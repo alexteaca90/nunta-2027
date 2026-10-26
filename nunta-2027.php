@@ -3,7 +3,7 @@
  * Plugin Name:       Nunta noastră 2027
  * Plugin URI:        https://github.com/alexteaca90/nunta-2027
  * Description:       Platforma privată de organizare a nunții: invitați, săli, buget, furnizori și calendar, cu date sincronizate între dispozitive. Se afișează pe pagina care conține shortcode-ul [nunta_2027].
- * Version:           0.1.4
+ * Version:           0.2.0
  * Requires at least: 6.2
  * Requires PHP:      7.4
  * Author:            Alex Teacă
@@ -19,7 +19,7 @@ if ( defined( 'NN27_VERSION' ) ) {
 	return; // O altă copie a pluginului este deja încărcată.
 }
 
-define( 'NN27_VERSION', '0.1.4' );
+define( 'NN27_VERSION', '0.2.0' );
 define( 'NN27_FILE', __FILE__ );
 define( 'NN27_DIR', plugin_dir_path( __FILE__ ) );
 define( 'NN27_URL', plugin_dir_url( __FILE__ ) );
@@ -28,6 +28,7 @@ require_once NN27_DIR . 'includes/class-installer.php';
 require_once NN27_DIR . 'includes/class-store.php';
 require_once NN27_DIR . 'includes/class-auth.php';
 require_once NN27_DIR . 'includes/class-files.php';
+require_once NN27_DIR . 'includes/class-mail.php';
 require_once NN27_DIR . 'includes/class-rest.php';
 require_once NN27_DIR . 'includes/class-frontend.php';
 require_once NN27_DIR . 'includes/class-admin.php';

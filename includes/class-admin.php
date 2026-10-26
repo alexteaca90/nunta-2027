@@ -13,7 +13,7 @@ class Nn27_Admin {
 
 	public static function init() {
 		add_action( 'admin_menu', array( __CLASS__, 'menu' ) );
-		foreach ( array( 'import_check', 'import_do', 'import_cancel', 'export', 'create_page', 'save_settings', 'download_backup' ) as $a ) {
+		foreach ( array( 'import_check', 'import_do', 'import_cancel', 'export', 'create_page', 'save_settings', 'download_backup', 'new_token' ) as $a ) {
 			add_action( 'admin_post_nn27_' . $a, array( __CLASS__, 'action_' . $a ) );
 		}
 		add_filter( 'plugin_action_links_' . plugin_basename( NN27_FILE ), array( __CLASS__, 'links' ) );
@@ -129,6 +129,12 @@ class Nn27_Admin {
 		self::back( array( 'nn27_msg' => 'pagecreated' ) );
 	}
 
+	public static function action_new_token() {
+		self::guard( 'new_token' );
+		Nn27_Mail::regenerate_token();
+		self::back( array( 'nn27_msg' => 'newtoken' ) );
+	}
+
 	public static function action_save_settings() {
 		self::guard( 'save_settings' );
 		$repo = esc_url_raw( trim( (string) wp_unslash( $_POST['nn27_repo'] ?? '' ) ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
@@ -172,6 +178,7 @@ class Nn27_Admin {
 			'pagefail'    => array( 'error', 'Pagina nu a putut fi creată.' ),
 			'shortpass'   => array( 'error', 'Parola trebuie să aibă cel puțin 8 caractere.' ),
 			'saved'       => array( 'success', 'Setările au fost salvate.' ),
+			'newtoken'    => array( 'success', 'Token nou generat. Copiați din nou scriptul în Google Apps Script, altfel sincronizarea se oprește.' ),
 			'badrepo'     => array( 'error', 'Adresa repository-ului trebuie să fie de forma https://github.com/cont/nume.' ),
 		);
 
@@ -278,6 +285,22 @@ class Nn27_Admin {
 				echo '</ul>';
 			}
 			?>
+
+			<h2 id="gmail">Emailuri din Gmail</h2>
+			<?php $st = Nn27_Mail::stats(); ?>
+			<p><?php echo $st && (int) $st['n'] ? esc_html( sprintf( '%d emailuri primite; ultimul sincronizat la %s (UTC); %d nealocate unei săli.', (int) $st['n'], $st['last'], (int) $st['unassigned'] ) ) : 'Niciun email sincronizat încă.'; ?></p>
+			<ol style="max-width:760px">
+				<li>Deschideți <a href="https://script.google.com/home/projects/create" target="_blank" rel="noopener">script.google.com → Proiect nou</a>, cu contul Gmail din care scrieți sălilor.</li>
+				<li>Ștergeți codul existent și lipiți scriptul de mai jos (are deja adresa și tokenul acestui site).</li>
+				<li>Opțional, pentru oferte PDF scanate: în stânga, <strong>Servicii (+)</strong> → <strong>Drive API</strong> → Adaugă.</li>
+				<li>Sus, alegeți funcția <code>instaleaza</code> și apăsați <strong>Rulează</strong>. Acceptați permisiunile cerute de Google.</li>
+				<li>În Gmail, puneți eticheta <strong>Nunta 2027</strong> pe emailurile de la săli. După ce o sală are adresa salvată în platformă, emailurile ei vin automat, fără etichetă.</li>
+			</ol>
+			<textarea readonly rows="10" class="large-text code" onclick="this.select()"><?php echo esc_textarea( Nn27_Mail::script() ); ?></textarea>
+			<?php self::form_open( 'new_token' ); ?>
+				<p class="description">Tokenul din script dă acces doar la trimiterea emailurilor către platformă. Dacă l-ați distribuit din greșeală, generați altul.</p>
+				<?php submit_button( 'Generează token nou', 'secondary', 'submit', false ); ?>
+			</form>
 
 			<h2>Actualizări automate</h2>
 			<?php self::form_open( 'save_settings' ); ?>

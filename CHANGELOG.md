@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.2.0 (26 octombrie 2026)
+
+**Emailuri din Gmail**
+- Un script Google Apps Script, care rulează în contul Gmail al proprietarului, trimite în platformă, la fiecare 10 minute, doar emailurile schimbate cu sălile. Le alege după adresele salvate la săli sau după eticheta „Nunta 2027”. Endpointul `/inbox` e protejat cu un token secret.
+- Pagina nouă **Emailuri**: corespondența grupată pe săli, emailurile nealocate (cu alegerea sălii) și sălile de la care așteptați răspuns de peste 4 zile.
+- Potrivirea cu sala se face după adresă, după domeniu sau după numele sălii. După o alocare manuală, adresa e reținută și emailurile următoare de la ea vin automat.
+- **Oferta se citește automat** din textul emailului și din PDF-uri: preț pe persoană (inclusiv variantele de meniu), meniu copii, avans, băuturi, capacitate, minim de persoane, valabilitate, taxe extra. Se completează doar câmpurile goale ale sălii și sunt marcate „citit automat din email”. PDF-ul se atașează la sală, iar sala trece la „Ofertă primită”. Ofertele în euro se convertesc după cursul din Setări.
+- În fișa sălii: adresele de email și ultimele emailuri.
+
+**Responsive**
+- Conținutul folosește lățimea ecranului (până la 1440 px).
+- Coloanele sălilor nu mai au scroll lateral: se așază pe toată lățimea, iar pe telefon se alege etapa din butoane.
+- Pe telefon, bara cu cifre de sus e o grilă de 3 × 2.
+- Toate paginile au fost verificate la 360, 414, 768, 1024, 1280, 1440 și 1920 px, fără depășiri pe orizontală.
+
 ## 0.1.4 (26 octombrie 2026)
 
 - Furnizori direct în Buget: fiecare categorie se deschide și arată furnizorii ei, cu bifa „În buget”, prețul și cât s-a plătit.

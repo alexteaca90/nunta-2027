@@ -41,6 +41,14 @@ class Nn27_Rest {
 				array( 'methods' => 'DELETE', 'callback' => array( __CLASS__, 'remove_file' ), 'permission_callback' => $perm ),
 			)
 		);
+		// Scriptul din Gmail (token secret).
+		$tok = array( 'Nn27_Mail', 'check_token' );
+		register_rest_route( self::NS, '/inbox', array( 'methods' => 'POST', 'callback' => array( __CLASS__, 'inbox' ), 'permission_callback' => $tok ) );
+		register_rest_route( self::NS, '/inbox/known', array( 'methods' => 'POST', 'callback' => array( __CLASS__, 'known' ), 'permission_callback' => $tok ) );
+		register_rest_route( self::NS, '/inbox/contacts', array( 'methods' => 'GET', 'callback' => array( __CLASS__, 'contacts' ), 'permission_callback' => $tok ) );
+		// Platforma (parola paginii).
+		register_rest_route( self::NS, '/mail', array( 'methods' => 'GET', 'callback' => array( __CLASS__, 'mail_list' ), 'permission_callback' => $perm ) );
+		register_rest_route( self::NS, '/mail/(?P<id>[A-Za-z0-9_-]{1,64})', array( 'methods' => 'POST', 'callback' => array( __CLASS__, 'mail_update' ), 'permission_callback' => $perm ) );
 		add_filter( 'rest_post_dispatch', array( __CLASS__, 'no_cache' ), 10, 3 );
 	}
 
@@ -90,6 +98,33 @@ class Nn27_Rest {
 		}
 		$res['log'] = Nn27_Store::recent_log();
 		return rest_ensure_response( $res );
+	}
+
+	public static function inbox( WP_REST_Request $req ) {
+		$b   = $req->get_json_params();
+		$res = Nn27_Mail::ingest( (array) ( $b['message'] ?? array() ), (array) ( $b['attachments'] ?? array() ) );
+		return is_wp_error( $res ) ? $res : rest_ensure_response( $res );
+	}
+
+	public static function known( WP_REST_Request $req ) {
+		$b = $req->get_json_params();
+		return rest_ensure_response( array( 'known' => Nn27_Mail::known_ids( $b['ids'] ?? array() ) ) );
+	}
+
+	public static function contacts() {
+		return rest_ensure_response( array( 'emails' => Nn27_Mail::known_emails(), 'label' => Nn27_Mail::LABEL, 'server' => NN27_VERSION ) );
+	}
+
+	public static function mail_list( WP_REST_Request $req ) {
+		$since = (int) $req->get_param( 'since' );
+		$rev   = Nn27_Mail::rev();
+		return rest_ensure_response( array( 'rev' => $rev, 'mail' => $since && $since >= $rev ? null : Nn27_Mail::list_all() ) );
+	}
+
+	public static function mail_update( WP_REST_Request $req ) {
+		$b = $req->get_json_params();
+		$ok = Nn27_Mail::update( $req['id'], array_key_exists( 'venue', (array) $b ) ? (string) $b['venue'] : null, array_key_exists( 'hidden', (array) $b ) ? (bool) $b['hidden'] : null );
+		return rest_ensure_response( array( 'ok' => $ok, 'rev' => Nn27_Mail::rev() ) );
 	}
 
 	public static function upload( WP_REST_Request $req ) {

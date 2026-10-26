@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
 
 class Nn27_Installer {
 
-	const DB_VERSION = '1';
+	const DB_VERSION = '2';
 
 	public static function activate() {
 		self::install();
@@ -41,6 +41,7 @@ class Nn27_Installer {
 			'revs'    => $wpdb->prefix . 'nn27_revs',
 			'log'     => $wpdb->prefix . 'nn27_log',
 			'files'   => $wpdb->prefix . 'nn27_files',
+			'mail'    => $wpdb->prefix . 'nn27_mail',
 		);
 	}
 
@@ -92,8 +93,32 @@ class Nn27_Installer {
   path varchar(255) NOT NULL DEFAULT '',
   created datetime NOT NULL,
   deleted tinyint(1) NOT NULL DEFAULT 0,
+  mail varchar(64) NOT NULL DEFAULT '',
   PRIMARY KEY  (id),
   KEY venue (venue)
+) $c;"
+		);
+		dbDelta(
+			"CREATE TABLE {$t['mail']} (
+  id varchar(64) NOT NULL,
+  thread varchar(64) NOT NULL DEFAULT '',
+  sent datetime NOT NULL,
+  direction varchar(3) NOT NULL DEFAULT 'in',
+  from_email varchar(190) NOT NULL DEFAULT '',
+  from_name varchar(255) NOT NULL DEFAULT '',
+  to_email varchar(500) NOT NULL DEFAULT '',
+  subject varchar(255) NOT NULL DEFAULT '',
+  snippet text NULL,
+  body mediumtext NULL,
+  venue varchar(40) NOT NULL DEFAULT '',
+  auto tinyint(1) NOT NULL DEFAULT 1,
+  hidden tinyint(1) NOT NULL DEFAULT 0,
+  offer text NULL,
+  files text NULL,
+  created datetime NOT NULL,
+  PRIMARY KEY  (id),
+  KEY venue (venue),
+  KEY sent (sent)
 ) $c;"
 		);
 		update_option( 'nn27_db_version', self::DB_VERSION, false );

@@ -17,6 +17,15 @@ Fișierul cu date nu face parte din acest repository: conține nume reale și se
 
 Fiecare versiune nouă este publicată aici ca release, cu `nunta-2027.zip` atașat. WordPress o afișează la **Module** ca „Actualizare disponibilă”. Un click o instalează. Dacă o versiune schimbă structura bazei de date, pluginul face singur un backup înainte de migrare.
 
+## Emailuri din Gmail
+
+1. În WordPress: **Nunta 2027 → Emailuri din Gmail**. Copiați scriptul, care conține deja adresa și tokenul site-ului.
+2. Pe script.google.com creați un proiect nou și lipiți scriptul. Pentru PDF-uri scanate, adăugați opțional serviciul Drive API.
+3. Rulați funcția `instaleaza` și acceptați permisiunile.
+4. În Gmail, puneți eticheta **Nunta 2027** pe emailurile de la săli noi. Când o sală are adresa salvată în platformă, emailurile ei vin automat.
+
+Scriptul trimite numai emailurile potrivite, nu restul căsuței. Tokenul se poate regenera oricând din panou.
+
 ## Securitate
 
 - Datele se citesc și se scriu numai prin `/wp-json/nn27/v1/`.

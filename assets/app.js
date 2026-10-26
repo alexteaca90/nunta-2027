@@ -16,17 +16,18 @@ const I = {
   x:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>',
   check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></svg>',
   plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
+  mail:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg>',
   up:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 15 6-6 6 6"/></svg>',
   down:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>',
   link:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>'
 };
 const VIEWS = [
   ['acasa','Acasă',I.home],['invitati','Invitați',I.guests],['sali','Săli',I.venues],
-  ['buget','Buget',I.budget],['calendar','Calendar',I.cal],['furnizori','Furnizori',I.vend],['setari','Setări',I.set]
+  ['buget','Buget',I.budget],['calendar','Calendar',I.cal],['furnizori','Furnizori',I.vend],['emailuri','Emailuri',I.mail],['setari','Setări',I.set]
 ];
 
 /* ---------- stare ---------- */
-const DEFAULT_SETTINGS = {date:'',budget:80000,giftRate:80,giftAvg:700,pendingRate:70,childPct:50,assumedPrice:350,refVenue:null};
+const DEFAULT_SETTINGS = {eurRate:5,date:'',budget:80000,giftRate:80,giftAvg:700,pendingRate:70,childPct:50,assumedPrice:350,refVenue:null};
 function emptyState(){ return {settings:{...DEFAULT_SETTINGS}, cats:[], hh:[], p:[], v:[], budget:[], vendors:[], tasks:[]}; }
 function migrate(s){
   if (s.cats.length && typeof s.cats[0]==='string'){ s.cats = s.cats.map((n,i)=>({id:'C'+(i+1),n})); s.hh.forEach(h=>{ if (typeof h.c==='number') h.c = 'C'+(h.c+1); }); }
@@ -204,6 +205,120 @@ async function load(){
   S = migrate(fromRecords(m));
   return restorePending();
 }
+/* ---------- emailuri ---------- */
+let MAIL = [], MAILREV = 0;
+const PUBLIC_DOMAINS = ['gmail.com','yahoo.com','yahoo.ro','outlook.com','hotmail.com','icloud.com','live.com','ymail.com'];
+const mailsOf = vid => MAIL.filter(m=>m.venue===vid && !m.hidden);
+const gmailUrl = m => 'https://mail.google.com/mail/u/0/#all/' + encodeURIComponent(m.thread || m.id);
+async function loadMail(force){
+  try{
+    const r = await api('mail' + (force||!MAILREV ? '' : '?since='+MAILREV));
+    if (r.mail){ MAIL = r.mail; MAILREV = r.rev; applyMailOffers(); if (UI.view==='emailuri' || UI.drawer) refreshAfterRemote(); else renderNav(); }
+  }catch(e){}
+}
+function toLei(x){ return !x ? 0 : x.cur==='EUR' ? Math.round(x.v * (num(S.settings.eurRate)||5)) : x.v; }
+function learnEmail(v, addr){
+  if (!addr) return false;
+  const cur = (v.em||'').toLowerCase();
+  if (cur.includes(addr.toLowerCase())) return false;
+  v.em = (v.em ? v.em + ', ' : '') + addr; return true;
+}
+/* Ofertele din emailuri completează automat sala (doar câmpurile goale). */
+function applyMailOffers(){
+  const msgs = [];
+  for (const m of MAIL.slice().reverse()){
+    if (!m.venue || m.hidden) continue;
+    const v = byId(S.v, m.venue); if (!v) continue;
+    const o = offerOf(v); o.mails = o.mails || []; o.auto = o.auto || [];
+    if (o.mails.includes(m.id)) continue;
+    o.mails.push(m.id);
+    if (m.dir!=='in') {
+      if (v.st < 1) v.st = 1;
+      (m.to||'').split(/[,;\s]+/).filter(a=>a.includes('@')).forEach(a=>{ const d = a.split('@')[1]; if (m.auto===0 || !PUBLIC_DOMAINS.includes(d)) learnEmail(v, a); });
+      msgs.push(`${v.n}: email trimis`); continue;
+    }
+    const of = m.offer || {}, got = [];
+    for (const fl of m.files||[]) if (!o.files.some(x=>x.id===fl.id)){ o.files.push({...fl, mail:m.id}); got.push('fișier'); }
+    if (of.ppp && !num(v.ppp)){ v.ppp = toLei(of.ppp); got.push('preț'); o.auto.push('ppp'); }
+    if (of.ppp && of.pppMax && of.pppMax.v!==of.ppp.v && !o.range){ o.range = `${n0(toLei(of.ppp))}–${n0(toLei(of.pppMax))} lei/pers. (${of.options} variante)`; }
+    if (of.cp && !num(v.cp)){ v.cp = toLei(of.cp); o.auto.push('cp'); }
+    if (of.childPct && !num(v.cp) && num(v.ppp)){ v.cp = Math.round(num(v.ppp)*of.childPct/100); o.auto.push('cp'); }
+    if (of.deposit && !o.deposit){ o.deposit = of.deposit; o.auto.push('deposit'); }
+    if (of.drinks && !+o.drinks){ o.drinks = of.drinks; o.auto.push('drinks'); }
+    if (of.valid && !o.valid){ o.valid = of.valid; o.auto.push('valid'); }
+    if (of.cap && !num(v.cap)){ v.cap = of.cap; o.auto.push('cap'); }
+    if (of.min && !num(v.min)){ v.min = of.min; o.auto.push('min'); }
+    if (of.extraHint && !(o.inc||'').includes(of.extraHint)){ o.inc = (o.inc ? o.inc + '\n' : '') + of.extraHint; }
+    if (got.length && !o.date) o.date = new Date(m.t).toISOString().slice(0,10);
+    if (v.st < 1) v.st = 1;
+    if ((of.ppp || (m.files||[]).length) && v.st < 2) v.st = 2;
+    const dom = (m.from||'').split('@')[1]||'';
+    if (m.auto===0 || !PUBLIC_DOMAINS.includes(dom)) learnEmail(v, m.from);
+    o.auto = [...new Set(o.auto)];
+    msgs.push(got.length ? `${v.n}: ofertă citită automat din email` : `${v.n}: email nou`);
+  }
+  if (msgs.length) commit(msgs.length===1 ? msgs[0] : `Emailuri noi procesate: ${msgs.length}`, false);
+}
+async function assignMail(id, venue){
+  const m = MAIL.find(x=>x.id===id); if (!m) return;
+  try{ await api('mail/'+id, {method:'POST', json:{venue}}); }catch(e){ toast('Nu am putut aloca emailul: '+e.message); return; }
+  m.venue = venue; m.auto = 0;
+  const v = byId(S.v, venue);
+  if (v){ offerOf(v).mails = (offerOf(v).mails||[]).filter(x=>x!==id); learnEmail(v, m.dir==='in' ? m.from : ''); }
+  applyMailOffers(); render();
+  toast(v ? `Emailul a fost alocat la ${v.n}. Următoarele emailuri de la ${m.from} vin automat.` : 'Emailul a fost scos de la sală');
+}
+async function hideMail(id){
+  try{ await api('mail/'+id, {method:'POST', json:{hidden:true}}); }catch(e){ toast(e.message); return; }
+  const m = MAIL.find(x=>x.id===id); if (m) m.hidden = 1; render(); toast('Emailul a fost ascuns');
+}
+function offerChips(of){
+  const c = [];
+  if (of.ppp) c.push(`${n0(toLei(of.ppp))}${of.pppMax&&of.pppMax.v!==of.ppp.v?'–'+n0(toLei(of.pppMax)):''} lei/pers.${of.ppp.cur==='EUR'?` (${of.ppp.v}${of.pppMax&&of.pppMax.v!==of.ppp.v?'–'+of.pppMax.v:''} €)`:''}`);
+  if (of.cp) c.push(`copii ${n0(toLei(of.cp))} lei`);
+  if (of.childPct) c.push(`copii ${of.childPct}%`);
+  if (of.deposit) c.push(`avans ${of.deposit}`);
+  if (of.drinks) c.push(DRINKS[of.drinks].toLowerCase());
+  if (of.cap) c.push(`până la ${of.cap} pers.`);
+  if (of.min) c.push(`minim ${of.min} pers.`);
+  if (of.valid) c.push(`valabilă până pe ${fmtDate(of.valid)}`);
+  if (of.extraHint) c.push(of.extraHint);
+  return c.map(x=>`<span class="tag gold">${esc(x)}</span>`).join('');
+}
+function mailItem(m, opts={}){
+  const files = (m.files||[]).map(f=>`<button class="chip" data-act="viewfile" data-vid="${esc(m.venue)}" data-id="${f.id}">${f.type==='application/pdf'?'PDF':'IMG'} · ${esc(f.name.length>30?f.name.slice(0,28)+'…':f.name)}</button>`).join('');
+  return `<article class="mail ${m.dir}">
+    <div class="mail-h"><span class="mdir" title="${m.dir==='in'?'Primit':'Trimis'}">${m.dir==='in'?'↙':'↗'}</span>
+      <div class="mail-who"><b>${esc(m.dir==='in' ? (m.name||m.from) : 'Tu')}</b> <span class="muted">${esc(m.dir==='in' ? m.from : '→ '+(m.to||'').split(',')[0])}</span></div>
+      <time class="muted">${new Date(m.t).toLocaleString('ro-RO',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</time></div>
+    <div class="mail-s">${esc(m.subject||'(fără subiect)')}</div>
+    ${UI.mopen.has(m.id)?`<div class="mail-body">${esc(m.body).replace(/\n/g,'<br>')}</div>`:`<div class="mail-sn muted">${esc(m.snippet)}</div>`}
+    ${m.offer && Object.keys(m.offer).length?`<div class="mail-of"><span class="sub muted">Citit din ofertă:</span>${offerChips(m.offer)}</div>`:''}
+    ${files?`<div class="mail-f">${files}</div>`:''}
+    <div class="mail-a"><button class="link" data-act="mtoggle" data-id="${m.id}">${UI.mopen.has(m.id)?'Restrânge':'Citește tot'}</button><a class="link" href="${gmailUrl(m)}" target="_blank" rel="noopener">Deschide în Gmail</a>
+      ${opts.assign?`<select class="input" data-massign="${m.id}" aria-label="Alocă la sală"><option value="">${m.venue?'Mută la altă sală…':'Alocă la sală…'}</option>${S.v.filter(v=>v.st!==6).map(v=>`<option value="${v.id}">${esc(v.n)}</option>`).join('')}</select>`:''}
+      ${!m.venue?`<button class="link" data-act="mhide" data-id="${m.id}">Ascunde</button>`:''}</div>
+  </article>`;
+}
+function vMail(){
+  const un = MAIL.filter(m=>!m.venue && !m.hidden);
+  const byV = {}; MAIL.filter(m=>m.venue && !m.hidden).forEach(m=>{ (byV[m.venue] = byV[m.venue] || []).push(m); });
+  const groups = Object.entries(byV).map(([vid,ms])=>({v:byId(S.v,vid), ms})).filter(g=>g.v).sort((a,b)=>b.ms[0].t-a.ms[0].t);
+  const last = MAIL.length ? Math.max(...MAIL.map(m=>m.t)) : 0;
+  const waiting = S.v.filter(v=>v.st===1 && mailsOf(v.id).length && mailsOf(v.id)[0].dir==='out' && Date.now()-mailsOf(v.id)[0].t > 4*86400000);
+  if (!MAIL.length) return `<div class="page-head"><div><h1>Emailuri</h1><p>Aici apar emailurile schimbate cu sălile și ofertele citite automat din ele.</p></div></div>
+    <div class="empty" style="text-align:left;max-width:640px"><b>Gmail nu e conectat încă.</b><br>Conectarea se face o singură dată, din WordPress: meniul <b>Nunta 2027 → Emailuri din Gmail</b>. Durează aproximativ 10 minute.${CFG.admin?`<br><br><a class="btn primary" href="${esc(CFG.admin)}#gmail">Deschide pașii de conectare</a>`:''}</div>`;
+  return `<div class="page-head"><div><h1>Emailuri</h1><p>Corespondența cu sălile, sincronizată din Gmail la fiecare 10 minute. Ofertele din emailuri și PDF-uri se citesc automat și completează sala, doar în câmpurile încă goale.</p></div>
+    <span class="muted" style="font-size:13px">Ultimul email: ${rel(last)}</span></div>
+    ${waiting.length?`<div class="ref"><span><b>Așteptați răspuns de peste 4 zile</b> de la: ${waiting.map(v=>`<button class="link" data-act="openv" data-id="${v.id}">${esc(v.n)}</button>`).join(', ')}</span></div>`:''}
+    ${un.length?`<section class="msec"><h2 class="catsec">Nealocate<span>${un.length} ${un.length===1?'email':'emailuri'} · alegeți sala, iar următoarele emailuri de la aceeași adresă vin automat</span></h2>${un.map(m=>mailItem(m,{assign:true})).join('')}</section>`:''}
+    ${groups.map(g=>`<section class="msec"><header class="vsec-h"><div><h2><button class="link" data-act="openv" data-id="${g.v.id}" style="font:inherit;text-decoration:none">${esc(g.v.n)}</button></h2>
+      <div class="vsum"><span class="tag">${STAGES[g.v.st]}</span> · ${g.ms.length} ${g.ms.length===1?'email':'emailuri'} · ultimul ${rel(g.ms[0].t)}${num(g.v.ppp)?` · <b>${lei(g.v.ppp)}/pers.</b>`:''}</div></div>
+      <button class="btn" data-act="openv" data-id="${g.v.id}">Fișa sălii</button></header>
+      ${(UI.mall.has(g.v.id)?g.ms:g.ms.slice(0,2)).map(m=>mailItem(m,{assign:true})).join('')}
+      ${g.ms.length>2?`<button class="link" data-act="mall" data-id="${g.v.id}">${UI.mall.has(g.v.id)?'Arată mai puține':`Arată toate (${g.ms.length})`}</button>`:''}
+    </section>`).join('')}`;
+}
 function screen(title, text, actions=''){
   $('#view').innerHTML = `<section class="panel" style="max-width:560px;margin:48px auto"><h2>${title}</h2><p class="muted" style="margin:8px 0 16px">${text}</p>${actions}</section>`;
 }
@@ -233,6 +348,7 @@ async function boot(){
   if (restored){ toast('Am recuperat modificările nesalvate de data trecută.'); schedule(0); }
   if (!WHO) askWho();
   setInterval(poll, 8000);
+  loadMail(true); setInterval(()=>{ if (!document.hidden) loadMail(); }, 60000);
   document.addEventListener('visibilitychange', ()=>{ if (!document.hidden) poll(); else if (diffOps().length) flush(); });
   window.addEventListener('online', ()=>schedule(0));
   window.addEventListener('beforeunload', e=>{ if (diffOps().length || SYNC.busy){ e.preventDefault(); e.returnValue = ''; } });
@@ -254,19 +370,21 @@ async function addFiles(v, list){
   if (ok){ if (v.st<2) v.st = 2; if (!o.date) o.date = new Date().toISOString().slice(0,10); commit(`${v.n}: ${ok===1?'ofertă atașată':ok+' fișiere atașate'}`); toast(ok===1?'Oferta a fost atașată':`${ok} fișiere atașate`); }
 }
 async function viewFile(vid, fid){
-  const v = byId(S.v,vid), f = offerOf(v).files.find(x=>x.id===fid);
+  const v = byId(S.v,vid); let f = v ? offerOf(v).files.find(x=>x.id===fid) : null;
+  if (!f) for (const m of MAIL){ f = (m.files||[]).find(x=>x.id===fid); if (f) break; }
+  if (!f){ toast('Fișierul nu mai există'); return; }
   let blob;
   try{ const r = await api('files/'+fid, {raw:true}); blob = await r.blob(); }
   catch(e){ toast(e.status===404 ? 'Fișierul nu mai există pe server' : 'Fișierul nu a putut fi deschis: '+e.message); return; }
   const url = URL.createObjectURL(blob);
   const el = document.createElement('div'); el.className='viewer'; el.setAttribute('role','dialog'); el.setAttribute('aria-label',f.name);
-  el.innerHTML = `<header><span>${esc(v.n)} · ${esc(f.name)}</span><span style="display:flex;gap:8px"><a class="btn" href="${url}" target="_blank" rel="noopener">Deschide separat</a><a class="btn" href="${url}" download="${esc(f.name)}">Descarcă</a><button class="btn" data-act="closeviewer">Închide</button></span></header><div class="vbody">${f.type.startsWith('image/')?`<img src="${url}" alt="${esc(f.name)}">`:`<iframe src="${url}" title="${esc(f.name)}"></iframe>`}</div>`;
+  el.innerHTML = `<header><span>${esc(v?v.n:'Email')} · ${esc(f.name)}</span><span style="display:flex;gap:8px"><a class="btn" href="${url}" target="_blank" rel="noopener">Deschide separat</a><a class="btn" href="${url}" download="${esc(f.name)}">Descarcă</a><button class="btn" data-act="closeviewer">Închide</button></span></header><div class="vbody">${f.type.startsWith('image/')?`<img src="${url}" alt="${esc(f.name)}">`:`<iframe src="${url}" title="${esc(f.name)}"></iframe>`}</div>`;
   el.dataset.url = url; document.body.appendChild(el);
 }
 function save(){ schedule(); }
 function log(msg){ LOGS.unshift({t:Date.now(), who:WHO, m:msg}); LOGS = LOGS.slice(0,30); PENDING_LOG.push(msg); }
 
-const UI = {view:'acasa', q:'', cat:'all', gf:'all', open:new Set(), vopen:new Set(), bopen:new Set(), vendAdd:null, flash:null, gview:'cards', vtab:'board', vq:'', drawer:null, showRejected:false};
+const UI = {view:'acasa', q:'', cat:'all', gf:'all', open:new Set(), vopen:new Set(), bopen:new Set(), mopen:new Set(), mall:new Set(), stageM:0, vendAdd:null, flash:null, gview:'cards', vtab:'board', vq:'', drawer:null, showRejected:false};
 try{ const h = location.hash.slice(1); if (VIEWS.some(v=>v[0]===h)) UI.view = h; }catch(e){}
 
 /* ---------- utilitare ---------- */
@@ -380,7 +498,7 @@ function renderThread(C){
 
 /* ---------- navigare ---------- */
 function renderNav(){
-  const counts = {invitati:S.p.length, sali:S.v.filter(v=>v.st!==6).length};
+  const counts = {invitati:S.p.length, sali:S.v.filter(v=>v.st!==6).length, emailuri:MAIL.filter(m=>!m.venue&&!m.hidden).length||''};
   $('#nav').innerHTML = VIEWS.map(([k,l,ic])=>`<button data-go="${k}" ${UI.view===k?'aria-current="page"':''}>${ic}<span>${l}</span>${counts[k]?`<span class="count num">${counts[k]}</span>`:''}</button>`).join('');
   $('#tabbar').innerHTML = VIEWS.filter(v=>v[0]!=='setari').map(([k,l,ic])=>`<button data-go="${k}" ${UI.view===k?'aria-current="page"':''}>${ic}<span>${l}</span></button>`).join('');
 }
@@ -389,7 +507,7 @@ function render(){
   if (!BOOTED) return;
   const C = compute();
   renderNav(); renderThread(C);
-  const fn = {acasa:vHome, invitati:vGuests, sali:vVenues, buget:vBudget, calendar:vCal, furnizori:vVendors, setari:vSettings}[UI.view];
+  const fn = {acasa:vHome, invitati:vGuests, sali:vVenues, buget:vBudget, calendar:vCal, furnizori:vVendors, emailuri:vMail, setari:vSettings}[UI.view];
   const keep = {}, keyOf = el => { const fm = el.closest('form'); return fm ? (fm.id || fm.className + (fm.dataset.line||'')) + '|' + (el.name || el.id) : null; };
   document.querySelectorAll('#view form input, #view form select, #view form textarea').forEach(el=>{ const k = keyOf(el); if (k) keep[k] = el.value; });
   const act = document.activeElement, actKey = act && act.closest && act.closest('#view form') ? keyOf(act) : null;
@@ -592,9 +710,11 @@ function vVenues(C){
   if (UI.vtab==='cmp') return head + venueCompare(C);
   const searchBar = `<div class="toolbar"><input class="input vsearch" type="search" id="vq" placeholder="Caută o sală" value="${esc(UI.vq)}" aria-label="Caută săli"></div>`;
   const cols = STAGES.map((s,i)=>i).filter(i=>i<6 || UI.showRejected);
-  return head + searchBar + `<div class="board">${cols.map(i=>{
-    const vs = S.v.filter(v=>v.st===i && (!UI.vq || v.n.toLowerCase().includes(UI.vq.toLowerCase()))).sort((a,b)=>(b.rt||0)-(a.rt||0));
-    return `<div class="col"><h3><span>${STAGES[i]}</span><b class="num">${vs.length}</b></h3>${vs.map(v=>venueCard(v,C)).join('') || '<div class="col-empty">Nicio sală în această etapă.</div>'}</div>`;
+  const inCol = i => S.v.filter(v=>v.st===i && (!UI.vq || v.n.toLowerCase().includes(UI.vq.toLowerCase())));
+  const picker = `<div class="stagepick seg" role="tablist" aria-label="Etapă">${cols.map(i=>`<button data-act="stagem" data-i="${i}" aria-pressed="${UI.stageM===i}">${STAGES[i]}<em>${inCol(i).length}</em></button>`).join('')}</div>`;
+  return head + searchBar + picker + `<div class="board">${cols.map(i=>{
+    const vs = inCol(i).sort((a,b)=>(b.rt||0)-(a.rt||0));
+    return `<div class="col" data-on="${UI.stageM===i?1:0}"><h3><span>${STAGES[i]}</span><b class="num">${vs.length}</b></h3>${vs.map(v=>venueCard(v,C)).join('') || '<div class="col-empty">Nicio sală în această etapă.</div>'}</div>`;
   }).join('')}</div>
   <button class="link" data-act="rej" style="margin-top:8px">${UI.showRejected?'Ascunde sălile respinse':`Arată sălile respinse (${S.v.filter(v=>v.st===6).length})`}</button>`;
 }
@@ -606,7 +726,7 @@ function venueCard(v,C){
   return `<button class="vc ${isRef?'isref':''}" data-act="openv" data-id="${v.id}">
     <span class="vn">${esc(v.n)}</span>
     <span class="vm">${v.rt?`<span class="r">★ ${String(v.rt).replace('.',',')} (${n0(v.rc)})</span>`:''}<span class="tag ${fc}">${fl}</span>${isRef?'<span class="tag gold">în calcule</span>':''}${v.cmp?'<span class="tag wine">compar</span>':''}${nf?`<span class="tag gold">ofertă${nf>1?' ×'+nf:''}</span>`:''}</span>
-    <span class="cost">${est?`Estimat <b>${est}</b> · ${lei(v.ppp)}/pers.`:'Preț neprimit încă'}</span>
+    <span class="cost">${est?`Estimat <b>${est}</b> · ${lei(v.ppp)}/pers.`:'Preț neprimit încă'}${mailsOf(v.id).length?` · ✉ ${mailsOf(v.id).length}`:''}</span>
   </button>`;
 }
 function venueCompare(C){
@@ -662,6 +782,7 @@ function renderDrawer(C){
         <label class="field"><span>Preț meniu copil (lei)</span><input class="input num" inputmode="numeric" data-v="${v.id}" data-f="cp" value="${v.cp||''}" placeholder="${v.ppp?n0(v.ppp*S.settings.childPct/100)+' (estimat)':''}"></label>
         <label class="field"><span>Capacitate maximă</span><input class="input num" inputmode="numeric" data-v="${v.id}" data-f="cap" value="${v.cap||''}"></label>
         <label class="field"><span>Minim de persoane</span><input class="input num" inputmode="numeric" data-v="${v.id}" data-f="min" value="${v.min||''}"></label>
+        <label class="field full"><span>Adrese de email ale sălii</span><input class="input" data-v="${v.id}" data-f="em" value="${esc(v.em||'')}" placeholder="ex. evenimente@sala.ro, manager@sala.ro" inputmode="email"></label>
         <label class="field full"><span>Disponibilitate pentru data voastră</span><input class="input" data-v="${v.id}" data-f="av" value="${esc(v.av)}" placeholder="ex. liber pe 12 iunie, ocupat pe 19"></label>
       </div>
       <div class="field"><span>Notele voastre (1–5)</span><div class="scores">${SCORE_LABELS.map((l,i)=>`<div class="score"><span>${l}</span><div class="stars">${[1,2,3,4,5].map(n=>`<button class="${v.sc[i]>=n?'on':''}" data-act="star" data-i="${i}" data-n="${n}" aria-label="${l} ${n}">★</button>`).join('')}</div></div>`).join('')}</div></div>
@@ -673,8 +794,10 @@ function renderDrawer(C){
   d.innerHTML = html;
 }
 function offerBlock(v){
-  const o = offerOf(v);
-  return `<section class="offer">
+  const o = offerOf(v), ms = mailsOf(v.id);
+  const auto = (o.auto||[]).length ? `<p class="hint" style="margin:0"><span class="tag gold">citit automat din email</span> ${(o.auto||[]).map(k=>({ppp:'preț',cp:'preț copii',deposit:'avans',drinks:'băuturi',valid:'valabilitate',cap:'capacitate',min:'minim'})[k]||k).join(', ')}. Verificați cu oferta atașată.</p>` : '';
+  return `${ms.length?`<section class="offer" style="background:var(--surface)"><div><h3>Corespondență</h3><div class="sub muted">${ms.length} ${ms.length===1?'email':'emailuri'} · ultimul ${rel(ms[0].t)}</div></div>${ms.slice(0,3).map(m=>mailItem(m)).join('')}${ms.length>3?`<button class="link" data-go="emailuri">Toate emailurile</button>`:''}</section>`:''}
+  <section class="offer">${auto}${o.range?`<p class="hint" style="margin:0">Variante de meniu: <b>${esc(o.range)}</b></p>`:''}
     <div><h3>Oferta primită</h3><div class="sub muted">Atașați PDF-ul sau pozele ofertei și completați câmpurile de mai jos, ca să puteți compara sălile.</div></div>
     <label class="drop" id="drop" for="offerFile"><b>Atașează oferta</b><span>PDF sau imagine · trageți fișierul aici sau apăsați</span></label>
     <input type="file" id="offerFile" accept="application/pdf,image/*" multiple hidden>
@@ -846,6 +969,7 @@ function vSettings(){
     <label class="field"><span>Meniul de copil, % din cel de adult</span><input class="input num" data-set="childPct" value="${st.childPct}" inputmode="numeric"></label>
     <label class="field"><span>Câți vin dintre cei fără răspuns (%)</span><input class="input num" data-set="pendingRate" value="${st.pendingRate}" inputmode="numeric"></label>
     <label class="field"><span>Dar mediu pe adult (lei)</span><input class="input num" data-set="giftAvg" value="${st.giftAvg}" inputmode="numeric"></label>
+    <label class="field"><span>Curs euro (lei), pentru ofertele în euro</span><input class="input num" data-set="eurRate" value="${st.eurRate}" inputmode="decimal"></label>
   </div></section>
   <section class="panel" style="margin-top:16px"><div class="ph"><div><h2>Categorii de invitați</h2><div class="sub">Redenumiți, schimbați ordinea, adăugați sau ștergeți. Ordinea de aici e ordinea din lista de invitați.</div></div></div>
   <div style="max-width:640px">${catEditor()}</div></section>
@@ -911,6 +1035,10 @@ document.addEventListener('click', e=>{
     case 'task': { const t = byId(S.tasks,id); t.done=!t.done; commit(`${t.title}: ${t.done?'bifat':'debifat'}`); break; }
     case 'deltask': { const s0=snap(); S.tasks = S.tasks.filter(t=>t.id!==id); commit('Pas șters'); toast('Pasul a fost șters', s0); break; }
     case 'addb': { const n = S.budget.length+1; S.budget.push({id:'B'+Date.now(),cat:'Categorie nouă',est:0,quote:0,paid:0}); commit('Categorie de buget adăugată'); break; }
+    case 'mtoggle': UI.mopen.has(id)?UI.mopen.delete(id):UI.mopen.add(id); render(); break;
+    case 'mall': UI.mall.has(id)?UI.mall.delete(id):UI.mall.add(id); render(); break;
+    case 'mhide': hideMail(id); break;
+    case 'stagem': UI.stageM = +a.dataset.i; render(); break;
     case 'btoggle': UI.bopen.has(id)?UI.bopen.delete(id):UI.bopen.add(id); render(); break;
     case 'vinbudget': { const v = byId(S.vendors,id); v.status = v.status==='Rezervat' ? 'Ofertă primită' : 'Rezervat'; commit(`${v.name}: ${v.status==='Rezervat'?'inclus în buget':'scos din buget'}`); break; }
     case 'vunassign': { const s0 = snap(); const v = byId(S.vendors,id); const from = (byId(S.budget,v.line)||{}).cat||''; v.line = ''; if (v.status==='Rezervat') v.status = 'Ofertă primită'; commit(`${v.name} scos din ${from}`); toast(`${v.name} nu mai e în ${from}. Îl găsiți la Furnizori, „Fără categorie”.`, s0); break; }
@@ -964,6 +1092,7 @@ document.addEventListener('change', e=>{
   if (t.dataset.b){
     const b = byId(S.budget,t.dataset.b); b[f] = f==='cat'?t.value:num(t.value); commit(null); return;
   }
+  if (t.dataset.massign){ if (t.value) assignMail(t.dataset.massign, t.value); return; }
   if (t.dataset.assign){ if (!t.value) return; const v = byId(S.vendors,t.value), b = byId(S.budget,t.dataset.assign); v.line = b.id; commit(`${v.name} mutat la ${b.cat}`); toast(`${v.name} a fost mutat la ${b.cat}`); return; }
   if (t.dataset.vd){ const v = byId(S.vendors,t.dataset.vd); v[f] = f==='price'?num(t.value):(f==='name'?(t.value.trim()||v.name):t.value); commit(f==='status'?`${v.name}: ${v.status.toLowerCase()}`:f==='line'?`${v.name} mutat la ${(byId(S.budget,v.line)||{}).cat||''}`:null); return; }
   if (t.dataset.pay){ const p = byId(S.vendors,t.dataset.pay).pays[+t.dataset.i]; p[f] = f==='amount'?num(t.value):t.value; commit(null); return; }

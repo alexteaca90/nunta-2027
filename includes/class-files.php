@@ -51,7 +51,7 @@ class Nn27_Files {
 	 * @param string $venue ID-ul sălii.
 	 * @return array|WP_Error Metadatele fișierului.
 	 */
-	public static function store( $file, $venue ) {
+	public static function store( $file, $venue, $force_id = '', $mail = '' ) {
 		global $wpdb;
 		if ( empty( $file ) || ! isset( $file['tmp_name'] ) || UPLOAD_ERR_OK !== (int) $file['error'] ) {
 			return new WP_Error( 'nn27_upload', 'Fișierul nu a ajuns la server. Încercați din nou.', array( 'status' => 400 ) );
@@ -71,7 +71,7 @@ class Nn27_Files {
 		if ( ! $dir ) {
 			return new WP_Error( 'nn27_upload', 'Folderul pentru fișiere nu poate fi creat. Verificați permisiunile din wp-content/uploads.', array( 'status' => 500 ) );
 		}
-		$id   = 'F' . strtolower( wp_generate_password( 20, false ) );
+		$id   = $force_id ? $force_id : 'F' . strtolower( wp_generate_password( 20, false ) );
 		$disk = $id . '-' . wp_generate_password( 12, false ) . '.' . $check['ext'];
 		if ( ! @move_uploaded_file( $file['tmp_name'], $dir . '/' . $disk ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors
 			// Permite și fișiere care nu vin prin HTTP (teste).
@@ -89,6 +89,7 @@ class Nn27_Files {
 			'path'    => $disk,
 			'created' => current_time( 'mysql', true ),
 			'deleted' => 0,
+			'mail'    => (string) $mail,
 		);
 		$wpdb->insert( $t['files'], $meta );
 		return array(
