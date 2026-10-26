@@ -286,11 +286,15 @@ class Nn27_Admin {
 				<table class="widefat striped" style="max-width:760px"><tbody>
 					<tr><td><strong>Se păstrează și se completează (<?php echo count( $vp['keep'] ); ?>)</strong></td><td><?php echo esc_html( implode( ', ', array_map( static function ( $k ) { return $k[0] === $k[1] ? $k[0] : $k[0] . ' → ' . $k[1]; }, $vp['keep'] ) ) ); ?></td></tr>
 					<tr><td><strong>Se adaugă (<?php echo count( $vp['add'] ); ?>)</strong></td><td><?php echo esc_html( implode( ', ', $vp['add'] ) ); ?></td></tr>
+					<?php if ( $vp['update'] && ! $vp['add'] && ! $vp['remove'] ) : ?>
+					<tr><td><strong>Primesc date noi (<?php echo count( $vp['update'] ); ?>)</strong></td><td><?php echo esc_html( implode( ', ', $vp['update'] ) ); ?></td></tr>
+					<?php endif; ?>
 					<tr><td><strong>Se șterg (<?php echo count( $vp['remove'] ); ?>)</strong></td><td><?php echo esc_html( implode( ', ', array_map( static function ( $r ) { return $r[1] . ( $r[2] ? " ({$r[2]} emailuri devin nealocate)" : '' ) . ( $r[3] ? " ({$r[3]} oferte atașate)" : '' ); }, $vp['remove'] ) ) ); ?></td></tr>
 				</tbody></table>
-				<?php if ( $vp['add'] || $vp['remove'] ) : ?>
+				<?php if ( $vp['add'] || $vp['remove'] || $vp['update'] ) : ?>
+					<?php $only_update = ! $vp['add'] && ! $vp['remove']; ?>
 					<?php self::form_open( 'venues_replace' ); ?>
-						<p><?php submit_button( 'Înlocuiește sălile', 'primary', 'submit', false, array( 'onclick' => "return confirm('Înlocuiți lista de săli? Se face backup înainte.');" ) ); ?></p>
+						<p><?php submit_button( $only_update ? 'Actualizează sălile' : 'Înlocuiește sălile', 'primary', 'submit', false, array( 'onclick' => $only_update ? '' : "return confirm('Înlocuiți lista de săli? Se face backup înainte.');" ) ); ?></p>
 					</form>
 				<?php else : ?>
 					<p>✔ Lista de săli este deja cea din cercetare.</p>

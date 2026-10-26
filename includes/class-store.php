@@ -560,7 +560,23 @@ class Nn27_Store {
 			$files    = isset( $ov['of']['files'] ) && is_array( $ov['of']['files'] ) ? count( $ov['of']['files'] ) : 0;
 			$remove[] = array( $id, $ov['n'] ?? $id, $mails, $files, (int) ( $ov['st'] ?? 0 ) );
 		}
-		return array( 'match' => $match, 'keep' => $keep, 'add' => $add, 'remove' => $remove, 'researched' => $doc['researched'] ?? '' );
+		// Săli regăsite ale căror date din cercetare s-au schimbat (de ex. un email nou).
+		$update = array();
+		foreach ( $doc['venues'] as $nv ) {
+			$id = $match[ $nv['key'] ] ?? '';
+			if ( ! $id ) {
+				continue;
+			}
+			$cur = $old[ $id ];
+			$new = self::research_record( $nv, $id, $cur );
+			unset( $cur['o'], $new['o'] );
+			ksort( $cur );
+			ksort( $new );
+			if ( wp_json_encode( $cur ) !== wp_json_encode( $new ) ) {
+				$update[] = $nv['n'];
+			}
+		}
+		return array( 'match' => $match, 'keep' => $keep, 'add' => $add, 'remove' => $remove, 'update' => $update, 'researched' => $doc['researched'] ?? '' );
 	}
 
 	/** Construiește înregistrarea unei săli: datele din cercetare peste ce ați completat voi. */

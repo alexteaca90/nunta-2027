@@ -32,6 +32,7 @@ Pluginul conține lista de 29 de săli din cercetarea din 26 octombrie 2026 (`in
 
 1. În WordPress: **Nunta 2027 → Săli din cercetare**. Raportul arată ce săli se păstrează, ce se adaugă și ce se șterge.
 2. **Înlocuiește sălile**. Se face backup înainte. Sălile care se regăsesc (după nume) își păstrează etapa, notele, prețul, oferta atașată și emailurile. Emailurile primite de la sălile șterse devin nealocate.
+   Dacă lista din plugin primește completări (de ex. emailuri noi), același panou arată „Primesc date noi” și butonul **Actualizează sălile**, care nu atinge etapa, notele sau prețurile voastre.
 3. În platformă, la **Săli → Solicitări**, fiecare sală are butonul **Cere disponibilitatea**: deschide emailul gata scris, cu data din Setări și numărul de invitați. Textul se poate modifica. După trimitere, sala trece la „Contactată”.
 
 ## Securitate

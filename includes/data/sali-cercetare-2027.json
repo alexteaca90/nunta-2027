@@ -387,7 +387,7 @@
    "tel": [
     "0734 009 655"
    ],
-   "em": "",
+   "em": "restaurant@goldenstone.ro",
    "web": "https://goldenstone.ro/",
    "ph": [
     {
@@ -405,7 +405,7 @@
    "rc": 60,
    "rv": "3,9★ din 60 pe Weddingo, cel mai mic scor din listă. Cort spațios, fără elemente de design; spațiu exterior comun cu cortul vecin.",
    "pub": "Niciun preț public.",
-   "tip": "200 de locuri: sub 211. Email de cerut prin site.",
+   "tip": "200 de locuri: sub 211.",
    "src": [
     "https://www.weddingo.ro/locatii-nunta/iasi/golden-stone-resort",
     "https://www.fotografi-cameramani.ro/locatie/345"
@@ -556,7 +556,7 @@
     "0758 526 153",
     "0748 884 382 (WhatsApp)"
    ],
-   "em": "",
+   "em": "complexeosiasi@gmail.com",
    "web": "https://complexeos.ro/",
    "ph": [
     {
@@ -578,7 +578,7 @@
    "rc": 80,
    "rv": "4,4★ din 80 pe Weddingo.",
    "pub": "Preț nepublicat. Event planning și decor incluse, valsul mirilor la piscină, meniul se alege preparat cu preparat. Ultimele sâmbete 2027 libere pentru Silver.",
-   "tip": "Un meniu e valabil în Silver doar de la 120 de invitați. Email de cerut prin site.",
+   "tip": "Un meniu e valabil în Silver doar de la 120 de invitați.",
    "src": [
     "https://www.weddingo.ro/locatii-nunta/iasi/complex-eos",
     "https://vinenunta.ro/furnizor/complex-eos/"
@@ -686,7 +686,7 @@
    "tel": [
     "0743 487 789"
    ],
-   "em": "",
+   "em": "info@grandmarion.ro",
    "web": "https://www.popasulmariei.ro/",
    "ph": [
     {
@@ -702,7 +702,7 @@
    "halls": "Salon Grand Marion 80–300.",
    "rv": "Nu am găsit un scor agregat.",
    "pub": "Pachete de la 60 €/pers. cu meniu, decor, șampanie (saloane-evenimente.ro). vinenunta.ro: de la 70 € sâmbătă, 65 € duminică; meniul Platinum 450 lei.",
-   "tip": "Prețul de pornire probabil fără alcool; cereți oferta all inclusive. Email de cerut prin site.",
+   "tip": "Prețul de pornire probabil fără alcool; cereți oferta all inclusive.",
    "src": [
     "https://www.saloane-evenimente.ro/Salon-de-evenimente-Grand-Marion-Iasi.html",
     "https://vinenunta.ro/furnizor/grand-marion/"
@@ -852,7 +852,7 @@
    "tel": [
     "0743 051 119 (WhatsApp)"
    ],
-   "em": "",
+   "em": "rezervari@lacastel.ro",
    "web": "https://lacastel.ro/",
    "ph": [
     {
@@ -872,7 +872,7 @@
    "halls": "7 săli: Green View 400, Castel Ballroom 200–360, Sala Venețiană, Sala Regală 130, Sala Coloanelor 70, Restaurant 60–70, Terasa Turnurilor. Hotel.",
    "rv": "Testimonialele de pe site laudă coordonarea; 13+ ani de nunți.",
    "pub": "2027: de la 105 €/pers. cu TVA, vin Cotnari nelimitat, 3 feluri, tort, fructe, open soft drinks; 2028: de la 114 €. Variantă all inclusive cu personal, decor, cocktail bar. Promo 2027: −25% la mâncare și vin din partea casei duminica; tragere la sorți 10.000 €.",
-   "tip": "105 € × 211 ≈ 110.000 lei doar meniul. Telefon fix complet și formular pe lacastel.ro/contact.",
+   "tip": "105 € × 211 ≈ 110.000 lei doar meniul. Telefonul fix complet e pe lacastel.ro/contact.",
    "src": [
     "https://lacastel.ro/meniu-nunta-standard/",
     "https://lacastel.ro/contact/"
@@ -1021,7 +1021,7 @@
     "0332 425 425",
     "0745 255 435"
    ],
-   "em": "",
+   "em": "events@hotelpleiada.ro",
    "web": "https://www.hotelpleiada.ro/",
    "ph": [
     {
@@ -1042,7 +1042,7 @@
    "halls": "Atlas 100–220, Concordia 60–100, Taas 50, Burgo 40. Hotel 5*, spa.",
    "rv": "Zeci de recenzii de nuntă 2025–2026, aproape toate de nota maximă (publicate de hotel). Se laudă coordonarea, mâncarea, camerele; un oaspete: prețul e mare.",
    "pub": "Preț nepublicat; oferta de pe site e pentru 2025–2026. Eveniment anual „Nunta de 5*”.",
-   "tip": "Atlas are maxim 220: 211 e la limită. Email prin pagina de contact.",
+   "tip": "Atlas are maxim 220: 211 e la limită.",
    "src": [
     "https://www.hotelpleiada.ro/review-uri-evenimente-pleiada/",
     "https://vinenunta.ro/furnizor/pleiada-boutique-hotel/"
@@ -1218,5 +1218,6 @@
    "rc": 0,
    "maps": "https://www.google.com/maps/search/?api=1&query=Titanic%20Dream%20Mogosesti"
   }
- ]
+ ],
+ "updated": "2026-10-26"
 }
