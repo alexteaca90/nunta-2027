@@ -1,0 +1,4 @@
+dist/
+*date-initiale*.json
+backup-*.json
+.DS_Store
