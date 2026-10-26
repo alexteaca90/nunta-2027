@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.1 (26 octombrie 2026)
+
+- Prefix tehnic propriu (`nn27`) pentru constante, tabele, opțiuni și API (`/wp-json/nn27/v1/`). Prefixul vechi, `atwn27`, era folosit și de un plugin mai vechi de pe site, iar cele două intrau în conflict.
+- Datele importate în v0.1.0 se mută automat în tabelele noi.
+- Avertisment în panou, cu link de dezactivare, dacă e activ alt plugin „nunta”.
+- Aplicația tolerează un avertisment PHP afișat înaintea răspunsului JSON.
+- Importul acceptă și fișierele cu formatul vechi.
+
 ## 0.1.0 (26 octombrie 2026)
 
 Prima versiune.

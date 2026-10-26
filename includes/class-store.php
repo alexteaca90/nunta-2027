@@ -12,10 +12,10 @@
 
 defined( 'ABSPATH' ) || exit;
 
-class Atwn27_Store {
+class Nn27_Store {
 
 	const COLS        = array( 'settings', 'cats', 'hh', 'p', 'v', 'budget', 'vendors', 'tasks' );
-	const FORMAT      = 'atwn27-state';
+	const FORMAT      = 'nn27-state';
 	const MAX_OPS     = 500;
 	const MAX_RECORD  = 200000; // octeți JSON per înregistrare.
 
@@ -25,13 +25,13 @@ class Atwn27_Store {
 
 	public static function current_rev() {
 		global $wpdb;
-		$t = Atwn27_Installer::tables();
+		$t = Nn27_Installer::tables();
 		return (int) $wpdb->get_var( "SELECT MAX(id) FROM {$t['revs']}" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	}
 
 	public static function all() {
 		global $wpdb;
-		$t    = Atwn27_Installer::tables();
+		$t    = Nn27_Installer::tables();
 		$rows = $wpdb->get_results( "SELECT col, rid, data, ver FROM {$t['records']} WHERE deleted = 0", ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$out  = array();
 		foreach ( (array) $rows as $r ) {
@@ -42,7 +42,7 @@ class Atwn27_Store {
 
 	public static function changes( $since ) {
 		global $wpdb;
-		$t    = Atwn27_Installer::tables();
+		$t    = Nn27_Installer::tables();
 		$rows = $wpdb->get_results( $wpdb->prepare( "SELECT col, rid, data, ver, deleted FROM {$t['records']} WHERE rev > %d ORDER BY rev ASC", $since ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$out  = array();
 		foreach ( (array) $rows as $r ) {
@@ -63,7 +63,7 @@ class Atwn27_Store {
 
 	public static function count_by_col() {
 		global $wpdb;
-		$t    = Atwn27_Installer::tables();
+		$t    = Nn27_Installer::tables();
 		$rows = $wpdb->get_results( "SELECT col, COUNT(*) AS n FROM {$t['records']} WHERE deleted = 0 GROUP BY col", ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$out  = array_fill_keys( self::COLS, 0 );
 		foreach ( (array) $rows as $r ) {
@@ -74,7 +74,7 @@ class Atwn27_Store {
 
 	public static function recent_log( $limit = 12 ) {
 		global $wpdb;
-		$t    = Atwn27_Installer::tables();
+		$t    = Nn27_Installer::tables();
 		$rows = $wpdb->get_results( $wpdb->prepare( "SELECT created, who, msg FROM {$t['log']} ORDER BY id DESC LIMIT %d", $limit ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$out  = array();
 		foreach ( (array) $rows as $r ) {
@@ -100,7 +100,7 @@ class Atwn27_Store {
 	 */
 	private static function clean( $v, $depth = 0 ) {
 		if ( $depth > 6 ) {
-			return new WP_Error( 'atwn27_invalid', 'Structură prea adâncă.' );
+			return new WP_Error( 'nn27_invalid', 'Structură prea adâncă.' );
 		}
 		if ( is_null( $v ) || is_bool( $v ) || is_int( $v ) ) {
 			return $v;
@@ -116,7 +116,7 @@ class Atwn27_Store {
 			$out = array();
 			foreach ( $v as $k => $item ) {
 				if ( is_string( $k ) && ! preg_match( '/^[A-Za-z0-9_]{1,40}$/', $k ) ) {
-					return new WP_Error( 'atwn27_invalid', 'Câmp nepermis: ' . sanitize_text_field( $k ) );
+					return new WP_Error( 'nn27_invalid', 'Câmp nepermis: ' . sanitize_text_field( $k ) );
 				}
 				$c = self::clean( $item, $depth + 1 );
 				if ( is_wp_error( $c ) ) {
@@ -126,7 +126,7 @@ class Atwn27_Store {
 			}
 			return $out;
 		}
-		return new WP_Error( 'atwn27_invalid', 'Tip de date nepermis.' );
+		return new WP_Error( 'nn27_invalid', 'Tip de date nepermis.' );
 	}
 
 	/**
@@ -139,23 +139,23 @@ class Atwn27_Store {
 	 */
 	public static function validate_record( $col, $id, $data ) {
 		if ( ! in_array( $col, self::COLS, true ) ) {
-			return new WP_Error( 'atwn27_invalid', 'Colecție necunoscută.' );
+			return new WP_Error( 'nn27_invalid', 'Colecție necunoscută.' );
 		}
 		if ( ! is_string( $id ) || ! preg_match( '/^[A-Za-z0-9_-]{1,40}$/', $id ) ) {
-			return new WP_Error( 'atwn27_invalid', 'ID invalid.' );
+			return new WP_Error( 'nn27_invalid', 'ID invalid.' );
 		}
 		if ( 'settings' === $col && 'main' !== $id ) {
-			return new WP_Error( 'atwn27_invalid', 'Setările au un singur ID.' );
+			return new WP_Error( 'nn27_invalid', 'Setările au un singur ID.' );
 		}
 		if ( ! is_array( $data ) || ( array() !== $data && array_keys( $data ) === range( 0, count( $data ) - 1 ) ) ) {
-			return new WP_Error( 'atwn27_invalid', 'Înregistrarea trebuie să fie un obiect.' );
+			return new WP_Error( 'nn27_invalid', 'Înregistrarea trebuie să fie un obiect.' );
 		}
 		$data = self::clean( $data );
 		if ( is_wp_error( $data ) ) {
 			return $data;
 		}
 		if ( 'settings' !== $col && ( ! isset( $data['id'] ) || $data['id'] !== $id ) ) {
-			return new WP_Error( 'atwn27_invalid', 'ID-ul din date nu corespunde.' );
+			return new WP_Error( 'nn27_invalid', 'ID-ul din date nu corespunde.' );
 		}
 		$required = array(
 			'cats' => array( 'n' ),
@@ -165,11 +165,11 @@ class Atwn27_Store {
 		);
 		foreach ( isset( $required[ $col ] ) ? $required[ $col ] : array() as $f ) {
 			if ( ! isset( $data[ $f ] ) || ! is_string( $data[ $f ] ) ) {
-				return new WP_Error( 'atwn27_invalid', "Lipsește câmpul „{$f}” ({$col}/{$id})." );
+				return new WP_Error( 'nn27_invalid', "Lipsește câmpul „{$f}” ({$col}/{$id})." );
 			}
 		}
 		if ( strlen( wp_json_encode( $data ) ) > self::MAX_RECORD ) {
-			return new WP_Error( 'atwn27_invalid', 'Înregistrare prea mare.' );
+			return new WP_Error( 'nn27_invalid', 'Înregistrare prea mare.' );
 		}
 		return $data;
 	}
@@ -196,14 +196,14 @@ class Atwn27_Store {
 	 */
 	public static function commit( $ops, $logs, $who ) {
 		global $wpdb;
-		$t   = Atwn27_Installer::tables();
+		$t   = Nn27_Installer::tables();
 		$who = mb_substr( sanitize_text_field( (string) $who ), 0, 40 );
 
 		if ( ! is_array( $ops ) || ! $ops ) {
-			return new WP_Error( 'atwn27_invalid', 'Nicio modificare.', array( 'status' => 400 ) );
+			return new WP_Error( 'nn27_invalid', 'Nicio modificare.', array( 'status' => 400 ) );
 		}
 		if ( count( $ops ) > self::MAX_OPS ) {
-			return new WP_Error( 'atwn27_invalid', 'Prea multe modificări deodată.', array( 'status' => 400 ) );
+			return new WP_Error( 'nn27_invalid', 'Prea multe modificări deodată.', array( 'status' => 400 ) );
 		}
 
 		$clean = array();
@@ -220,11 +220,11 @@ class Atwn27_Store {
 					return $data;
 				}
 			} elseif ( ! in_array( $col, self::COLS, true ) || ! preg_match( '/^[A-Za-z0-9_-]{1,40}$/', $id ) || 'settings' === $col ) {
-				return new WP_Error( 'atwn27_invalid', 'Ștergere invalidă.', array( 'status' => 422 ) );
+				return new WP_Error( 'nn27_invalid', 'Ștergere invalidă.', array( 'status' => 422 ) );
 			}
 			$key = $col . ':' . $id;
 			if ( isset( $seen[ $key ] ) ) {
-				return new WP_Error( 'atwn27_invalid', 'Aceeași înregistrare apare de două ori.', array( 'status' => 422 ) );
+				return new WP_Error( 'nn27_invalid', 'Aceeași înregistrare apare de două ori.', array( 'status' => 422 ) );
 			}
 			$seen[ $key ] = true;
 			$clean[]      = compact( 'col', 'id', 'base', 'data' );
@@ -252,7 +252,7 @@ class Atwn27_Store {
 		}
 		if ( $conflicts ) {
 			$wpdb->query( 'ROLLBACK' );
-			return new WP_Error( 'atwn27_conflict', 'Datele au fost modificate între timp pe alt dispozitiv.', array( 'status' => 409, 'records' => $conflicts ) );
+			return new WP_Error( 'nn27_conflict', 'Datele au fost modificate între timp pe alt dispozitiv.', array( 'status' => 409, 'records' => $conflicts ) );
 		}
 
 		// Integritate: fiecare persoană trebuie să aparțină unei familii existente.
@@ -269,7 +269,7 @@ class Atwn27_Store {
 		foreach ( $clean as $op ) {
 			if ( 'p' === $op['col'] && null !== $op['data'] && ! isset( $hh_after[ $op['data']['h'] ] ) ) {
 				$wpdb->query( 'ROLLBACK' );
-				return new WP_Error( 'atwn27_invalid', 'Persoana „' . $op['data']['n'] . '” nu aparține unei familii existente.', array( 'status' => 422 ) );
+				return new WP_Error( 'nn27_invalid', 'Persoana „' . $op['data']['n'] . '” nu aparține unei familii existente.', array( 'status' => 422 ) );
 			}
 		}
 
@@ -278,7 +278,7 @@ class Atwn27_Store {
 		$rev = (int) $wpdb->insert_id;
 		if ( ! $rev ) {
 			$wpdb->query( 'ROLLBACK' );
-			return new WP_Error( 'atwn27_db', 'Nu am putut salva. Încercați din nou.', array( 'status' => 500 ) );
+			return new WP_Error( 'nn27_db', 'Nu am putut salva. Încercați din nou.', array( 'status' => 500 ) );
 		}
 
 		$applied = array();
@@ -286,7 +286,7 @@ class Atwn27_Store {
 			$res = self::write( $op['col'], $op['id'], $op['data'], $current[ $op['col'] . ':' . $op['id'] ], $rev, $now, $who );
 			if ( false === $res ) {
 				$wpdb->query( 'ROLLBACK' );
-				return new WP_Error( 'atwn27_db', 'Nu am putut salva. Încercați din nou.', array( 'status' => 500 ) );
+				return new WP_Error( 'nn27_db', 'Nu am putut salva. Încercați din nou.', array( 'status' => 500 ) );
 			}
 			if ( null !== $res ) {
 				$applied[] = $res;
@@ -330,7 +330,7 @@ class Atwn27_Store {
 
 	private static function live_ids( $col ) {
 		global $wpdb;
-		$t   = Atwn27_Installer::tables();
+		$t   = Nn27_Installer::tables();
 		$ids = $wpdb->get_col( $wpdb->prepare( "SELECT rid FROM {$t['records']} WHERE col = %s AND deleted = 0", $col ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		return array_fill_keys( (array) $ids, true );
 	}
@@ -342,7 +342,7 @@ class Atwn27_Store {
 	 */
 	private static function write( $col, $id, $data, $row, $rev, $now, $who ) {
 		global $wpdb;
-		$t = Atwn27_Installer::tables();
+		$t = Nn27_Installer::tables();
 		if ( null === $data ) {
 			if ( ! $row || ! empty( $row['deleted'] ) ) {
 				return null;
@@ -406,7 +406,7 @@ class Atwn27_Store {
 			'format'   => self::FORMAT,
 			'version'  => 1,
 			'exported' => gmdate( 'c' ),
-			'plugin'   => ATWN27_VERSION,
+			'plugin'   => NN27_VERSION,
 			'state'    => $state,
 		);
 	}
@@ -415,7 +415,7 @@ class Atwn27_Store {
 		if ( ! self::current_rev() ) {
 			return '';
 		}
-		$dir = Atwn27_Files::ensure_dir();
+		$dir = Nn27_Files::ensure_dir();
 		if ( ! $dir ) {
 			return '';
 		}
@@ -434,7 +434,7 @@ class Atwn27_Store {
 		$errors   = array();
 		$warnings = array();
 		$counts   = array();
-		if ( ! is_array( $doc ) || ( $doc['format'] ?? '' ) !== self::FORMAT || ! isset( $doc['state'] ) || ! is_array( $doc['state'] ) ) {
+		if ( ! is_array( $doc ) || ! in_array( $doc['format'] ?? '', array( self::FORMAT, 'atwn27-state' ), true ) || ! isset( $doc['state'] ) || ! is_array( $doc['state'] ) ) {
 			return array( 'ok' => false, 'errors' => array( 'Fișierul nu este un export al acestei platforme (format ' . self::FORMAT . ').' ), 'warnings' => array(), 'counts' => array() );
 		}
 		$s = $doc['state'];
@@ -500,10 +500,10 @@ class Atwn27_Store {
 		global $wpdb;
 		$check = self::validate_import( $doc );
 		if ( ! $check['ok'] ) {
-			return new WP_Error( 'atwn27_invalid', implode( ' ', $check['errors'] ) );
+			return new WP_Error( 'nn27_invalid', implode( ' ', $check['errors'] ) );
 		}
 		$backup = self::backup_to_file( 'inainte-de-import' );
-		$t      = Atwn27_Installer::tables();
+		$t      = Nn27_Installer::tables();
 		$now    = current_time( 'mysql', true );
 		$wpdb->query( 'START TRANSACTION' );
 		$wpdb->insert( $t['revs'], array( 'created' => $now, 'who' => $who ) );
@@ -523,7 +523,7 @@ class Atwn27_Store {
 				$row = $wpdb->get_row( $wpdb->prepare( "SELECT col, rid, ver, deleted FROM {$t['records']} WHERE col = %s AND rid = %s", $c, $id ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				if ( false === self::write( $c, $id, $data, $row, $rev, $now, $who ) ) {
 					$wpdb->query( 'ROLLBACK' );
-					return new WP_Error( 'atwn27_db', 'Importul a eșuat; datele existente au rămas neschimbate.' );
+					return new WP_Error( 'nn27_db', 'Importul a eșuat; datele existente au rămas neschimbate.' );
 				}
 				++$n;
 			}

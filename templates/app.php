@@ -18,10 +18,10 @@ defined( 'ABSPATH' ) || exit;
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..600&family=Hanken+Grotesk:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="<?php echo Atwn27_Frontend::asset( 'app.css' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>">
+<link rel="stylesheet" href="<?php echo Nn27_Frontend::asset( 'app.css' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>">
 <script>
-(function(){try{var t=localStorage.getItem('atwn27-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(e){}})();
-window.ATWN27 = <?php echo wp_json_encode( Atwn27_Frontend::config() ); ?>;
+(function(){try{var t=localStorage.getItem('nn27-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(e){}})();
+window.NN27 = <?php echo wp_json_encode( Nn27_Frontend::config() ); ?>;
 </script>
 </head>
 <body>
@@ -41,6 +41,6 @@ window.ATWN27 = <?php echo wp_json_encode( Atwn27_Frontend::config() ); ?>;
 <div class="scrim" id="scrim" data-act="close"></div>
 <aside class="drawer" id="drawer" aria-hidden="true"></aside>
 <div class="toast" id="toast" role="status"></div>
-<script src="<?php echo Atwn27_Frontend::asset( 'app.js' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>"></script>
+<script src="<?php echo Nn27_Frontend::asset( 'app.js' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>"></script>
 </body>
 </html>

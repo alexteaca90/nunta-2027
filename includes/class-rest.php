@@ -1,6 +1,6 @@
 <?php
 /**
- * API REST: /wp-json/atwn27/v1/...
+ * API REST: /wp-json/nn27/v1/...
  *
  * GET    state            toate datele + revizia curentă
  * GET    changes?since=N  ce s-a schimbat după revizia N (sincronizare între dispozitive)
@@ -14,12 +14,12 @@
 
 defined( 'ABSPATH' ) || exit;
 
-class Atwn27_Rest {
+class Nn27_Rest {
 
-	const NS = 'atwn27/v1';
+	const NS = 'nn27/v1';
 
 	public static function register_routes() {
-		$perm = array( 'Atwn27_Auth', 'check' );
+		$perm = array( 'Nn27_Auth', 'check' );
 		register_rest_route( self::NS, '/state', array( 'methods' => 'GET', 'callback' => array( __CLASS__, 'state' ), 'permission_callback' => $perm ) );
 		register_rest_route(
 			self::NS,
@@ -58,23 +58,23 @@ class Atwn27_Rest {
 	public static function state() {
 		return rest_ensure_response(
 			array(
-				'rev'     => Atwn27_Store::current_rev(),
-				'records' => Atwn27_Store::all(),
-				'log'     => Atwn27_Store::recent_log(),
-				'server'  => ATWN27_VERSION,
+				'rev'     => Nn27_Store::current_rev(),
+				'records' => Nn27_Store::all(),
+				'log'     => Nn27_Store::recent_log(),
+				'server'  => NN27_VERSION,
 			)
 		);
 	}
 
 	public static function changes( WP_REST_Request $req ) {
 		$since = (int) $req->get_param( 'since' );
-		$rev   = Atwn27_Store::current_rev();
+		$rev   = Nn27_Store::current_rev();
 		return rest_ensure_response(
 			array(
 				'rev'     => $rev,
-				'changes' => $rev > $since ? Atwn27_Store::changes( $since ) : array(),
-				'log'     => $rev > $since ? Atwn27_Store::recent_log() : null,
-				'server'  => ATWN27_VERSION,
+				'changes' => $rev > $since ? Nn27_Store::changes( $since ) : array(),
+				'log'     => $rev > $since ? Nn27_Store::recent_log() : null,
+				'server'  => NN27_VERSION,
 			)
 		);
 	}
@@ -82,31 +82,31 @@ class Atwn27_Rest {
 	public static function commit( WP_REST_Request $req ) {
 		$body = $req->get_json_params();
 		if ( ! is_array( $body ) ) {
-			return new WP_Error( 'atwn27_invalid', 'Cerere invalidă.', array( 'status' => 400 ) );
+			return new WP_Error( 'nn27_invalid', 'Cerere invalidă.', array( 'status' => 400 ) );
 		}
-		$res = Atwn27_Store::commit( $body['ops'] ?? array(), $body['log'] ?? array(), $body['who'] ?? '' );
+		$res = Nn27_Store::commit( $body['ops'] ?? array(), $body['log'] ?? array(), $body['who'] ?? '' );
 		if ( is_wp_error( $res ) ) {
 			return $res;
 		}
-		$res['log'] = Atwn27_Store::recent_log();
+		$res['log'] = Nn27_Store::recent_log();
 		return rest_ensure_response( $res );
 	}
 
 	public static function upload( WP_REST_Request $req ) {
 		$files = $req->get_file_params();
-		$res   = Atwn27_Files::store( $files['file'] ?? null, (string) $req->get_param( 'venue' ) );
+		$res   = Nn27_Files::store( $files['file'] ?? null, (string) $req->get_param( 'venue' ) );
 		return is_wp_error( $res ) ? $res : rest_ensure_response( $res );
 	}
 
 	public static function download( WP_REST_Request $req ) {
-		$row = Atwn27_Files::get( $req['id'] );
+		$row = Nn27_Files::get( $req['id'] );
 		if ( ! $row ) {
-			return new WP_Error( 'atwn27_404', 'Fișierul nu mai există.', array( 'status' => 404 ) );
+			return new WP_Error( 'nn27_404', 'Fișierul nu mai există.', array( 'status' => 404 ) );
 		}
-		Atwn27_Files::stream( $row );
+		Nn27_Files::stream( $row );
 	}
 
 	public static function remove_file( WP_REST_Request $req ) {
-		return rest_ensure_response( array( 'deleted' => Atwn27_Files::delete( $req['id'] ) ) );
+		return rest_ensure_response( array( 'deleted' => Nn27_Files::delete( $req['id'] ) ) );
 	}
 }

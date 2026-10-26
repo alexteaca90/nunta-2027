@@ -12,35 +12,35 @@
 
 defined( 'ABSPATH' ) || exit;
 
-class Atwn27_Installer {
+class Nn27_Installer {
 
 	const DB_VERSION = '1';
 
 	public static function activate() {
 		self::install();
-		Atwn27_Files::ensure_dir();
+		Nn27_Files::ensure_dir();
 	}
 
 	public static function maybe_upgrade() {
-		$current = get_option( 'atwn27_db_version' );
+		$current = get_option( 'nn27_db_version' );
 		if ( self::DB_VERSION === $current ) {
 			return;
 		}
 		if ( $current ) {
 			// Există date dintr-o versiune anterioară: backup înainte de migrare.
-			Atwn27_Store::backup_to_file( 'inainte-de-schema-' . self::DB_VERSION );
+			Nn27_Store::backup_to_file( 'inainte-de-schema-' . self::DB_VERSION );
 		}
 		self::install();
-		Atwn27_Files::ensure_dir();
+		Nn27_Files::ensure_dir();
 	}
 
 	public static function tables() {
 		global $wpdb;
 		return array(
-			'records' => $wpdb->prefix . 'atwn27_records',
-			'revs'    => $wpdb->prefix . 'atwn27_revs',
-			'log'     => $wpdb->prefix . 'atwn27_log',
-			'files'   => $wpdb->prefix . 'atwn27_files',
+			'records' => $wpdb->prefix . 'nn27_records',
+			'revs'    => $wpdb->prefix . 'nn27_revs',
+			'log'     => $wpdb->prefix . 'nn27_log',
+			'files'   => $wpdb->prefix . 'nn27_files',
 		);
 	}
 
@@ -96,6 +96,58 @@ class Atwn27_Installer {
   KEY venue (venue)
 ) $c;"
 		);
-		update_option( 'atwn27_db_version', self::DB_VERSION, false );
+		update_option( 'nn27_db_version', self::DB_VERSION, false );
+		self::migrate_legacy();
+	}
+
+	/**
+	 * v0.1.0 folosea prefixul „atwn27”, același cu un plugin mai vechi de pe site.
+	 * Dacă tabelele noi sunt goale și cele vechi au structura noastră, copiem datele.
+	 */
+	public static function migrate_legacy() {
+		global $wpdb;
+		$t   = self::tables();
+		$old = array(
+			'records' => $wpdb->prefix . 'atwn27_records',
+			'revs'    => $wpdb->prefix . 'atwn27_revs',
+			'log'     => $wpdb->prefix . 'atwn27_log',
+			'files'   => $wpdb->prefix . 'atwn27_files',
+		);
+		if ( (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$t['records']}" ) > 0 ) { // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			return;
+		}
+		$exists = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $old['records'] ) );
+		if ( $exists !== $old['records'] ) {
+			return;
+		}
+		$cols = $wpdb->get_col( "SHOW COLUMNS FROM {$old['records']}" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		if ( array_diff( array( 'col', 'rid', 'data', 'ver', 'rev', 'deleted', 'updated_at', 'updated_by' ), (array) $cols ) ) {
+			return; // Alt plugin, altă structură: nu atingem nimic.
+		}
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$wpdb->query( "INSERT INTO {$t['records']} (col, rid, data, ver, rev, deleted, updated_at, updated_by) SELECT col, rid, data, ver, rev, deleted, updated_at, updated_by FROM {$old['records']}" );
+		foreach ( array( 'revs' => 'id, created, who', 'log' => 'id, created, who, msg' ) as $k => $list ) {
+			if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $old[ $k ] ) ) === $old[ $k ] ) {
+				$wpdb->query( "INSERT INTO {$t[$k]} ({$list}) SELECT {$list} FROM {$old[$k]}" );
+			}
+		}
+		if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $old['files'] ) ) === $old['files'] ) {
+			$wpdb->query( "INSERT INTO {$t['files']} (id, venue, name, mime, size, path, created, deleted) SELECT id, venue, name, mime, size, path, created, deleted FROM {$old['files']}" );
+			$up  = wp_upload_dir( null, false );
+			$src = trailingslashit( $up['basedir'] ) . 'atwn27-private';
+			$dst = Nn27_Files::ensure_dir();
+			if ( $dst && is_dir( $src ) ) {
+				foreach ( (array) glob( $src . '/F*' ) as $f ) {
+					@copy( $f, $dst . '/' . basename( $f ) ); // phpcs:ignore
+				}
+			}
+		}
+		// phpcs:enable
+		foreach ( array( 'page_id', 'update_repo' ) as $o ) {
+			$v = get_option( 'atwn27_' . $o );
+			if ( $v && ! get_option( 'nn27_' . $o ) ) {
+				update_option( 'nn27_' . $o, $v, false );
+			}
+		}
 	}
 }

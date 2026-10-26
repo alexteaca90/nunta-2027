@@ -19,16 +19,16 @@ Fiecare versiune nouă este publicată aici ca release, cu `nunta-2027.zip` ata�
 
 ## Securitate
 
-- Datele se citesc și se scriu numai prin `/wp-json/atwn27/v1/`.
+- Datele se citesc și se scriu numai prin `/wp-json/nn27/v1/`.
 - Fiecare cerere verifică pe server parola paginii (cookie-ul `wp-postpass_*`) sau un administrator autentificat.
 - Dacă pagina nu are parolă, accesul anonim e refuzat.
-- Antetul `X-ATWN27` e obligatoriu, ceea ce blochează cererile trimise de pe alte site-uri (CSRF).
-- Ofertele atașate stau în `wp-content/uploads/atwn27-private/`, cu acces direct blocat și nume aleatorii. Se descarcă numai prin API, după verificarea parolei.
+- Antetul `X-NN27` e obligatoriu, ceea ce blochează cererile trimise de pe alte site-uri (CSRF).
+- Ofertele atașate stau în `wp-content/uploads/nn27-private/`, cu acces direct blocat și nume aleatorii. Se descarcă numai prin API, după verificarea parolei.
 - Răspunsurile API sunt marcate `no-store`, iar pagina nu e indexată și nu intră în cache.
 
 ## Date și sincronizare
 
-- Tabele proprii: `atwn27_records` (o înregistrare per familie, persoană, sală etc., fiecare cu versiune), `atwn27_revs`, `atwn27_log` și `atwn27_files`.
+- Tabele proprii: `nn27_records` (o înregistrare per familie, persoană, sală etc., fiecare cu versiune), `nn27_revs`, `nn27_log` și `nn27_files`.
 - Mesajul „Salvat” apare numai după ce serverul a confirmat salvarea.
 - Dacă salvarea eșuează, modificarea rămâne în browser și se retrimite, inclusiv după un refresh.
 - Dacă două persoane modifică aceeași înregistrare, serverul răspunde 409. Aplicația combină modificările pe câmpuri și le retrimite, fără să suprascrie în tăcere.

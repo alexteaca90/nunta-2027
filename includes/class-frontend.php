@@ -11,7 +11,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-class Atwn27_Frontend {
+class Nn27_Frontend {
 
 	public static function init() {
 		add_shortcode( 'nunta_2027', array( __CLASS__, 'shortcode' ) );
@@ -44,8 +44,8 @@ class Atwn27_Frontend {
 			return $template;
 		}
 		$post = get_queried_object();
-		if ( (int) get_option( Atwn27_Auth::PAGE_OPTION ) !== (int) $post->ID ) {
-			update_option( Atwn27_Auth::PAGE_OPTION, (int) $post->ID, false );
+		if ( (int) get_option( Nn27_Auth::PAGE_OPTION ) !== (int) $post->ID ) {
+			update_option( Nn27_Auth::PAGE_OPTION, (int) $post->ID, false );
 		}
 		if ( ! defined( 'DONOTCACHEPAGE' ) ) {
 			define( 'DONOTCACHEPAGE', true ); // Pluginurile de cache nu salvează pagina.
@@ -56,23 +56,23 @@ class Atwn27_Frontend {
 		header( 'X-Frame-Options: SAMEORIGIN' );
 
 		if ( post_password_required( $post ) || ( '' === $post->post_password && ! current_user_can( 'manage_options' ) ) ) {
-			return ATWN27_DIR . 'templates/password.php';
+			return NN27_DIR . 'templates/password.php';
 		}
-		return ATWN27_DIR . 'templates/app.php';
+		return NN27_DIR . 'templates/app.php';
 	}
 
 	public static function asset( $file ) {
-		$path = ATWN27_DIR . 'assets/' . $file;
-		$ver  = ATWN27_VERSION . '-' . ( file_exists( $path ) ? filemtime( $path ) : '0' );
-		return esc_url( ATWN27_URL . 'assets/' . $file . '?ver=' . $ver );
+		$path = NN27_DIR . 'assets/' . $file;
+		$ver  = NN27_VERSION . '-' . ( file_exists( $path ) ? filemtime( $path ) : '0' );
+		return esc_url( NN27_URL . 'assets/' . $file . '?ver=' . $ver );
 	}
 
 	public static function config() {
 		return array(
-			'rest'    => esc_url_raw( rest_url( Atwn27_Rest::NS . '/' ) ),
+			'rest'    => esc_url_raw( rest_url( Nn27_Rest::NS . '/' ) ),
 			'nonce'   => wp_create_nonce( 'wp_rest' ),
-			'version' => ATWN27_VERSION,
-			'admin'   => current_user_can( 'manage_options' ) ? esc_url_raw( admin_url( 'admin.php?page=atwn27' ) ) : '',
+			'version' => NN27_VERSION,
+			'admin'   => current_user_can( 'manage_options' ) ? esc_url_raw( admin_url( 'admin.php?page=nn27' ) ) : '',
 		);
 	}
 }

@@ -11,7 +11,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-class Atwn27_Files {
+class Nn27_Files {
 
 	const MAX_BYTES = 26214400; // 25 MB.
 	const MIMES     = array(
@@ -25,7 +25,7 @@ class Atwn27_Files {
 
 	public static function dir() {
 		$up = wp_upload_dir( null, false );
-		return trailingslashit( $up['basedir'] ) . 'atwn27-private';
+		return trailingslashit( $up['basedir'] ) . 'nn27-private';
 	}
 
 	public static function ensure_dir() {
@@ -54,32 +54,32 @@ class Atwn27_Files {
 	public static function store( $file, $venue ) {
 		global $wpdb;
 		if ( empty( $file ) || ! isset( $file['tmp_name'] ) || UPLOAD_ERR_OK !== (int) $file['error'] ) {
-			return new WP_Error( 'atwn27_upload', 'Fișierul nu a ajuns la server. Încercați din nou.', array( 'status' => 400 ) );
+			return new WP_Error( 'nn27_upload', 'Fișierul nu a ajuns la server. Încercați din nou.', array( 'status' => 400 ) );
 		}
 		if ( (int) $file['size'] > self::MAX_BYTES ) {
-			return new WP_Error( 'atwn27_upload', 'Fișierul depășește 25 MB.', array( 'status' => 413 ) );
+			return new WP_Error( 'nn27_upload', 'Fișierul depășește 25 MB.', array( 'status' => 413 ) );
 		}
 		if ( ! preg_match( '/^[A-Za-z0-9_-]{1,40}$/', (string) $venue ) ) {
-			return new WP_Error( 'atwn27_upload', 'Sală invalidă.', array( 'status' => 400 ) );
+			return new WP_Error( 'nn27_upload', 'Sală invalidă.', array( 'status' => 400 ) );
 		}
 		$name  = sanitize_file_name( wp_basename( (string) $file['name'] ) );
 		$check = wp_check_filetype_and_ext( $file['tmp_name'], $name, self::MIMES );
 		if ( empty( $check['ext'] ) || empty( $check['type'] ) ) {
-			return new WP_Error( 'atwn27_upload', 'Se pot atașa doar PDF-uri și imagini (JPG, PNG, WEBP).', array( 'status' => 415 ) );
+			return new WP_Error( 'nn27_upload', 'Se pot atașa doar PDF-uri și imagini (JPG, PNG, WEBP).', array( 'status' => 415 ) );
 		}
 		$dir = self::ensure_dir();
 		if ( ! $dir ) {
-			return new WP_Error( 'atwn27_upload', 'Folderul pentru fișiere nu poate fi creat. Verificați permisiunile din wp-content/uploads.', array( 'status' => 500 ) );
+			return new WP_Error( 'nn27_upload', 'Folderul pentru fișiere nu poate fi creat. Verificați permisiunile din wp-content/uploads.', array( 'status' => 500 ) );
 		}
 		$id   = 'F' . strtolower( wp_generate_password( 20, false ) );
 		$disk = $id . '-' . wp_generate_password( 12, false ) . '.' . $check['ext'];
 		if ( ! @move_uploaded_file( $file['tmp_name'], $dir . '/' . $disk ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors
 			// Permite și fișiere care nu vin prin HTTP (teste).
 			if ( ! @rename( $file['tmp_name'], $dir . '/' . $disk ) ) { // phpcs:ignore
-				return new WP_Error( 'atwn27_upload', 'Fișierul nu a putut fi salvat pe server.', array( 'status' => 500 ) );
+				return new WP_Error( 'nn27_upload', 'Fișierul nu a putut fi salvat pe server.', array( 'status' => 500 ) );
 			}
 		}
-		$t    = Atwn27_Installer::tables();
+		$t    = Nn27_Installer::tables();
 		$meta = array(
 			'id'      => $id,
 			'venue'   => $venue,
@@ -102,7 +102,7 @@ class Atwn27_Files {
 
 	public static function get( $id ) {
 		global $wpdb;
-		$t = Atwn27_Installer::tables();
+		$t = Nn27_Installer::tables();
 		return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$t['files']} WHERE id = %s AND deleted = 0", $id ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	}
 
@@ -112,7 +112,7 @@ class Atwn27_Files {
 		if ( ! $row ) {
 			return false;
 		}
-		$t = Atwn27_Installer::tables();
+		$t = Nn27_Installer::tables();
 		$wpdb->update( $t['files'], array( 'deleted' => 1 ), array( 'id' => $id ) );
 		$path = self::dir() . '/' . $row['path'];
 		if ( is_file( $path ) ) {

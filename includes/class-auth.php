@@ -9,7 +9,7 @@
  *   paginii (post_password_required). Fără parola corectă: 401.
  * - Administratorii autentificați în WordPress au mereu acces.
  * - Dacă pagina NU are parolă, accesul anonim este refuzat (nu expunem datele din greșeală).
- * - Antetul X-ATWN27 este obligatoriu: un formular de pe alt site nu îl poate trimite,
+ * - Antetul X-NN27 este obligatoriu: un formular de pe alt site nu îl poate trimite,
  *   deci cererile cross-site (CSRF) sunt blocate.
  *
  * @package Nunta2027
@@ -17,9 +17,9 @@
 
 defined( 'ABSPATH' ) || exit;
 
-class Atwn27_Auth {
+class Nn27_Auth {
 
-	const PAGE_OPTION = 'atwn27_page_id';
+	const PAGE_OPTION = 'nn27_page_id';
 
 	public static function page() {
 		$id = (int) get_option( self::PAGE_OPTION );
@@ -56,11 +56,11 @@ class Atwn27_Auth {
 	 * @return true|WP_Error
 	 */
 	public static function check( $request ) {
-		if ( '1' !== (string) $request->get_header( 'x_atwn27' ) ) {
-			return new WP_Error( 'atwn27_csrf', 'Cerere respinsă.', array( 'status' => 403 ) );
+		if ( '1' !== (string) $request->get_header( 'x_nn27' ) ) {
+			return new WP_Error( 'nn27_csrf', 'Cerere respinsă.', array( 'status' => 403 ) );
 		}
 		if ( ! self::can_access() ) {
-			return new WP_Error( 'atwn27_auth', 'Introduceți din nou parola paginii.', array( 'status' => 401 ) );
+			return new WP_Error( 'nn27_auth', 'Introduceți din nou parola paginii.', array( 'status' => 401 ) );
 		}
 		return true;
 	}

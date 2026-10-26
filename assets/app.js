@@ -1,6 +1,6 @@
 
-const LS = 'atwn27';
-const CFG = window.ATWN27 || {rest:'/wp-json/atwn27/v1/', nonce:'', admin:'', version:''};
+const LS = 'nn27';
+const CFG = window.NN27 || {rest:'/wp-json/nn27/v1/', nonce:'', admin:'', version:''};
 const STAGES = ['De contactat','Contactată','Ofertă primită','Vizitată','Lista scurtă','Rezervată','Respinsă'];
 const RS = ['În așteptare','Vine','Nu vine'];
 const SCORE_LABELS = ['Locație','Meniu','Servicii','Flexibilitate'];
@@ -40,14 +40,17 @@ try{ WHO = localStorage.getItem(LS+'-who') || ''; }catch(e){}
 const SYNC = {busy:false, again:false, timer:null, status:'loading', fails:0, msg:''};
 function apiUrl(path){ const base = CFG.rest; if (base.includes('?')){ const [p,q] = path.split('?'); return base + p + (q ? '&'+q : ''); } return base + path; }
 async function api(path, opt={}){
-  const headers = {'X-WP-Nonce':CFG.nonce, 'X-ATWN27':'1'};
+  const headers = {'X-WP-Nonce':CFG.nonce, 'X-NN27':'1'};
   let body = opt.body;
   if (opt.json){ headers['Content-Type']='application/json'; body = JSON.stringify(opt.json); }
   let r;
   try{ r = await fetch(apiUrl(path), {method:opt.method||'GET', credentials:'same-origin', cache:'no-store', headers, body}); }
   catch(e){ const err = new Error('Fără conexiune la server'); err.status = 0; throw err; }
   if (opt.raw && r.ok) return r;
-  let data = null; try{ data = await r.json(); }catch(e){}
+  let data = null; const txt = await r.text();
+  try{ data = JSON.parse(txt); }
+  catch(e){ const i = txt.search(/[{\[]"?/); if (i>0){ try{ data = JSON.parse(txt.slice(txt.indexOf('{"')>=0?txt.indexOf('{"'):i)); console.warn('Răspuns cu text în plus înainte de JSON (avertisment PHP?)', txt.slice(0,200)); }catch(x){} } }
+  if (r.ok && data===null){ const err = new Error('Serverul a trimis un răspuns neașteptat'); err.status = r.status; throw err; }
   if (!r.ok){ const err = new Error((data && data.message) || ('Eroare '+r.status)); err.status = r.status; err.data = data; throw err; }
   return data;
 }
