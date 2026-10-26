@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.4 (26 octombrie 2026)
+
+- Furnizori direct în Buget: fiecare categorie se deschide și arată furnizorii ei, cu bifa „În buget”, prețul și cât s-a plătit.
+- Din Buget se poate muta în categorie un furnizor existent, se poate adăuga unul nou sau se poate scoate unul din categorie.
+- Mai mulți furnizori bifați în aceeași categorie se adună (de exemplu foto și video separat).
+- Furnizorii fără categorie apar la Furnizori, în secțiunea „Fără categorie”.
+- Bugetul pe telefon e afișat ca o listă de carduri, nu ca tabel.
+
 ## 0.1.3 (26 octombrie 2026)
 
 - Reparat: formularele (furnizor, pas în calendar, categorie) nu se mai golesc și butonul nu mai „pierde” click-ul. Sincronizarea redesena pagina chiar și când nu se schimbase nimic (după ștergeri recente), exact în momentul click-ului.

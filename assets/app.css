@@ -402,3 +402,43 @@ td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
 @media (max-width:960px){.df4{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:560px){.df4{grid-template-columns:minmax(0,1fr)}}
 .vend .hh-name[aria-expanded="true"] .caret{transform:rotate(90deg)}
+
+/* furnizori în buget */
+.bcat{display:flex;gap:6px;align-items:center}
+.bt{border:0;background:none;padding:4px;border-radius:6px;color:var(--muted);display:grid;place-items:center}
+.bt:hover{background:var(--sunk);color:var(--ink)}
+.bt svg{width:14px;height:14px;transition:transform .2s}
+.bt[aria-expanded="true"] svg{transform:rotate(90deg)}
+tr.bexp td{background:var(--sunk);padding:14px}
+.bvend{display:grid;gap:14px}
+.bvlist{display:grid;gap:6px}
+.bvrow{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto auto;gap:12px;align-items:center;padding:8px 10px;border-radius:10px;background:var(--surface);border:1px solid var(--line)}
+.bvrow.on{border-color:var(--sage)}
+.bvname{font-weight:600;display:flex;gap:8px;align-items:center;flex-wrap:wrap;min-width:0}
+.bvacts{display:flex;gap:6px;align-items:center}
+.bvadd{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:14px;align-items:end}
+.bvform{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,.8fr) auto;gap:10px;align-items:end;padding:0;background:none}
+@media (max-width:760px){.bvrow{grid-template-columns:auto minmax(0,1fr)}.bvrow .dar,.bvrow .vsum,.bvacts{grid-column:1/-1}.bvadd,.bvform{grid-template-columns:minmax(0,1fr)}}
+.blines tr.bexp td input{width:100%;text-align:left}
+.blines tr.bexp td .dar input{width:96px;text-align:right}
+.blines tr.bexp td select{width:100%}
+
+@media (max-width:700px){
+  .blines{border:0;background:none;overflow:visible}
+  .blines table,.blines tbody,.blines tr,.blines td{display:block;width:100%}
+  .blines thead{display:none}
+  .blines tr.bline{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 12px;padding:14px;margin-bottom:10px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-m)}
+  .blines tr.bline td{padding:0;border:0;text-align:left}
+  .blines tr.bline td.cat{grid-column:1/-1}
+  .blines tr.bline td[data-label]:not([data-label=""])::before{content:attr(data-label);display:block;font-size:11.5px;color:var(--muted);font-weight:600;margin-bottom:3px}
+  .blines tr.bline td input{width:100%;text-align:left}
+  .blines tr.bline td[data-label="Furnizori"]{grid-column:1/-1}
+  .blines tr.bexp{margin:-14px 0 10px;border:1px solid var(--line);border-top:0;border-radius:0 0 var(--r-m) var(--r-m);overflow:hidden}
+  .blines tr.bexp td{display:block}
+  .blines tr.bsum{display:flex;justify-content:space-between;padding:12px 14px;border-radius:var(--r-m);background:var(--sunk)}
+  .blines tr.bsum td{width:auto;padding:0;border:0;background:none}
+  .blines tr.bsum td:empty{display:none}
+  .blines tr.bsum td:nth-child(4)::before{content:"Achitat ";font-weight:400;color:var(--muted)}
+  .blines tr.bsum td:nth-child(5)::before{content:"Total ";font-weight:400;color:var(--muted)}
+  .blines tr.bsum td:first-child{display:none}
+}

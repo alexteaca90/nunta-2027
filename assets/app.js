@@ -266,7 +266,7 @@ async function viewFile(vid, fid){
 function save(){ schedule(); }
 function log(msg){ LOGS.unshift({t:Date.now(), who:WHO, m:msg}); LOGS = LOGS.slice(0,30); PENDING_LOG.push(msg); }
 
-const UI = {view:'acasa', q:'', cat:'all', gf:'all', open:new Set(), vopen:new Set(), vendAdd:null, flash:null, gview:'cards', vtab:'board', vq:'', drawer:null, showRejected:false};
+const UI = {view:'acasa', q:'', cat:'all', gf:'all', open:new Set(), vopen:new Set(), bopen:new Set(), vendAdd:null, flash:null, gview:'cards', vtab:'board', vq:'', drawer:null, showRejected:false};
 try{ const h = location.hash.slice(1); if (VIEWS.some(v=>v[0]===h)) UI.view = h; }catch(e){}
 
 /* ---------- utilitare ---------- */
@@ -708,17 +708,17 @@ function closeDrawer(silent){ UI.drawer = null; $('#drawer').classList.remove('o
 /* ---------- Buget ---------- */
 function vBudget(C){
   const st = S.settings;
-  return `<div class="page-head"><div><h1>Buget</h1><p>Linia de sală și meniu se calculează singură din invitații așteptați și sala folosită în calcule. Când un furnizor din categorie e rezervat, prețul lui devine oferta categoriei, iar plățile lui intră la „Achitat”. Coloana Furnizori duce direct la furnizorii categoriei.</p></div>
+  return `<div class="page-head"><div><h1>Buget</h1><p>Linia de sală și meniu se calculează singură din invitații așteptați și sala folosită în calcule. Deschideți o categorie (săgeata din stânga) ca să adăugați furnizori, să aduceți unul existent sau să bifați care intră în buget.</p></div>
   <label class="field" style="width:200px"><span>Limita de buget (lei)</span><input class="input num" inputmode="numeric" data-set="budget" value="${st.budget}"></label></div>
   <div class="cmpwrap blines"><table>
     <thead><tr><th>Categorie</th><th class="n">Estimare</th><th class="n">Ofertă</th><th class="n">Achitat</th><th class="n">Contează</th><th>Furnizori</th></tr></thead>
-    <tbody>${C.lines.map(b=>`<tr>
-      <td class="cat">${b.link==='venue'?`<div style="font-weight:600">${esc(b.cat)}</div><span class="linked">${I.link}${n0(C.expected)} invitați × ${lei(C.price)} (${esc(C.priceSrc)})</span>`:`<input class="input" data-b="${b.id}" data-f="cat" value="${esc(b.cat)}" aria-label="Categorie">`}</td>
-      <td class="n">${b.link==='venue'?lei(b.est):`<input class="input num" inputmode="numeric" data-b="${b.id}" data-f="est" value="${b.est||''}" aria-label="Estimare">`}</td>
-      <td class="n">${b.fromVendors?`<span class="linked">${I.link}${lei(b.quote)}</span>`:`<input class="input num" inputmode="numeric" data-b="${b.id}" data-f="quote" value="${num(S.budget.find(x=>x.id===b.id).quote)||''}" aria-label="Ofertă">`}</td>
-      <td class="n"><input class="input num" inputmode="numeric" data-b="${b.id}" data-f="paid" value="${num(S.budget.find(x=>x.id===b.id).paid)||''}" aria-label="Achitat">${b.vPaid?`<div class="linked" style="justify-content:flex-end">+${lei(b.vPaid)} furnizori</div>`:''}</td>
-      <td class="n"><b>${lei(b.eff)}</b></td>
-      <td>${b.link==='venue'?`<button class="link" data-go="sali">Săli</button>`:(()=>{const L=lineSummary(b);return `<button class="link" data-act="goline" data-id="${b.id}">${L.vs.length?`${L.vs.length} ${L.vs.length===1?'furnizor':'furnizori'}`:'Adaugă furnizor'}</button>${!L.booked.length&&L.offers.length?`<div class="linked">${L.offers.length>1?`${lei(Math.min(...L.offers))}–${lei(Math.max(...L.offers))}`:lei(L.offers[0])}</div>`:''}`})()}</td></tr>`).join('')}
+    <tbody>${C.lines.map(b=>`<tr class="bline">
+      <td class="cat" data-label="">${b.link==='venue'?`<div style="font-weight:600">${esc(b.cat)}</div><span class="linked">${I.link}${n0(C.expected)} invitați × ${lei(C.price)} (${esc(C.priceSrc)})</span>`:`<div class="bcat"><button class="bt" data-act="btoggle" data-id="${b.id}" aria-expanded="${UI.bopen.has(b.id)}" aria-label="Furnizorii categoriei ${esc(b.cat)}">${I.caret}</button><input class="input" data-b="${b.id}" data-f="cat" value="${esc(b.cat)}" aria-label="Categorie"></div>`}</td>
+      <td class="n" data-label="Estimare">${b.link==='venue'?lei(b.est):`<input class="input num" inputmode="numeric" data-b="${b.id}" data-f="est" value="${b.est||''}" aria-label="Estimare">`}</td>
+      <td class="n" data-label="Ofertă">${b.fromVendors?`<span class="linked">${I.link}${lei(b.quote)}</span>`:`<input class="input num" inputmode="numeric" data-b="${b.id}" data-f="quote" value="${num(S.budget.find(x=>x.id===b.id).quote)||''}" aria-label="Ofertă">`}</td>
+      <td class="n" data-label="Achitat"><input class="input num" inputmode="numeric" data-b="${b.id}" data-f="paid" value="${num(S.budget.find(x=>x.id===b.id).paid)||''}" aria-label="Achitat">${b.vPaid?`<div class="linked" style="justify-content:flex-end">+${lei(b.vPaid)} furnizori</div>`:''}</td>
+      <td class="n" data-label="Contează"><b>${lei(b.eff)}</b></td>
+      <td data-label="Furnizori">${b.link==='venue'?`<button class="link" data-go="sali">Săli</button>`:(()=>{const L=lineSummary(b);return `<button class="link" data-act="btoggle" data-id="${b.id}">${L.vs.length?`${L.vs.length} ${L.vs.length===1?'furnizor':'furnizori'}${L.booked.length?` · ${L.booked.length} în buget`:''}`:'Adaugă furnizor'}</button>${!L.booked.length&&L.offers.length?`<div class="linked">${L.offers.length>1?`${lei(Math.min(...L.offers))}–${lei(Math.max(...L.offers))}`:lei(L.offers[0])}</div>`:''}`})()}</td></tr>${b.link!=='venue'&&UI.bopen.has(b.id)?budgetVendors(b):''}`).join('')}
       <tr class="bsum"><td>Total</td><td></td><td></td><td class="n" data-live="paid">${lei(C.paid)}</td><td class="n" data-live="cost">${lei(C.cost)}</td><td></td></tr>
     </tbody></table></div>
   <p class="hint">„Contează” folosește oferta când există și estimarea când nu. <button class="link" data-act="addb">Adaugă o categorie</button></p>
@@ -733,6 +733,31 @@ function vBudget(C){
       </div>
     </div>
   </section>`;
+}
+
+function budgetVendors(b){
+  const L = lineSummary(b);
+  const others = S.vendors.filter(v=>v.line!==b.id);
+  const catOf = v => (byId(S.budget,v.line)||{}).cat || 'fără categorie';
+  return `<tr class="bexp"><td colspan="6"><div class="bvend">
+    ${L.vs.length?`<div class="bvlist">${L.vs.map(v=>{ const inB = v.status==='Rezervat', pd = vPaid(v); return `<div class="bvrow ${inB?'on':''}">
+      <button class="toggle" aria-pressed="${inB}" data-act="vinbudget" data-id="${v.id}" title="Prețul furnizorilor bifați intră în costul categoriei"><i></i>În buget</button>
+      <span class="bvname">${esc(v.name)} <span class="tag ${inB?'ok':v.status==='Renunțat'?'bad':v.status==='Ofertă primită'?'gold':''}">${esc(v.status)}</span></span>
+      <label class="dar">Preț <input class="input num" inputmode="numeric" data-vd="${v.id}" data-f="price" value="${v.price||''}" aria-label="Preț ${esc(v.name)}"> lei</label>
+      <span class="vsum">${pd?`achitat <b>${lei(pd)}</b>`:'nimic achitat'}</span>
+      <span class="bvacts"><button class="link" data-act="vdetails" data-id="${v.id}">Detalii și plăți</button><button class="iconbtn" data-act="vunassign" data-id="${v.id}" aria-label="Scoate ${esc(v.name)} din categorie" title="Scoate din categorie">${I.x}</button></span>
+    </div>`; }).join('')}</div>`:`<p class="muted" style="margin:0">Niciun furnizor în ${esc(b.cat)} încă.</p>`}
+    <div class="bvadd">
+      ${others.length?`<label class="field"><span>Mută aici un furnizor existent</span><select class="input" data-assign="${b.id}"><option value="">Alege furnizorul…</option>${others.map(v=>`<option value="${v.id}">${esc(v.name)} (${esc(catOf(v))})</option>`).join('')}</select></label>`:''}
+      <form class="vendForm bvform" data-line="${b.id}" data-stay="1">
+        <label class="field"><span>Furnizor nou în ${esc(b.cat)}</span><input class="input" name="vn" required placeholder="Nume"></label>
+        <label class="field"><span>Preț (lei)</span><input class="input num" name="vp" inputmode="numeric"></label>
+        <input type="hidden" name="vs" value="Ofertă primită"><input type="hidden" name="vt" value="">
+        <button class="btn primary">${I.plus}Adaugă</button>
+      </form>
+    </div>
+    <p class="hint" style="margin:0">Bifați „În buget” la furnizorii aleși: prețul lor devine costul categoriei, iar plățile achitate intră la „Achitat”. Pot fi mai mulți (de exemplu foto și video separat).</p>
+  </div></td></tr>`;
 }
 
 /* ---------- Calendar ---------- */
@@ -751,13 +776,14 @@ function vCal(){
 const VSTAT = ['De contactat','Ofertă cerută','Ofertă primită','Rezervat','Renunțat'];
 const vPaid = v => v.pays.reduce((s,p)=>s+(p.done?num(p.amount):0),0);
 function lineSummary(b){
-  const vs = S.vendors.filter(v=>v.line===b.id);
+  const vs = S.vendors.filter(v=> b.id==='' ? !S.budget.some(x=>x.id===v.line && !x.link) : v.line===b.id);
   const booked = vs.filter(v=>v.status==='Rezervat');
   const offers = vs.filter(v=>v.status!=='Renunțat' && num(v.price)>0).map(v=>num(v.price));
   return {vs, booked, offers, paid:vs.reduce((a,v)=>a+vPaid(v),0), bookedTotal:booked.reduce((a,v)=>a+num(v.price),0)};
 }
 function vVendors(){
-  const lines = S.budget.filter(b=>!b.link);
+  const lines = S.budget.filter(b=>!b.link).slice();
+  if (S.vendors.some(v=>!S.budget.some(b=>b.id===v.line && !b.link))) lines.push({id:'', cat:'Fără categorie'});
   const tag = s => s==='Rezervat'?'ok':s==='Renunțat'?'bad':s==='Ofertă primită'?'gold':'';
   return `<div class="page-head"><div><h1>Furnizori</h1><p>Furnizorii sunt grupați pe categoriile din buget. Când marcați unul „Rezervat”, prețul lui devine costul categoriei, iar plățile bifate ca achitate intră la „Achitat”.</p></div></div>
   <div class="vsecs">${lines.map(b=>{
@@ -792,7 +818,7 @@ function vendCard(v,tag){
         <label class="field"><span>Nume</span><input class="input" data-vd="${v.id}" data-f="name" value="${esc(v.name)}"></label>
         <label class="field"><span>Stadiu</span><select class="input" data-vd="${v.id}" data-f="status">${VSTAT.map(s=>`<option ${v.status===s?'selected':''}>${s}</option>`).join('')}</select></label>
         <label class="field"><span>Preț (lei)</span><input class="input num" data-vd="${v.id}" data-f="price" value="${v.price||''}" inputmode="numeric"></label>
-        <label class="field"><span>Categorie din buget</span><select class="input" data-vd="${v.id}" data-f="line">${S.budget.filter(b=>!b.link).map(b=>`<option value="${b.id}" ${v.line===b.id?'selected':''}>${esc(b.cat)}</option>`).join('')}</select></label>
+        <label class="field"><span>Categorie din buget</span><select class="input" data-vd="${v.id}" data-f="line"><option value="" ${!S.budget.some(b=>b.id===v.line&&!b.link)?'selected':''}>Fără categorie</option>${S.budget.filter(b=>!b.link).map(b=>`<option value="${b.id}" ${v.line===b.id?'selected':''}>${esc(b.cat)}</option>`).join('')}</select></label>
         <label class="field"><span>Persoană de contact</span><input class="input" data-vd="${v.id}" data-f="contact" value="${esc(v.contact||'')}"></label>
         <label class="field"><span>Telefon</span><input class="input" data-vd="${v.id}" data-f="phone" value="${esc(v.phone||'')}" inputmode="tel"></label>
         <label class="field"><span>Email</span><input class="input" data-vd="${v.id}" data-f="email" value="${esc(v.email||'')}" inputmode="email"></label>
@@ -885,6 +911,10 @@ document.addEventListener('click', e=>{
     case 'task': { const t = byId(S.tasks,id); t.done=!t.done; commit(`${t.title}: ${t.done?'bifat':'debifat'}`); break; }
     case 'deltask': { const s0=snap(); S.tasks = S.tasks.filter(t=>t.id!==id); commit('Pas șters'); toast('Pasul a fost șters', s0); break; }
     case 'addb': { const n = S.budget.length+1; S.budget.push({id:'B'+Date.now(),cat:'Categorie nouă',est:0,quote:0,paid:0}); commit('Categorie de buget adăugată'); break; }
+    case 'btoggle': UI.bopen.has(id)?UI.bopen.delete(id):UI.bopen.add(id); render(); break;
+    case 'vinbudget': { const v = byId(S.vendors,id); v.status = v.status==='Rezervat' ? 'Ofertă primită' : 'Rezervat'; commit(`${v.name}: ${v.status==='Rezervat'?'inclus în buget':'scos din buget'}`); break; }
+    case 'vunassign': { const s0 = snap(); const v = byId(S.vendors,id); const from = (byId(S.budget,v.line)||{}).cat||''; v.line = ''; if (v.status==='Rezervat') v.status = 'Ofertă primită'; commit(`${v.name} scos din ${from}`); toast(`${v.name} nu mai e în ${from}. Îl găsiți la Furnizori, „Fără categorie”.`, s0); break; }
+    case 'vdetails': { const v = byId(S.vendors,id); UI.view = 'furnizori'; UI.vopen.add(id); try{ history.replaceState(null,'','#furnizori'); }catch(x){} render(); setTimeout(()=>{ const el = document.getElementById('vend-'+id); if (el) el.scrollIntoView({block:'center'}); },0); break; }
     case 'vaddopen': UI.vendAdd = UI.vendAdd===id ? null : id; render(); if (UI.vendAdd) setTimeout(()=>{ const i = document.querySelector(`#line-${id} [name=vn]`); if (i) i.focus(); },0); break;
     case 'vtoggle': UI.vopen.has(id)?UI.vopen.delete(id):UI.vopen.add(id); render(); break;
     case 'goline': UI.view = 'furnizori'; closeDrawer(true); try{ history.replaceState(null,'','#furnizori'); }catch(x){} if (!lineSummary(byId(S.budget,id)).vs.length) UI.vendAdd = id; render(); setTimeout(()=>{ const el = document.getElementById('line-'+id); if (el) el.scrollIntoView({block:'start'}); const i = el && el.querySelector('[name=vn]'); if (i) i.focus(); },0); break;
@@ -934,6 +964,7 @@ document.addEventListener('change', e=>{
   if (t.dataset.b){
     const b = byId(S.budget,t.dataset.b); b[f] = f==='cat'?t.value:num(t.value); commit(null); return;
   }
+  if (t.dataset.assign){ if (!t.value) return; const v = byId(S.vendors,t.value), b = byId(S.budget,t.dataset.assign); v.line = b.id; commit(`${v.name} mutat la ${b.cat}`); toast(`${v.name} a fost mutat la ${b.cat}`); return; }
   if (t.dataset.vd){ const v = byId(S.vendors,t.dataset.vd); v[f] = f==='price'?num(t.value):(f==='name'?(t.value.trim()||v.name):t.value); commit(f==='status'?`${v.name}: ${v.status.toLowerCase()}`:f==='line'?`${v.name} mutat la ${(byId(S.budget,v.line)||{}).cat||''}`:null); return; }
   if (t.dataset.pay){ const p = byId(S.vendors,t.dataset.pay).pays[+t.dataset.i]; p[f] = f==='amount'?num(t.value):t.value; commit(null); return; }
 });
@@ -948,7 +979,7 @@ document.addEventListener('submit', e=>{
     fm.reset(); UI.vendAdd = null; UI.flash = id;
     commit(`Furnizor adăugat la ${b?b.cat:'buget'}: ${name}`);
     toast(`${name} a fost adăugat la ${b?b.cat:'buget'}`);
-    setTimeout(()=>{ const el = document.getElementById('vend-'+id); if (el) el.scrollIntoView({block:'center', behavior:'smooth'}); }, 0);
+    if (!fm.dataset.stay) setTimeout(()=>{ const el = document.getElementById('vend-'+id); if (el) el.scrollIntoView({block:'center', behavior:'smooth'}); }, 0);
     setTimeout(()=>{ if (UI.flash===id){ UI.flash = null; const el = document.getElementById('vend-'+id); if (el) el.classList.remove('flash'); } }, 2500);
   }
 });
