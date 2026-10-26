@@ -1,0 +1,1222 @@
+{
+ "format": "nn27-venues",
+ "researched": "2026-10-26",
+ "source": "Locații nuntă Iași 2027 — analiză",
+ "venues": [
+  {
+   "key": "ambio",
+   "n": "Ambio Events",
+   "zone": "Horpaz, lac Ezăreni",
+   "addr": "Str. Iazului, Horpaz 707313",
+   "km": 11,
+   "drive": "20 min",
+   "tel": [
+    "0750 681 460"
+   ],
+   "em": "contact@ambioevents.ro, ambio.events@gmail.com",
+   "web": "https://ambioevents.ro/",
+   "ph": [
+    {
+     "l": "Site",
+     "u": "https://ambioevents.ro/"
+    },
+    {
+     "l": "Facebook",
+     "u": "https://www.facebook.com/ambioevents2021/"
+    }
+   ],
+   "cap": 250,
+   "halls": "Sală cu design nordic, grădină cu acces la lac, cazare.",
+   "rt": 4.5,
+   "rc": 170,
+   "rv": "4,5★ din 170 recenzii agregate (fotografi-cameramani.ro); 96% recomandă pe Facebook (48). Se laudă grădina de la lac și personalul.",
+   "pub": "Niciun preț public; vizionare gratuită, ofertă personalizată.",
+   "tip": "Premiată la Șoimii Nunților. În afara orașului: contează transportul invitaților.",
+   "src": [
+    "https://ambioevents.ro/contact-ambio-events/",
+    "https://www.fotografi-cameramani.ro/locatie/4874"
+   ],
+   "aliases": [],
+   "min": 0,
+   "maps": "https://www.google.com/maps/search/?api=1&query=Ambio%20Events%2C%20Str.%20Iazului%2C%20Horpaz%20707313"
+  },
+  {
+   "key": "amouria",
+   "n": "Amouria Events",
+   "zone": "Lac Aroneanu",
+   "addr": "com. Aroneanu, Lacul Aroneanu 707020",
+   "km": 7,
+   "drive": "15 min",
+   "tel": [
+    "0747 520 303"
+   ],
+   "em": "weddings@amouria-events.ro, contact@amouria-events.ro",
+   "web": "https://amouria-events.ro/",
+   "ph": [
+    {
+     "l": "Galerie",
+     "u": "https://amouria-events.ro/galerie/"
+    },
+    {
+     "l": "Instagram",
+     "u": "https://www.instagram.com/amouria_events"
+    },
+    {
+     "l": "Ouido (7 poze)",
+     "u": "https://www.ouido.ro/locatii/amouria-events"
+    }
+   ],
+   "cap": 180,
+   "halls": "Sală de 340 mp fără stâlpi, pereți de sticlă, ponton pe lac pentru cununie. Exclusivitate.",
+   "rv": "Deschisă în 2024; peste 50 de rezervări la deschidere (Ziarul de Iași). Testimonialele de pe site sunt ale sălii-soră Liria.",
+   "pub": "Pachet: meniu 3 feluri, personal, exclusivitate, open bar fără alcool, Prosecco la primire, fructe, recuzită, cununie pe ponton. Preț nepublicat.",
+   "tip": "Același proprietar ca Liria. Funcționează tot anul. 180 de locuri: sub cele 211 persoane.",
+   "src": [
+    "https://amouria-events.ro/servicii/",
+    "https://www.ziaruldeiasi.ro/stiri/amouria-o-noua-destinatie-pentru-evenimente-pe-malul-lacului-aroneanu-investitie-de-aproape-un-milion-de-euro-peste-50-de-rezervari-facute-deja--1751848.html"
+   ],
+   "aliases": [],
+   "min": 0,
+   "rt": 0,
+   "rc": 0,
+   "maps": "https://www.google.com/maps/search/?api=1&query=Amouria%20Events%20Aroneanu"
+  },
+  {
+   "key": "bellaria",
+   "n": "Bellaria",
+   "zone": "Șos. Bucium",
+   "addr": "Șos. Bucium nr. 7, Iași 700280",
+   "km": 4.5,
+   "drive": "10 min",
+   "tel": [
+    "0232 233 870",
+    "0332 403 500",
+    "0749 125 447"
+   ],
+   "em": "rezervari@bellaria.ro, office@bellaria.ro",
+   "web": "https://www.bellaria.ro/",
+   "ph": [
+    {
+     "l": "Site",
+     "u": "https://www.bellaria.ro/"
+    },
+    {
+     "l": "Weddingo",
+     "u": "https://www.weddingo.ro/locatii-nunta/iasi/hotel-bellaria"
+    }
+   ],
+   "cap": 240,
+   "halls": "Restaurant Gourmet 220–240, Loja Domnească 180, Restaurant Clasic 170. Hotel cu 47 de camere.",
+   "rt": 4.4,
+   "rc": 100,
+   "rv": "4,4★ din 100 pe Weddingo; hotelul are 8,6 pe Booking. Parcarea nu ajunge când sunt 3 evenimente simultan.",
+   "pub": "5 meniuri între 310 și 415 lei/pers. (Weddingo, an nepublicat). −10% sâmbăta în ian–apr și oct–dec, în post, sau vineri/duminică în mai–sep.",
+   "tip": "Doar Gourmet încape confortabil 211 persoane. Peste 700 de nunți declarate.",
+   "src": [
+    "https://www.weddingo.ro/locatii-nunta/iasi/hotel-bellaria",
+    "https://ievent.ro/locatii-nunta/iasi/bellaria-hotel",
+    "https://iasi365.com/restaurante-din-iasi/restaurante-cu-sali-nunti-si-cumatrii-iasi"
+   ],
+   "aliases": [],
+   "min": 0,
+   "maps": "https://www.google.com/maps/search/?api=1&query=Hotel%20Bellaria%20Iasi"
+  },
+  {
+   "key": "bizantiq",
+   "n": "Bizantiq Event",
+   "aliases": [
+    "Restaurant Bizantiq",
+    "Bizantiq"
+   ],
+   "zone": "Rediu",
+   "addr": "Șos. Valea Rediului nr. 19, Rediu 707410",
+   "km": 7,
+   "drive": "15 min",
+   "tel": [
+    "0747 022 600 (Raluca)",
+    "0744 140 199 (Romeo)"
+   ],
+   "em": "office@bizantiq.ro",
+   "web": "https://bizantiq.ro/",
+   "ph": [
+    {
+     "l": "Site",
+     "u": "https://bizantiq.ro/"
+    },
+    {
+     "l": "Facebook",
+     "u": "https://www.facebook.com/BizantiqRestaurantCatering/"
+    },
+    {
+     "l": "Weddingo",
+     "u": "https://www.weddingo.ro/locatii-nunta/iasi/restaurant-bizantiq"
+    }
+   ],
+   "cap": 200,
+   "halls": "Regalis 200, Victoria 130, Imperium 90. Grădină pentru poze.",
+   "rt": 4.6,
+   "rc": 90,
+   "rv": "4,6★ din 90 pe Weddingo; 4,5★ din 935 agregate. Fotografii: funcțională, design clasic din lemn masiv, arhitectură învechită.",
+   "pub": "Niciun preț public.",
+   "tip": "Doar Regalis (200) se apropie de 211 persoane: la limită.",
+   "src": [
+    "https://bizantiq.ro/contact/",
+    "https://www.weddingo.ro/locatii-nunta/iasi/restaurant-bizantiq",
+    "https://www.fotografi-cameramani.ro/locatie/1012"
+   ],
+   "min": 0,
+   "maps": "https://www.google.com/maps/search/?api=1&query=Bizantiq%20Rediu%20Iasi"
+  },
+  {
+   "key": "casablanca",
+   "n": "Casablanca",
+   "aliases": [
+    "La Casablanca",
+    "Restaurant Casablanca",
+    "Restaurant Casablanca Iasi"
+   ],
+   "zone": "Rediu",
+   "addr": "Str. Rediu nr. 154, Iași",
+   "km": 7,
+   "drive": "15 min",
+   "tel": [
+    "0761 325 950",
+    "0729 689 178 (WhatsApp)"
+   ],
+   "em": "contact@restaurantcasablanca.ro, casablanca.iasi@gmail.com",
+   "web": "https://restaurantcasablanca.ro/",
+   "ph": [
+    {
+     "l": "Site",
+     "u": "https://restaurantcasablanca.ro/"
+    },
+    {
+     "l": "Salon Ballroom",
+     "u": "https://restaurantcasablanca.ro/salon-ballroom/"
+    },
+    {
+     "l": "Instagram",
+     "u": "https://www.instagram.com/restaurantcasablanca.iasi"
+    }
+   ],
+   "cap": 300,
+   "halls": "Ballroom 300 (ring 220 mp fără stâlpi), Imperial 200, Glamour 110. Parcare 100 locuri cu valet.",
+   "rv": "Testimoniale de la nunți din 2024 laudă personalul și costurile transparente.",
+   "pub": "2027: 399 lei luni–vineri, 420 duminică, 443 sâmbătă, cu TVA, all inclusive (3 feluri, băuturi, vin, pălincă, tort, decor, personal, valet). Garantat la contracte semnate până la 28.02.2027. Rezervare: 1.500 lei la semnare + 2.500 lei după 6 luni. 2028: +10%.",
+   "tip": "211 × 443 lei sâmbătă ≈ 93.500 lei doar meniul.",
+   "src": [
+    "https://restaurantcasablanca.ro/meniu-nunta/",
+    "https://restaurantcasablanca.ro/contact/"
+   ],
+   "min": 0,
+   "rt": 0,
+   "rc": 0,
+   "maps": "https://www.google.com/maps/search/?api=1&query=Restaurant%20Casablanca%20Rediu%20Iasi"
+  },
+  {
+   "key": "chalette",
+   "n": "Chalette Events",
+   "zone": "Păun, pădurea Bucium",
+   "addr": "DN 24, sat Păun, com. Bârnova 707037",
+   "km": 11,
+   "drive": "20 min",
+   "tel": [
+    "0740 805 149 (Ștefan)",
+    "0746 788 664 (Simina)",
+    "031 222 1708"
+   ],
+   "em": "chalette.events@gmail.com",
+   "web": "https://www.chalette.ro/",
+   "ph": [
+    {
+     "l": "Site",
+     "u": "https://www.chalette.ro/"
+    },
+    {
+     "l": "Facebook",
+     "u": "https://www.facebook.com/ChaletteEvents/"
+    },
+    {
+     "l": "Ouido (7 poze)",
+     "u": "https://www.ouido.ro/locatii/chalette-events"
+    }
+   ],
+   "cap": 200,
+   "halls": "Glass Garden 200 (acoperiș retractabil), Minichalette 40–70.",
+   "rt": 4.6,
+   "rc": 12,
+   "rv": "4,6★ din 12 (revieweuro); 46 evenimente verificate pe fotografi-cameramani.ro.",
+   "pub": "Niciun preț public; meniu all inclusive și live cooking.",
+   "tip": "200 de locuri: sub 211. Drum prin pădure noaptea.",
+   "src": [
+    "https://www.chalette.ro/locatii/chalette-gourmet/",
+    "https://www.ouido.ro/locatii/chalette-events"
+   ],
+   "aliases": [],
+   "min": 0,
+   "maps": "https://www.google.com/maps/search/?api=1&query=Chalette%20Events%20Paun%20Iasi"
+  },
+  {
+   "key": "cityview",
+   "n": "CityView",
+   "zone": "Păun",
+   "addr": "Str. Petru și Pavel nr. 154, Păun 707037",
+   "km": 9,
+   "drive": "18 min",
+   "tel": [
+    "0799 189 337",
+    "0775 365 220",
+    "0793 333 338"
+   ],
+   "em": "eveniment@cityview.ro",
+   "web": "https://cityview.ro/",
+   "ph": [
+    {
+     "l": "Site",
+     "u": "https://cityview.ro/"
+    },
+    {
+     "l": "Facebook",
+     "u": "https://www.facebook.com/evenimentiasi"
+    }
+   ],
+   "cap": 100,
+   "halls": "Sală fără stâlpi cu priveliște asupra orașului. Capacitate reală de confirmat.",
+   "rt": 4.5,
+   "rc": 90,
+   "rv": "4,5★ din 90 pe Weddingo; 29 evenimente verificate pe fotografi-cameramani.ro.",
+   "pub": "Niciun preț public.",
+   "tip": "Capacitatea (aprox. 100) trebuie confirmată la telefon.",
+   "src": [
+    "https://cityview.ro/",
+    "https://www.fotografi-cameramani.ro/locatie/4054"
+   ],
+   "aliases": [],
+   "min": 0,
+   "maps": "https://www.google.com/maps/search/?api=1&query=CityView%20Events%20Paun%20Iasi"
+  },
+  {
+   "key": "congress",
+   "n": "Congress Hall",
+   "aliases": [
+    "Congress Hall Iasi",
+    "Congress Hall Iași"
+   ],
+   "zone": "Palas, centru",
+   "addr": "Str. Palas nr. 7A, etaj 2, Iași 700028",
+   "km": 0.5,
+   "drive": "5 min pe jos",
+   "tel": [
+    "0232 209 879",
+    "0742 298 101"
+   ],
+   "em": "evenimente@palasiasi.ro",
+   "web": "https://congresshall.ro/iasi/",
+   "ph": [
+    {
+     "l": "Pagina de nuntă",
+     "u": "https://congresshall.ro/iasi/evenimente_personale/nunta.php"
+    },
+    {
+     "l": "Palas Mall",
+     "u": "https://www.palasmall.ro/congresshall"
+    }
+   ],
+   "cap": 300,
+   "halls": "Chopin & Vivaldi 200–300, Chopin 110–160, Vivaldi 100–120, Mozart 50–70, Ravel 20–50.",
+   "rv": "Nu am găsit un scor agregat pentru nunți.",
+   "pub": "Fără preț public (doar ofertă PDF din 2023). Include amenajare, meniurile mirilor gratuite, open bar, ședință foto în Grădina Palas.",
+   "tip": "Centru de congrese, nu restaurant: de întrebat cine face catering-ul și până la ce oră se poate petrece.",
+   "src": [
+    "https://congresshall.ro/iasi/evenimente_personale/nunta.php"
+   ],
+   "min": 0,
+   "rt": 0,
+   "rc": 0,
+   "maps": "https://www.google.com/maps/search/?api=1&query=Congress%20Hall%20Palas%20Iasi"
+  },
+  {
+   "key": "coral",
+   "n": "Coral Events",
+   "aliases": [
+    "Hotel Coral"
+   ],
+   "zone": "Păcurari, vizavi de Metro",
+   "addr": "Str. Valea lui David nr. 2, 707410",
+   "km": 6,
+   "drive": "12–15 min",
+   "tel": [
+    "0754 031 164",
+    "0232 274 302",
+    "0766 188 244"
+   ],
+   "em": "coralapo@gmail.com, office@hotelcoraliasi.ro",
+   "web": "https://hotelcoraliasi.ro/",
+   "ph": [
+    {
+     "l": "Site",
+     "u": "https://hotelcoraliasi.ro/"
+    }
+   ],
+   "cap": 250,
+   "halls": "Săli modulare, total aprox. 250; altă listare: Grande 250, Regal 350, Mignon 40, terasă 70. 22 de camere.",
+   "rv": "Puține recenzii de nuntă găsite.",
+   "pub": "Niciun preț public.",
+   "tip": "Atenție: Facebook „Coral Events” și coralevents.ro sunt ale unei săli din Băile 1 Mai, nu ale acesteia.",
+   "src": [
+    "https://hotelcoraliasi.ro/contact/",
+    "https://www.saloane-evenimente.ro/Coral-Events-Iasi.html"
+   ],
+   "min": 0,
+   "rt": 0,
+   "rc": 0,
+   "maps": "https://www.google.com/maps/search/?api=1&query=Hotel%20Coral%20Iasi%20Valea%20lui%20David"
+  },
+  {
+   "key": "goldenstone",
+   "n": "Cort Lake Hall – Golden Stone Resort",
+   "aliases": [
+    "Golden Stone",
+    "Golden Stone Resort",
+    "Cort Lake Hall"
+   ],
+   "zone": "Ciric",
+   "addr": "Zona de agrement Ciric, Iași",
+   "km": 6,
+   "drive": "12 min",
+   "tel": [
+    "0734 009 655"
+   ],
+   "em": "",
+   "web": "https://goldenstone.ro/",
+   "ph": [
+    {
+     "l": "Instagram",
+     "u": "https://www.instagram.com/goldenstone.iasi/"
+    },
+    {
+     "l": "fotografi-cameramani.ro",
+     "u": "https://www.fotografi-cameramani.ro/locatie/345"
+    }
+   ],
+   "cap": 200,
+   "halls": "Lake Hall 200 (event planner inclus). Resortul mai are White Hall 600, restaurant cu terasă 500, cramă 50, piscină.",
+   "rt": 3.9,
+   "rc": 60,
+   "rv": "3,9★ din 60 pe Weddingo, cel mai mic scor din listă. Cort spațios, fără elemente de design; spațiu exterior comun cu cortul vecin.",
+   "pub": "Niciun preț public.",
+   "tip": "200 de locuri: sub 211. Email de cerut prin site.",
+   "src": [
+    "https://www.weddingo.ro/locatii-nunta/iasi/golden-stone-resort",
+    "https://www.fotografi-cameramani.ro/locatie/345"
+   ],
+   "min": 0,
+   "maps": "https://www.google.com/maps/search/?api=1&query=Golden%20Stone%20Resort%20Ciric%20Iasi"
+  },
+  {
+   "key": "crystal",
+   "n": "Crystal",
+   "aliases": [
+    "Restaurant Crystal"
+   ],
+   "zone": "Valea Lupului",
+   "addr": "Str. Rubinului, Valea Lupului 707410",
+   "km": 7,
+   "drive": "15 min",
+   "tel": [
+    "0767 374 161",
+    "0788 258 828",
+    "0232 249 999"
+   ],
+   "em": "contact@restaurantcrystal.ro, restaurantcrystaliasi@gmail.com",
+   "web": "https://restaurantcrystal.ro/",
+   "ph": [
+    {
+     "l": "Galerie",
+     "u": "https://restaurantcrystal.ro/galerie-foto/"
+    },
+    {
+     "l": "Facebook",
+     "u": "https://www.facebook.com/RestaurantCrystalIasi/"
+    },
+    {
+     "l": "Instagram",
+     "u": "https://www.instagram.com/restaurantcrystal/"
+    }
+   ],
+   "cap": 300,
+   "halls": "Crystal 150–300, Rubin 120–200, Diamant 50–100. Pensiune proprie.",
+   "rt": 4.6,
+   "rc": 1405,
+   "rv": "4,6★ din 1.405 pe Restaurant Guru; 28 evenimente verificate.",
+   "pub": "Site: pachete de nuntă „de la 120 lei/pers.” (probabil doar mâncarea); restauranteiasi.com: nuntă completă de la 290 lei/pers. Cereți oferta completă.",
+   "tip": "Peste 20 de ani de nunți. Aproape de ieșirea spre Târgu Frumos.",
+   "src": [
+    "https://restaurantcrystal.ro/",
+    "https://www.restauranteiasi.com/index.php"
+   ],
+   "min": 0,
+   "maps": "https://www.google.com/maps/search/?api=1&query=Restaurant%20Crystal%20Valea%20Lupului"
+  },
+  {
+   "key": "diamond",
+   "n": "Diamond Ballroom",
+   "aliases": [
+    "Diamond Ballroom Iasi",
+    "Diamond Ballroom Iași"
+   ],
+   "zone": "Dumbrava",
+   "addr": "DJ248, Dumbrava (com. Ciurea)",
+   "km": 12,
+   "drive": "20 min",
+   "tel": [
+    "0758 670 458"
+   ],
+   "em": "events@diamondballroom.ro",
+   "web": "https://diamondballroom.ro/",
+   "ph": [
+    {
+     "l": "Site",
+     "u": "https://diamondballroom.ro/"
+    },
+    {
+     "l": "fotografi-cameramani.ro",
+     "u": "https://www.fotografi-cameramani.ro/locatie/4497"
+    }
+   ],
+   "cap": 500,
+   "halls": "Sala Mică, Sala Mare (până la 300), Royal by Diamond (până la 500). Terasă, piscină, cazare, limuzină.",
+   "rt": 4.5,
+   "rc": 347,
+   "rv": "4,5★ din 347 agregate; 4,1★ pe Weddingo. Videograf: amenajată drăguț, dar situată „în câmp”.",
+   "pub": "Meniu all inclusive 325 lei/pers. sâmbătă și duminică (vinenunta.ro, an nepublicat). Calendarul 2027 e deschis; prețul 2027 nepublicat.",
+   "tip": "În afara orașului: contează transportul invitaților.",
+   "src": [
+    "https://vinenunta.ro/furnizor/diamond-ballroom-iasi/",
+    "https://www.fotografi-cameramani.ro/locatie/4497"
+   ],
+   "min": 0,
+   "maps": "https://www.google.com/maps/search/?api=1&query=Diamond%20Ballroom%20Dumbrava%20Iasi"
+  },
+  {
+   "key": "elysium",
+   "n": "Elysium de la Ciric",
+   "aliases": [
+    "Elysium Events",
+    "Elysium",
+    "Restaurant Elysium de la Ciric"
+   ],
+   "zone": "Ciric",
+   "addr": "Zona de agrement Ciric, Str. Moara de Vânt, Iași 707023",
+   "km": 5.5,
+   "drive": "12 min",
+   "tel": [
+    "0773 896 886",
+    "0755 689 633"
+   ],
+   "em": "rezervari@elysium-events.ro",
+   "web": "https://www.elysium-events.ro/",
+   "ph": [
+    {
+     "l": "Site",
+     "u": "https://www.elysium-events.ro/"
+    },
+    {
+     "l": "Facebook",
+     "u": "https://www.facebook.com/elysium.whitehall/"
+    }
+   ],
+   "cap": 400,
+   "halls": "Cort White Hall 1.000 mp (50–400, unele listări până la 600), săli noi Lotus și Bloom, Winery 50, ponton pentru cununie.",
+   "rv": "96% recomandă pe Facebook din 628 recenzii, cel mai mare volum din listă.",
+   "pub": "„De la 240 lei” (eventfull.ro, listare veche). Restaurant Guru: 110–230 lei/pers. la restaurant. Preț 2027 nepublicat.",
+   "tip": "Vecină cu Golden Stone; cele două corturi împart spațiul exterior.",
+   "src": [
+    "https://www.elysium-events.ro/contact/",
+    "https://www.eventfull.ro/Nunta/elysium-white-hall/"
+   ],
+   "min": 0,
+   "rt": 0,
+   "rc": 0,
+   "maps": "https://www.google.com/maps/search/?api=1&query=Elysium%20Events%20Ciric%20Iasi"
+  },
+  {
+   "key": "eos",
+   "n": "EOS Evenimente",
+   "aliases": [
+    "Complex EOS",
+    "Restaurant EOS Evenimente Iasi",
+    "Restaurant EOS"
+   ],
+   "zone": "Rediu",
+   "addr": "Str. Zorilor nr. 6, Rediu",
+   "km": 8,
+   "drive": "15 min",
+   "tel": [
+    "0758 526 153",
+    "0748 884 382 (WhatsApp)"
+   ],
+   "em": "",
+   "web": "https://complexeos.ro/",
+   "ph": [
+    {
+     "l": "Site",
+     "u": "https://complexeos.ro/"
+    },
+    {
+     "l": "TikTok",
+     "u": "https://www.tiktok.com/@restaurant.eos"
+    },
+    {
+     "l": "Weddingo",
+     "u": "https://www.weddingo.ro/locatii-nunta/iasi/complex-eos"
+    }
+   ],
+   "cap": 290,
+   "halls": "Silver Ballroom 270 (cu piscină), Gold Ballroom, EOS Garden 60. Cazare.",
+   "rt": 4.4,
+   "rc": 80,
+   "rv": "4,4★ din 80 pe Weddingo.",
+   "pub": "Preț nepublicat. Event planning și decor incluse, valsul mirilor la piscină, meniul se alege preparat cu preparat. Ultimele sâmbete 2027 libere pentru Silver.",
+   "tip": "Un meniu e valabil în Silver doar de la 120 de invitați. Email de cerut prin site.",
+   "src": [
+    "https://www.weddingo.ro/locatii-nunta/iasi/complex-eos",
+    "https://vinenunta.ro/furnizor/complex-eos/"
+   ],
+   "min": 0,
+   "maps": "https://www.google.com/maps/search/?api=1&query=Complex%20EOS%20Rediu%20Iasi"
+  },
+  {
+   "key": "capitol",
+   "n": "Events by Capitol",
+   "aliases": [
+    "Hotel Capitol",
+    "Ballroom Capitol"
+   ],
+   "zone": "Nicolina",
+   "addr": "Șos. Nicolina nr. 203A, Iași",
+   "km": 5,
+   "drive": "12 min",
+   "tel": [
+    "0755 083 638",
+    "0232 264 264"
+   ],
+   "em": "office@capitol-hotel.ro",
+   "web": "https://eventsbycapitol.ro/",
+   "ph": [
+    {
+     "l": "Site",
+     "u": "https://eventsbycapitol.ro/"
+    },
+    {
+     "l": "Facebook",
+     "u": "https://www.facebook.com/ballroomcapitoliasi/"
+    },
+    {
+     "l": "TikTok",
+     "u": "https://www.tiktok.com/@events.by.capitol"
+    }
+   ],
+   "cap": 600,
+   "halls": "Ballroom 250–600, Monalisa 100–250, Da Vinci 100–250, Clasic 80–200, Panoramic până la 150, terase.",
+   "rv": "96% recomandă pe Facebook (49).",
+   "pub": "Niciun preț public.",
+   "tip": "În oraș, fără drum de ieșire. Monalisa sau Da Vinci au mărimea potrivită.",
+   "src": [
+    "https://eventsbycapitol.ro/",
+    "https://capitol-hotel.ro/evenimente"
+   ],
+   "min": 0,
+   "rt": 0,
+   "rc": 0,
+   "maps": "https://www.google.com/maps/search/?api=1&query=Hotel%20Capitol%20Iasi%20Nicolina%20203A"
+  },
+  {
+   "key": "everly",
+   "n": "Everly Events",
+   "zone": "Chiperești",
+   "addr": "Str. Viilor nr. 10, Chiperești (com. Țuțora)",
+   "km": 17,
+   "drive": "25 min",
+   "tel": [
+    "0740 882 358",
+    "0741 931 933"
+   ],
+   "em": "contact.everlyevents@gmail.com",
+   "web": "https://everlyevents.ro/",
+   "ph": [
+    {
+     "l": "Site",
+     "u": "https://everlyevents.ro/"
+    },
+    {
+     "l": "Instagram",
+     "u": "https://www.instagram.com/everlyevents.iasi/"
+    },
+    {
+     "l": "Ouido (15 poze)",
+     "u": "https://www.ouido.ro/locatii/everly-events"
+    }
+   ],
+   "cap": 450,
+   "min": 180,
+   "halls": "Sală boho, grădină, foișor, cununie în aer liber, cazare.",
+   "rv": "100% recomandă pe Facebook (13).",
+   "pub": "Meniu de la 86 €/pers. (Ouido), băuturile separat. Minim 180 invitați vineri, 200 duminică, 250 sâmbătă.",
+   "tip": "Sâmbăta cere 250 de invitați; vinerea sau duminica se potrivesc.",
+   "src": [
+    "https://www.ouido.ro/locatii/everly-events",
+    "https://everlyevents.ro/"
+   ],
+   "aliases": [],
+   "rt": 0,
+   "rc": 0,
+   "maps": "https://www.google.com/maps/search/?api=1&query=Everly%20Events%20Chiperesti"
+  },
+  {
+   "key": "grandmarion",
+   "n": "Grand Marion",
+   "aliases": [
+    "Popasul Mariei"
+   ],
+   "zone": "Lețcani",
+   "addr": "DN28 nr. 298, Lețcani",
+   "km": 13,
+   "drive": "20 min",
+   "tel": [
+    "0743 487 789"
+   ],
+   "em": "",
+   "web": "https://www.popasulmariei.ro/",
+   "ph": [
+    {
+     "l": "Site",
+     "u": "https://www.popasulmariei.ro/"
+    },
+    {
+     "l": "saloane-evenimente.ro",
+     "u": "https://www.saloane-evenimente.ro/Salon-de-evenimente-Grand-Marion-Iasi.html"
+    }
+   ],
+   "cap": 300,
+   "halls": "Salon Grand Marion 80–300.",
+   "rv": "Nu am găsit un scor agregat.",
+   "pub": "Pachete de la 60 €/pers. cu meniu, decor, șampanie (saloane-evenimente.ro). vinenunta.ro: de la 70 € sâmbătă, 65 € duminică; meniul Platinum 450 lei.",
+   "tip": "Prețul de pornire probabil fără alcool; cereți oferta all inclusive. Email de cerut prin site.",
+   "src": [
+    "https://www.saloane-evenimente.ro/Salon-de-evenimente-Grand-Marion-Iasi.html",
+    "https://vinenunta.ro/furnizor/grand-marion/"
+   ],
+   "min": 0,
+   "rt": 0,
+   "rc": 0,
+   "maps": "https://www.google.com/maps/search/?api=1&query=Popasul%20Mariei%20Letcani"
+  },
+  {
+   "key": "international",
+   "n": "Hotel International",
+   "aliases": [
+    "Magnum Ballroom",
+    "Hotel International Iasi",
+    "Hotel International Iași"
+   ],
+   "zone": "Centru, lângă Palat",
+   "addr": "Str. Palat nr. 5A, Iași 700032",
+   "km": 0.3,
+   "drive": "3 min pe jos",
+   "tel": [
+    "0332 110 060",
+    "0729 200 100",
+    "0720 300 449"
+   ],
+   "em": "reception@hotelinternationaliasi.ro",
+   "web": "https://www.hotelinternationaliasi.ro/",
+   "ph": [
+    {
+     "l": "Magnum Ballroom",
+     "u": "https://www.hotelinternationaliasi.ro/conference-banqueting-halls/magnum-ballroom.html"
+    },
+    {
+     "l": "Facebook",
+     "u": "https://www.facebook.com/MagnumBallroom/"
+    }
+   ],
+   "cap": 300,
+   "halls": "Magnum Ballroom 423 mp, 300 la banchet (600 cocktail), scenă, foaier separat; Restaurant Panoramic până la 300.",
+   "rt": 4.3,
+   "rc": 70,
+   "rv": "4,3★ din 70 pe Weddingo.",
+   "pub": "Niciun preț public. Bucătărie proprie, tarife speciale de cazare pentru invitați.",
+   "tip": "Ballroom la nivelul −2, fără lumină naturală și fără grădină. „Restaurant Panoramic” din lista veche e probabil salonul acestui hotel.",
+   "src": [
+    "https://www.hotelinternationaliasi.ro/conference-banqueting-halls/magnum-ballroom.html",
+    "https://www.weddingo.ro/locatii-nunta/iasi/hotel-international"
+   ],
+   "min": 0,
+   "maps": "https://www.google.com/maps/search/?api=1&query=Hotel%20International%20Iasi"
+  },
+  {
+   "key": "iriss",
+   "n": "Iriss",
+   "aliases": [
+    "Pensiunea-Restaurant Iriss",
+    "Iriss Events",
+    "Pensiunea Iriss"
+   ],
+   "zone": "Valea Lupului",
+   "addr": "Valea Lupului nr. 1 (vizavi de Antibiotice), 707410",
+   "km": 7,
+   "drive": "15 min",
+   "tel": [
+    "0746 291 050",
+    "0232 274 687"
+   ],
+   "em": "contact@pensiunea-iriss.ro",
+   "web": "https://www.pensiunea-iriss.ro/",
+   "ph": [
+    {
+     "l": "Sala Iriss Events",
+     "u": "https://www.pensiunea-iriss.ro/ro/Sala-Iriss-Events-18c.html"
+    },
+    {
+     "l": "Facebook",
+     "u": "https://www.facebook.com/IrissEventsIasi/"
+    }
+   ],
+   "cap": 350,
+   "halls": "Iriss Events până la 350 (fără stâlpi), Sala Iriss 120. Cazare.",
+   "rt": 4.5,
+   "rc": 80,
+   "rv": "4,5★ din 80 pe Weddingo; 100% recomandă pe Facebook (27).",
+   "pub": "2027: meniu 70 €/pers. vineri și duminică (restauranteiasi.com). 2026: redus de la 99 € la 79 €/pers.",
+   "tip": "Prețul de sâmbătă 2027 nepublicat. Vecină cu Crystal.",
+   "src": [
+    "https://www.restauranteiasi.com/Restaurante/",
+    "https://www.saloane-evenimente.ro/Restaurant-Pensiune-Iriss-Iasi.html"
+   ],
+   "min": 0,
+   "maps": "https://www.google.com/maps/search/?api=1&query=Pensiunea%20Iriss%20Valea%20Lupului"
+  },
+  {
+   "key": "kalipso",
+   "n": "Kalipso",
+   "aliases": [
+    "Kalipso Event Venue",
+    "Kalipso Events"
+   ],
+   "zone": "Ciric",
+   "addr": "Str. Izvor, zona de agrement Ciric, Iași 700334",
+   "km": 6,
+   "drive": "12 min",
+   "tel": [
+    "0747 527 980",
+    "0730 986 046"
+   ],
+   "em": "contact@kalipso.ro",
+   "web": "https://kalipso.ro/",
+   "ph": [
+    {
+     "l": "Site",
+     "u": "https://kalipso.ro/"
+    },
+    {
+     "l": "Kalipso Lago",
+     "u": "https://kalipso.ro/nunta-la-kalipso-lago/"
+    },
+    {
+     "l": "Facebook",
+     "u": "https://www.facebook.com/RestaurantKalipso/"
+    }
+   ],
+   "cap": 300,
+   "halls": "Kalipso Alma 130/170–300, Kalipso Lago 70–240 (panoramică, din sticlă). Calendar separat pe sală.",
+   "rt": 4.4,
+   "rc": 387,
+   "rv": "4,4★ din 387 agregate; fotografii laudă echipa și mâncarea. 82% recomandă pe Facebook (17), cel mai slab procent din listă.",
+   "pub": "Pagină de ofertă din 2024, fără prețuri; reduceri în timpul săptămânii și în afara sezonului.",
+   "tip": "Alma încape 211 persoane.",
+   "src": [
+    "https://kalipso.ro/oferta-nunti-iasi/",
+    "https://www.fotografi-cameramani.ro/locatie/5744"
+   ],
+   "min": 0,
+   "maps": "https://www.google.com/maps/search/?api=1&query=Kalipso%20Ciric%20Iasi"
+  },
+  {
+   "key": "lacastel",
+   "n": "La Castel",
+   "zone": "Copou",
+   "addr": "Aleea Mihail Sadoveanu nr. 82 A-D-E, Iași",
+   "km": 4,
+   "drive": "10 min",
+   "tel": [
+    "0743 051 119 (WhatsApp)"
+   ],
+   "em": "",
+   "web": "https://lacastel.ro/",
+   "ph": [
+    {
+     "l": "Sălile",
+     "u": "https://lacastel.ro/salile-noastre/"
+    },
+    {
+     "l": "Facebook",
+     "u": "https://www.facebook.com/lacasteliasi"
+    },
+    {
+     "l": "Instagram",
+     "u": "https://www.instagram.com/lacastelevents/"
+    }
+   ],
+   "cap": 400,
+   "halls": "7 săli: Green View 400, Castel Ballroom 200–360, Sala Venețiană, Sala Regală 130, Sala Coloanelor 70, Restaurant 60–70, Terasa Turnurilor. Hotel.",
+   "rv": "Testimonialele de pe site laudă coordonarea; 13+ ani de nunți.",
+   "pub": "2027: de la 105 €/pers. cu TVA, vin Cotnari nelimitat, 3 feluri, tort, fructe, open soft drinks; 2028: de la 114 €. Variantă all inclusive cu personal, decor, cocktail bar. Promo 2027: −25% la mâncare și vin din partea casei duminica; tragere la sorți 10.000 €.",
+   "tip": "105 € × 211 ≈ 110.000 lei doar meniul. Telefon fix complet și formular pe lacastel.ro/contact.",
+   "src": [
+    "https://lacastel.ro/meniu-nunta-standard/",
+    "https://lacastel.ro/contact/"
+   ],
+   "aliases": [],
+   "min": 0,
+   "rt": 0,
+   "rc": 0,
+   "maps": "https://www.google.com/maps/search/?api=1&query=La%20Castel%20Iasi%20Sadoveanu"
+  },
+  {
+   "key": "legaga",
+   "n": "Le Gaga",
+   "aliases": [
+    "Le Gaga Event Venue",
+    "Grand Ballroom by Le GaGa",
+    "Grand Ballroom Le Gaga",
+    "LeGaGa"
+   ],
+   "zone": "Pădurea Surdă",
+   "addr": "Str. Pădurea Surdă nr. 83, Iași 707311",
+   "km": 10,
+   "drive": "18 min",
+   "tel": [
+    "0741 207 500 (și WhatsApp)"
+   ],
+   "em": "grand.ballroom.legaga@gmail.com",
+   "web": "https://grandballroom.ro/",
+   "ph": [
+    {
+     "l": "Site",
+     "u": "https://grandballroom.ro/"
+    },
+    {
+     "l": "Facebook",
+     "u": "https://www.facebook.com/grandballroomiasi/"
+    },
+    {
+     "l": "Instagram",
+     "u": "https://www.instagram.com/grand_ballroom_by_legaga/"
+    }
+   ],
+   "cap": 400,
+   "halls": "Sala 120–400, exterior 40–110. Grădină, piscină (Restaurant Piscina), cazare, bucătărie proprie.",
+   "rv": "69 evenimente verificate și păreri de la 11 fotografi și videografi (fotografi-cameramani.ro).",
+   "pub": "„De la 220 lei” (eventfull.ro, listare veche); site-ul oferă doar ofertă personalizată.",
+   "tip": "",
+   "src": [
+    "https://grandballroom.ro/contact/",
+    "https://grandballroom.ro/locatie/grand-ballroom/"
+   ],
+   "min": 0,
+   "rt": 0,
+   "rc": 0,
+   "maps": "https://www.google.com/maps/search/?api=1&query=Grand%20Ballroom%20by%20Le%20GaGa%20Iasi"
+  },
+  {
+   "key": "liria",
+   "n": "Liria Events",
+   "zone": "Lac Aroneanu",
+   "addr": "Lacul Aroneanu, Aroneanu 707020",
+   "km": 7,
+   "drive": "15 min",
+   "tel": [
+    "0728 452 307",
+    "0747 520 303"
+   ],
+   "em": "contact@liria-events.ro, weddings@liria-events.ro",
+   "web": "https://liria-events.ro/",
+   "ph": [
+    {
+     "l": "Site",
+     "u": "https://liria-events.ro/"
+    },
+    {
+     "l": "Facebook",
+     "u": "https://www.facebook.com/liriaevents/"
+    }
+   ],
+   "cap": 330,
+   "halls": "Cort circular construit pe jumătate pe apă, pavilion de cununie pe ponton.",
+   "rv": "Testimoniale bune pe site; o nuntă de 200 de invitați descrisă ca reușită de la cununie (11:00) la final (04:00).",
+   "pub": "Niciun preț public.",
+   "tip": "Sezonieră: verificați luna dorită. Același proprietar ca Amouria. Biserica „Sf. Nicolae” Aroneanu e aproape.",
+   "src": [
+    "https://liria-events.ro/contact-rezervari/"
+   ],
+   "aliases": [],
+   "min": 0,
+   "rt": 0,
+   "rc": 0,
+   "maps": "https://www.google.com/maps/search/?api=1&query=Liria%20Events%20Aroneanu"
+  },
+  {
+   "key": "paradisulverde",
+   "n": "Paradisul Verde",
+   "aliases": [
+    "Complex Paradisul Verde"
+   ],
+   "zone": "Iepureni",
+   "addr": "Sat Iepureni, Str. La Izvoare nr. 51, com. Movileni",
+   "km": 15,
+   "drive": "25 min",
+   "tel": [
+    "0740 672 724"
+   ],
+   "em": "contact@paradisulverdeiasi.ro",
+   "web": "https://www.paradisulverdeiasi.ro/",
+   "ph": [
+    {
+     "l": "Site",
+     "u": "https://www.paradisulverdeiasi.ro/"
+    },
+    {
+     "l": "Facebook",
+     "u": "https://www.facebook.com/paradisulverdeiasi.ro/"
+    }
+   ],
+   "cap": 350,
+   "halls": "Lake Events 350, Paradis Lake 150. 16 căsuțe, 4 camere, aquapark, lacuri de pescuit.",
+   "rv": "8,4/10 din 115 pe Șoimii Nunților (laureată 2025).",
+   "pub": "Niciun preț public; pachete nuntă + botez în aceeași zi.",
+   "tip": "Tortul coboară din tavan. Vara aquapark-ul e deschis publicului: de întrebat cum se separă de nuntă.",
+   "src": [
+    "https://www.paradisulverdeiasi.ro/",
+    "https://www.soimiinuntilor.ro/profile-110121-complex-paradisul-verde-iasi"
+   ],
+   "min": 0,
+   "rt": 0,
+   "rc": 0,
+   "maps": "https://www.google.com/maps/search/?api=1&query=Complex%20Paradisul%20Verde%20Iepureni"
+  },
+  {
+   "key": "pleiada",
+   "n": "Pleiada Boutique Hotel",
+   "aliases": [
+    "Pleiada",
+    "Hotel Pleiada"
+   ],
+   "zone": "Șos. Bucium",
+   "addr": "Șos. Bucium nr. 18B, Iași",
+   "km": 4.5,
+   "drive": "10 min",
+   "tel": [
+    "0332 411 879 (evenimente)",
+    "0332 425 425",
+    "0745 255 435"
+   ],
+   "em": "",
+   "web": "https://www.hotelpleiada.ro/",
+   "ph": [
+    {
+     "l": "Galerie",
+     "u": "https://www.hotelpleiada.ro/galerie-foto-video-hotel-pleiada-iasi/"
+    },
+    {
+     "l": "Facebook",
+     "u": "https://www.facebook.com/HotelPleiada/"
+    },
+    {
+     "l": "Instagram",
+     "u": "https://www.instagram.com/hotelpleiada/"
+    }
+   ],
+   "cap": 220,
+   "min": 100,
+   "halls": "Atlas 100–220, Concordia 60–100, Taas 50, Burgo 40. Hotel 5*, spa.",
+   "rv": "Zeci de recenzii de nuntă 2025–2026, aproape toate de nota maximă (publicate de hotel). Se laudă coordonarea, mâncarea, camerele; un oaspete: prețul e mare.",
+   "pub": "Preț nepublicat; oferta de pe site e pentru 2025–2026. Eveniment anual „Nunta de 5*”.",
+   "tip": "Atlas are maxim 220: 211 e la limită. Email prin pagina de contact.",
+   "src": [
+    "https://www.hotelpleiada.ro/review-uri-evenimente-pleiada/",
+    "https://vinenunta.ro/furnizor/pleiada-boutique-hotel/"
+   ],
+   "rt": 0,
+   "rc": 0,
+   "maps": "https://www.google.com/maps/search/?api=1&query=Pleiada%20Boutique%20Hotel%20Iasi"
+  },
+  {
+   "key": "sky",
+   "n": "Sky Wedding & Events",
+   "aliases": [
+    "Sky Wedding",
+    "Sky Weddings Hall"
+   ],
+   "zone": "Costuleni",
+   "addr": "DN28, Dealul 2 Lei, Costuleni",
+   "km": 32,
+   "drive": "35–40 min",
+   "tel": [
+    "0733 111 115"
+   ],
+   "em": "skyballroomiasi@gmail.com",
+   "web": "https://www.skyweddings.ro/",
+   "ph": [
+    {
+     "l": "Site",
+     "u": "https://www.skyweddings.ro/"
+    },
+    {
+     "l": "Ouido (16 poze)",
+     "u": "https://www.ouido.ro/locatii/sky-wedding-events"
+    }
+   ],
+   "cap": 300,
+   "halls": "Sală panoramică 300, piscină, 5 camere, parcare 100.",
+   "rv": "Nu am găsit un scor agregat.",
+   "pub": "Meniu de la 87 €/pers. (Ouido), băuturile separat; bar și wedding planner incluse.",
+   "tip": "Cea mai depărtată: transport organizat pentru invitați.",
+   "src": [
+    "https://www.ouido.ro/locatii/sky-wedding-events",
+    "https://www.skyweddings.ro/about"
+   ],
+   "min": 0,
+   "rt": 0,
+   "rc": 0,
+   "maps": "https://www.google.com/maps/search/?api=1&query=Sky%20Wedding%20Events%20Costuleni"
+  },
+  {
+   "key": "storya",
+   "n": "Storya",
+   "aliases": [
+    "Storya Event Venue",
+    "Storya Events"
+   ],
+   "zone": "Bd. Chimiei",
+   "addr": "Bd. Chimiei nr. 14, Iași",
+   "km": 5,
+   "drive": "12 min",
+   "tel": [
+    "0744 870 603"
+   ],
+   "em": "contact@storyaevents.ro",
+   "web": "https://storyaevents.ro/",
+   "ph": [
+    {
+     "l": "Site",
+     "u": "https://storyaevents.ro/"
+    },
+    {
+     "l": "Facebook",
+     "u": "https://www.facebook.com/storya.events/"
+    },
+    {
+     "l": "Instagram",
+     "u": "https://www.instagram.com/storya.events"
+    }
+   ],
+   "cap": 160,
+   "halls": "O sală, 140–160 de locuri.",
+   "rv": "Nu am găsit un scor agregat consistent.",
+   "pub": "2023: 300 lei/pers. cu bere la draft, vinul casei, photobooth (vinenunta.ro). Weddingo: de la 60 €. Voucher 2.000 lei la contracte semnate 15 feb–15 mai.",
+   "tip": "Nu încape 211 persoane.",
+   "src": [
+    "https://storyaevents.ro/",
+    "https://vinenunta.ro/furnizor/storya-events/"
+   ],
+   "min": 0,
+   "rt": 0,
+   "rc": 0,
+   "maps": "https://www.google.com/maps/search/?api=1&query=Storya%20Events%20Iasi"
+  },
+  {
+   "key": "sunrise",
+   "n": "Sunrise Ciric",
+   "aliases": [
+    "Ciric Iași",
+    "Ciric Iasi",
+    "Complex Sunrise",
+    "Complex Sunrise Ciric"
+   ],
+   "zone": "Ciric",
+   "addr": "Șos. Aroneanu nr. 8, zona de agrement Ciric, Iași",
+   "km": 6,
+   "drive": "12 min",
+   "tel": [
+    "0731 773 344"
+   ],
+   "em": "office@sunriseclub.ro",
+   "web": "https://complexsunrise.ro/",
+   "ph": [
+    {
+     "l": "Site",
+     "u": "https://complexsunrise.ro/"
+    },
+    {
+     "l": "Instagram",
+     "u": "https://www.instagram.com/complexsunriseiasi/"
+    }
+   ],
+   "cap": 300,
+   "halls": "Salon Ballroom 600 mp / 300, Nobillum 100, Sollarium 60, Lagoo. Piscină.",
+   "rt": 4.5,
+   "rc": 549,
+   "rv": "4,5★ din 549 agregate. Fotografii laudă cadrul de lângă lac și piscina; unul critică iluminatul din sală.",
+   "pub": "Preț nepublicat; meniu cu 3 sau 4 feluri și pachet de băuturi non-alcoolice, decor și lumini incluse.",
+   "tip": "Email-ul e vechi (sunriseclub.ro); confirmați la telefon. Vecină cu Kalipso, Elysium, Golden Stone.",
+   "src": [
+    "https://complexsunrise.ro/",
+    "https://www.fotografi-cameramani.ro/locatie/5714"
+   ],
+   "min": 0,
+   "maps": "https://www.google.com/maps/search/?api=1&query=Complex%20Sunrise%20Ciric%20Iasi"
+  },
+  {
+   "key": "titanicdream",
+   "n": "Titanic Dream",
+   "zone": "Mogoșești",
+   "addr": "DJ248C, Mogoșești (la 9 km după capătul CUG)",
+   "km": 17,
+   "drive": "25 min",
+   "tel": [
+    "0757 151 482"
+   ],
+   "em": "contact@restaurant-titanic.ro, contact@titanicresort.ro",
+   "web": "https://restaurant-titanic.ro/sala-evenimente-titanic-dream/",
+   "ph": [
+    {
+     "l": "Pagina sălii",
+     "u": "https://restaurant-titanic.ro/sala-evenimente-titanic-dream/"
+    },
+    {
+     "l": "Facebook",
+     "u": "https://www.facebook.com/EvenimenteTitanicDream/"
+    },
+    {
+     "l": "Ouido (15 poze)",
+     "u": "https://www.ouido.ro/locatii/titanic-dream"
+    }
+   ],
+   "cap": 450,
+   "min": 170,
+   "halls": "Ballroom fără stâlpi 170–450, piscină exterioară, grădină pentru ceremonie.",
+   "rv": "Nu am găsit un scor pentru Titanic Dream; recenziile „Restaurant Titanic” sunt ale sălilor din Nicolina.",
+   "pub": "Meniu „Ultra All Inclusive” de la 60 €/pers. (Ouido), băuturi nespecificate.",
+   "tip": "Altă locație decât Titanic Hall din Nicolina (același proprietar).",
+   "src": [
+    "https://www.ouido.ro/locatii/titanic-dream",
+    "https://restaurant-titanic.ro/contact/"
+   ],
+   "aliases": [],
+   "rt": 0,
+   "rc": 0,
+   "maps": "https://www.google.com/maps/search/?api=1&query=Titanic%20Dream%20Mogosesti"
+  }
+ ]
+}

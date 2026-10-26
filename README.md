@@ -26,6 +26,14 @@ Fiecare versiune nouă este publicată aici ca release, cu `nunta-2027.zip` ata�
 
 Scriptul trimite numai emailurile potrivite, nu restul căsuței. Tokenul se poate regenera oricând din panou.
 
+## Săli din cercetare (v0.3.0)
+
+Pluginul conține lista de 29 de săli din cercetarea din 26 octombrie 2026 (`includes/data/sali-cercetare-2027.json`): adresă și link de hartă, distanța de la Palatul Culturii, telefoane, emailuri, site, linkuri către poze, săli și capacități, recenzii publice, oferte publicate și ce trebuie reținut.
+
+1. În WordPress: **Nunta 2027 → Săli din cercetare**. Raportul arată ce săli se păstrează, ce se adaugă și ce se șterge.
+2. **Înlocuiește sălile**. Se face backup înainte. Sălile care se regăsesc (după nume) își păstrează etapa, notele, prețul, oferta atașată și emailurile. Emailurile primite de la sălile șterse devin nealocate.
+3. În platformă, la **Săli → Solicitări**, fiecare sală are butonul **Cere disponibilitatea**: deschide emailul gata scris, cu data din Setări și numărul de invitați. Textul se poate modifica. După trimitere, sala trece la „Contactată”.
+
 ## Securitate
 
 - Datele se citesc și se scriu numai prin `/wp-json/nn27/v1/`.

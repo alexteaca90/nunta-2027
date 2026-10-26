@@ -13,7 +13,7 @@ class Nn27_Admin {
 
 	public static function init() {
 		add_action( 'admin_menu', array( __CLASS__, 'menu' ) );
-		foreach ( array( 'import_check', 'import_do', 'import_cancel', 'export', 'create_page', 'save_settings', 'download_backup', 'new_token' ) as $a ) {
+		foreach ( array( 'import_check', 'import_do', 'import_cancel', 'export', 'create_page', 'save_settings', 'download_backup', 'new_token', 'venues_replace' ) as $a ) {
 			add_action( 'admin_post_nn27_' . $a, array( __CLASS__, 'action_' . $a ) );
 		}
 		add_filter( 'plugin_action_links_' . plugin_basename( NN27_FILE ), array( __CLASS__, 'links' ) );
@@ -77,6 +77,16 @@ class Nn27_Admin {
 			self::back( array( 'nn27_msg' => 'importfail' ) );
 		}
 		self::back( array( 'nn27_msg' => 'imported', 'n' => (int) $res['records'] ) );
+	}
+
+	public static function action_venues_replace() {
+		self::guard( 'venues_replace' );
+		$res = Nn27_Store::replace_venues( wp_get_current_user()->display_name );
+		if ( is_wp_error( $res ) ) {
+			set_transient( 'nn27_err_' . get_current_user_id(), $res->get_error_message(), 300 );
+			self::back( array( 'nn27_msg' => 'venuesfail' ) );
+		}
+		self::back( array( 'nn27_msg' => 'venuesok', 'n' => (int) $res['venues'], 'k' => (int) $res['kept'], 'r' => (int) $res['removed'] ) );
 	}
 
 	public static function action_export() {
@@ -179,6 +189,8 @@ class Nn27_Admin {
 			'shortpass'   => array( 'error', 'Parola trebuie să aibă cel puțin 8 caractere.' ),
 			'saved'       => array( 'success', 'Setările au fost salvate.' ),
 			'newtoken'    => array( 'success', 'Token nou generat. Copiați din nou scriptul în Google Apps Script, altfel sincronizarea se oprește.' ),
+			'venuesok'    => array( 'success', sprintf( 'Sălile au fost înlocuite: %d săli din cercetare, %d păstrate cu notele voastre, %d șterse. Backup-ul de dinainte e în lista de mai jos.', (int) ( $_GET['n'] ?? 0 ), (int) ( $_GET['k'] ?? 0 ), (int) ( $_GET['r'] ?? 0 ) ) ), // phpcs:ignore
+			'venuesfail'  => array( 'error', 'Înlocuirea sălilor nu a reușit: ' . esc_html( (string) get_transient( 'nn27_err_' . get_current_user_id() ) ) ),
 			'badrepo'     => array( 'error', 'Adresa repository-ului trebuie să fie de forma https://github.com/cont/nume.' ),
 		);
 
@@ -266,6 +278,24 @@ class Nn27_Admin {
 				<?php
 			}
 			?>
+
+			<h2 id="sali">Săli din cercetare (<?php echo esc_html( count( (array) ( Nn27_Store::venue_research()['venues'] ?? array() ) ) ); ?>)</h2>
+			<?php $vp = Nn27_Store::plan_venue_replace(); ?>
+			<?php if ( $vp ) : ?>
+				<p>Înlocuiește lista de săli cu cele din cercetarea din <?php echo esc_html( $vp['researched'] ); ?>: adresă, telefoane, emailuri, distanță, săli, recenzii, oferte publicate, poze. Sălile care se regăsesc își păstrează etapa, notele, prețul, oferta atașată și emailurile.</p>
+				<table class="widefat striped" style="max-width:760px"><tbody>
+					<tr><td><strong>Se păstrează și se completează (<?php echo count( $vp['keep'] ); ?>)</strong></td><td><?php echo esc_html( implode( ', ', array_map( static function ( $k ) { return $k[0] === $k[1] ? $k[0] : $k[0] . ' → ' . $k[1]; }, $vp['keep'] ) ) ); ?></td></tr>
+					<tr><td><strong>Se adaugă (<?php echo count( $vp['add'] ); ?>)</strong></td><td><?php echo esc_html( implode( ', ', $vp['add'] ) ); ?></td></tr>
+					<tr><td><strong>Se șterg (<?php echo count( $vp['remove'] ); ?>)</strong></td><td><?php echo esc_html( implode( ', ', array_map( static function ( $r ) { return $r[1] . ( $r[2] ? " ({$r[2]} emailuri devin nealocate)" : '' ) . ( $r[3] ? " ({$r[3]} oferte atașate)" : '' ); }, $vp['remove'] ) ) ); ?></td></tr>
+				</tbody></table>
+				<?php if ( $vp['add'] || $vp['remove'] ) : ?>
+					<?php self::form_open( 'venues_replace' ); ?>
+						<p><?php submit_button( 'Înlocuiește sălile', 'primary', 'submit', false, array( 'onclick' => "return confirm('Înlocuiți lista de săli? Se face backup înainte.');" ) ); ?></p>
+					</form>
+				<?php else : ?>
+					<p>✔ Lista de săli este deja cea din cercetare.</p>
+				<?php endif; ?>
+			<?php endif; ?>
 
 			<h2>Backup</h2>
 			<?php self::form_open( 'export' ); ?>

@@ -496,6 +496,168 @@ class Nn27_Store {
 	 * @param string $who Cine importă.
 	 * @return array|WP_Error
 	 */
+	/* ------------------------------------------------------------------ */
+	/* Săli din cercetare: înlocuirea listei de săli                       */
+	/* ------------------------------------------------------------------ */
+
+	/** Lista de săli livrată cu pluginul (includes/data/sali-cercetare-2027.json). */
+	public static function venue_research() {
+		$path = NN27_DIR . 'includes/data/sali-cercetare-2027.json';
+		$doc  = is_readable( $path ) ? json_decode( (string) file_get_contents( $path ), true ) : null; // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+		return ( is_array( $doc ) && isset( $doc['venues'] ) && is_array( $doc['venues'] ) ) ? $doc : null;
+	}
+
+	private static function vkey( $s ) {
+		$s = remove_accents( mb_strtolower( (string) $s ) );
+		return trim( preg_replace( '/[^a-z0-9]+/', ' ', $s ) );
+	}
+
+	/**
+	 * Ce s-ar întâmpla la înlocuire, fără să scrie nimic.
+	 *
+	 * @return array|null { match: [newKey => oldId], keep: [[old, new]], add: [names], remove: [[id, name, mails]] }
+	 */
+	public static function plan_venue_replace() {
+		global $wpdb;
+		$doc = self::venue_research();
+		if ( ! $doc ) {
+			return null;
+		}
+		$old = array();
+		foreach ( self::all() as $r ) {
+			if ( 'v' === $r['col'] && is_array( $r['data'] ) ) {
+				$old[ $r['id'] ] = $r['data'];
+			}
+		}
+		$match = array();
+		$used  = array();
+		$keep  = array();
+		$add   = array();
+		foreach ( $doc['venues'] as $nv ) {
+			$names = array_map( array( __CLASS__, 'vkey' ), array_merge( array( $nv['n'] ), (array) ( $nv['aliases'] ?? array() ) ) );
+			$found = '';
+			foreach ( $old as $id => $ov ) {
+				if ( ! isset( $used[ $id ] ) && in_array( self::vkey( $ov['n'] ?? '' ), $names, true ) ) {
+					$found = $id;
+					break;
+				}
+			}
+			if ( $found ) {
+				$used[ $found ]       = true;
+				$match[ $nv['key'] ] = $found;
+				$keep[]              = array( $old[ $found ]['n'], $nv['n'] );
+			} else {
+				$add[] = $nv['n'];
+			}
+		}
+		$t      = Nn27_Installer::tables();
+		$remove = array();
+		foreach ( $old as $id => $ov ) {
+			if ( isset( $used[ $id ] ) ) {
+				continue;
+			}
+			$mails    = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$t['mail']} WHERE venue = %s", $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			$files    = isset( $ov['of']['files'] ) && is_array( $ov['of']['files'] ) ? count( $ov['of']['files'] ) : 0;
+			$remove[] = array( $id, $ov['n'] ?? $id, $mails, $files, (int) ( $ov['st'] ?? 0 ) );
+		}
+		return array( 'match' => $match, 'keep' => $keep, 'add' => $add, 'remove' => $remove, 'researched' => $doc['researched'] ?? '' );
+	}
+
+	/** Construiește înregistrarea unei săli: datele din cercetare peste ce ați completat voi. */
+	private static function research_record( $nv, $id, $base ) {
+		$keepUser = array( 'st', 'sc', 'nt', 'av', 'ppp', 'cp', 'cmp', 'of', 'req', 'reqn' );
+		$rec      = array( 'id' => $id, 'st' => 0, 'sc' => array( 0, 0, 0, 0 ), 'nt' => '', 'av' => '', 'ppp' => 0, 'cp' => 0, 'cmp' => false );
+		foreach ( $keepUser as $k ) {
+			if ( is_array( $base ) && array_key_exists( $k, $base ) ) {
+				$rec[ $k ] = $base[ $k ];
+			}
+		}
+		$emails = array();
+		foreach ( array( $base['em'] ?? '', $nv['em'] ?? '' ) as $raw ) {
+			preg_match_all( '/[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}/', (string) $raw, $m );
+			foreach ( $m[0] as $e ) {
+				$emails[ strtolower( $e ) ] = true;
+			}
+		}
+		$rec['n']    = (string) $nv['n'];
+		$rec['cap']  = (int) ( $nv['cap'] ?? 0 );
+		$rec['min']  = (int) ( $nv['min'] ?? 0 ) ? (int) $nv['min'] : (int) ( $base['min'] ?? 0 );
+		$rec['rt']   = (float) ( $nv['rt'] ?? 0 );
+		$rec['rc']   = (int) ( $nv['rc'] ?? 0 );
+		$rec['cond'] = (string) ( $nv['tip'] ?? '' );
+		$rec['url']  = (string) ( $nv['web'] ?? '' );
+		$rec['em']   = implode( ', ', array_keys( $emails ) );
+		foreach ( array( 'zone', 'addr', 'maps', 'km', 'drive', 'tel', 'web', 'ph', 'halls', 'rv', 'pub', 'tip', 'src' ) as $k ) {
+			$rec[ $k ] = $nv[ $k ] ?? '';
+		}
+		$rec['res'] = 1;
+		return $rec;
+	}
+
+	/**
+	 * Înlocuiește toate sălile cu lista din cercetare. Sălile care se regăsesc își păstrează
+	 * ID-ul, etapa, notele, prețul, oferta atașată și emailurile; celelalte sunt șterse.
+	 * Emailurile primite de la sălile șterse devin nealocate. Backup înainte.
+	 */
+	public static function replace_venues( $who ) {
+		global $wpdb;
+		$doc  = self::venue_research();
+		$plan = self::plan_venue_replace();
+		if ( ! $doc || ! $plan ) {
+			return new WP_Error( 'nn27_invalid', 'Lista de săli din cercetare lipsește din plugin.' );
+		}
+		$backup = self::backup_to_file( 'inainte-de-sali-noi' );
+		$t      = Nn27_Installer::tables();
+		$now    = current_time( 'mysql', true );
+		$cur    = array();
+		foreach ( $wpdb->get_results( "SELECT rid, data, ver, deleted FROM {$t['records']} WHERE col = 'v'", ARRAY_A ) as $r ) { // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			$cur[ $r['rid'] ] = $r;
+		}
+		$wpdb->query( 'START TRANSACTION' );
+		$wpdb->insert( $t['revs'], array( 'created' => $now, 'who' => $who ) );
+		$rev = (int) $wpdb->insert_id;
+		$n   = 0;
+		foreach ( $doc['venues'] as $i => $nv ) {
+			$id   = $plan['match'][ $nv['key'] ] ?? ( 'VR' . preg_replace( '/[^a-z0-9]/', '', (string) $nv['key'] ) );
+			$row  = $cur[ $id ] ?? null;
+			$base = ( $row && empty( $row['deleted'] ) ) ? json_decode( (string) $row['data'], true ) : array();
+			$rec  = self::research_record( $nv, $id, is_array( $base ) ? $base : array() );
+			$rec['o'] = $i;
+			$row  = $row ? array( 'col' => 'v', 'rid' => $id, 'ver' => $row['ver'], 'deleted' => $row['deleted'] ) : null;
+			if ( false === self::write( 'v', $id, $rec, $row, $rev, $now, $who ) ) {
+				$wpdb->query( 'ROLLBACK' );
+				return new WP_Error( 'nn27_db', 'Înlocuirea a eșuat; sălile au rămas neschimbate.' );
+			}
+			++$n;
+		}
+		$removed = array();
+		foreach ( $plan['remove'] as $r ) {
+			$row = $cur[ $r[0] ] ?? null;
+			if ( $row ) {
+				self::write( 'v', $r[0], null, array( 'col' => 'v', 'rid' => $r[0], 'ver' => $row['ver'], 'deleted' => $row['deleted'] ), $rev, $now, $who );
+			}
+			$removed[] = $r[0];
+		}
+		// Setarea „sala din calcule” nu trebuie să trimită la o sală ștearsă.
+		$srow = $wpdb->get_row( "SELECT data, ver, deleted FROM {$t['records']} WHERE col = 'settings' AND rid = 'main'", ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		if ( $srow ) {
+			$sd = json_decode( (string) $srow['data'], true );
+			if ( is_array( $sd ) && ! empty( $sd['refVenue'] ) && in_array( $sd['refVenue'], $removed, true ) ) {
+				$sd['refVenue'] = null;
+				self::write( 'settings', 'main', $sd, array( 'col' => 'settings', 'rid' => 'main', 'ver' => $srow['ver'], 'deleted' => $srow['deleted'] ), $rev, $now, $who );
+			}
+		}
+		$wpdb->insert( $t['log'], array( 'created' => $now, 'who' => $who, 'msg' => sprintf( 'Săli înlocuite cu lista din cercetare: %d săli, %d păstrate, %d șterse', $n, count( $plan['keep'] ), count( $removed ) ) ) );
+		$wpdb->query( 'COMMIT' );
+		if ( $removed ) {
+			$in = implode( ',', array_fill( 0, count( $removed ), '%s' ) );
+			$wpdb->query( $wpdb->prepare( "UPDATE {$t['mail']} SET venue = '' WHERE venue IN ($in)", $removed ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
+			$wpdb->query( $wpdb->prepare( "UPDATE {$t['files']} SET venue = 'mail' WHERE mail <> '' AND venue IN ($in)", $removed ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
+			update_option( 'nn27_mail_rev', (int) get_option( 'nn27_mail_rev', 0 ) + 1, false );
+		}
+		return array( 'venues' => $n, 'kept' => count( $plan['keep'] ), 'removed' => count( $removed ), 'backup' => $backup );
+	}
+
 	public static function import_state( $doc, $who ) {
 		global $wpdb;
 		$check = self::validate_import( $doc );

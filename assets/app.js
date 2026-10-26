@@ -356,6 +356,91 @@ async function boot(){
 const DRINKS = ['Neprecizat','Incluse complet','Parțial incluse','Nu sunt incluse'];
 function offerOf(v){ if (!v.of) v.of = {date:'',valid:'',drinks:0,deposit:'',extra:0,inc:'',files:[]}; return v.of; }
 function venueTotal(v,C){ const o = offerOf(v); if (!v.ppp) return 0; return C.expA*v.ppp + C.expK*(v.cp||v.ppp*S.settings.childPct/100) + num(o.extra); }
+/* ---------- Săli: detalii din cercetare și solicitări de disponibilitate ---------- */
+const TPL_SUBJ = 'Disponibilitate nuntă 2027 – aproximativ {invitati} invitați';
+const TPL_BODY = `Bună ziua,
+
+Suntem Alex și Andreea și ne căsătorim în 2027. Căutăm o sală pentru petrecerea de nuntă și am vrea să aflăm dacă {sala} este disponibilă.
+
+• Data: {data}
+• Invitați: aproximativ {invitati}, dintre care aproximativ {copii} copii
+
+Vă rugăm să ne trimiteți:
+1. Datele libere în 2027: sâmbetele, dar și vinerile și duminicile, cu diferența de preț între zile.
+2. Oferta de meniu pentru 2027: prețul pe persoană pentru adulți și pentru copii și ce include (băuturi alcoolice și non-alcoolice, tort, decor, DJ sau formație, taxa de servire).
+3. Ce sală ne recomandați pentru numărul nostru de invitați și dacă există un minim de persoane.
+4. Avansul, eșalonarea plăților și condițiile de anulare.
+5. Când putem veni la o vizionare și dacă organizați degustare.
+
+Vă mulțumim!
+Alex și Andreea`;
+const vEmails = v => (String(v.em||'').match(/[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}/g)||[]).filter((e,i,a)=>a.indexOf(e)===i);
+const vTels = v => (Array.isArray(v.tel)?v.tel:String(v.tel||'').split(/[,;]/)).map(x=>String(x).trim()).filter(Boolean);
+const telHref = t => 'tel:' + t.replace(/\(.*?\)/g,'').replace(/[^\d+]/g,'');
+const hostOf = u => { try{ return new URL(u).hostname.replace(/^www\./,''); }catch(e){ return u; } };
+const kmTxt = v => v.km!=='' && v.km!=null && v.km!==0 ? String(v.km).replace('.',',') + ' km' : '';
+function reqCounts(){
+  const going = S.p.filter(p=>p.r!==2);
+  return {n: going.length, k: going.filter(p=>p.k).length};
+}
+function reqFill(tpl, v){
+  const c = reqCounts(), d = S.settings.date;
+  const data = d ? `${fmtDate(d)} (${new Date(d+'T12:00:00').toLocaleDateString('ro-RO',{weekday:'long'})}); dacă nu e liberă, ne interesează și alte date apropiate` : 'încă nestabilită, în 2027 (suntem flexibili)';
+  return String(tpl).replace(/\{sala\}/g, v ? v.n : 'sala dumneavoastră').replace(/\{data\}/g, data).replace(/\{invitati\}/g, n0(c.n)).replace(/\{copii\}/g, n0(c.k));
+}
+const reqSubj = v => reqFill(S.settings.reqSubj || TPL_SUBJ, v);
+const reqBody = v => reqFill(S.settings.reqTpl || TPL_BODY, v);
+const reqMailto = v => 'mailto:' + vEmails(v).join(',') + '?subject=' + encodeURIComponent(reqSubj(v)) + '&body=' + encodeURIComponent(reqBody(v));
+function reqStatus(v){ return v.req ? `<span class="tag ok">Cerere trimisă ${new Date(v.req).toLocaleDateString('ro-RO')}</span>` : ''; }
+function reqActions(v, compact){
+  const ems = vEmails(v), tels = vTels(v);
+  return `${ems.length?`<a class="btn ${v.req?'':'primary'}" href="${esc(reqMailto(v))}" data-act="reqsent" data-id="${v.id}">${I.mail||''}${v.req?'Trimite din nou':'Cere disponibilitatea'}</a>`:''}
+    <button class="btn" data-act="reqcopy" data-id="${v.id}">Copiază textul</button>
+    ${!ems.length && tels.length ? `<a class="btn" href="${esc(telHref(tels[0]))}">Sună ${esc(tels[0].replace(/\s*\(.*\)/,''))}</a>`:''}
+    ${!v.req?`<button class="btn ghost" data-act="reqmark" data-id="${v.id}">${compact?'Marchează trimisă':'Am cerut pe altă cale'}</button>`:''}`;
+}
+function venueInfo(v){
+  const tels = vTels(v), ems = vEmails(v), ph = Array.isArray(v.ph)?v.ph:[], src = Array.isArray(v.src)?v.src:[];
+  if (!v.addr && !tels.length && !ems.length && !v.halls && !v.pub) return '';
+  const row = (k, val) => val ? `<div class="vi-row"><dt>${k}</dt><dd>${val}</dd></div>` : '';
+  return `<section class="vinfo"><div class="vi-head"><h3>Detalii și contact</h3>${v.res?'<span class="tag gold">din cercetare</span>':''}</div><dl>
+    ${row('Adresă', v.addr ? (v.maps?`<a href="${esc(v.maps)}" target="_blank" rel="noopener">${esc(v.addr)}</a>`:esc(v.addr)) : '')}
+    ${row('Zonă', esc(v.zone||''))}
+    ${row('Distanță', kmTxt(v) ? `${kmTxt(v)} de Palatul Culturii${v.drive?' · '+esc(v.drive):''}` : '')}
+    ${row('Telefon', tels.map(t=>`<a href="${esc(telHref(t))}">${esc(t)}</a>`).join('<br>'))}
+    ${row('Email', ems.map(e=>`<a href="mailto:${esc(e)}">${esc(e)}</a>`).join('<br>'))}
+    ${row('Site', v.web?`<a href="${esc(v.web)}" target="_blank" rel="noopener">${esc(hostOf(v.web))}</a>`:'')}
+    ${row('Poze', ph.map(x=>`<a href="${esc(x.u)}" target="_blank" rel="noopener">${esc(x.l)}</a>`).join(' · '))}
+    ${row('Săli', esc(v.halls||''))}
+    ${row('Recenzii', esc(v.rv||''))}
+    ${row('Ofertă publicată', esc(v.pub||''))}
+    ${row('De reținut', esc(v.tip||''))}
+    ${row('Surse', src.map(u=>`<a href="${esc(u)}" target="_blank" rel="noopener">${esc(hostOf(u))}</a>`).join(' · '))}
+  </dl></section>`;
+}
+function venueRequests(C){
+  const e = Math.round(C.expected);
+  let vs = S.v.filter(v=>v.st!==6);
+  if (UI.reqFit) vs = vs.filter(v=>!v.cap || v.cap>=e);
+  vs = vs.slice().sort((a,b)=>(!!a.req-!!b.req) || a.n.localeCompare(b.n,'ro'));
+  const all = S.v.filter(v=>v.st!==6), sent = all.filter(v=>v.req).length, withMail = all.filter(v=>vEmails(v).length).length;
+  const c = reqCounts();
+  return `<section class="panel"><div class="ph"><div><h2>Solicitări de disponibilitate</h2><div class="sub">Textul se completează automat pentru fiecare sală. „Cere disponibilitatea” deschide emailul gata scris în aplicația voastră de mail; după ce îl trimiteți, sala trece la „Contactată”. Răspunsurile vin în platformă prin sincronizarea cu Gmail.</div></div></div>
+    <div class="req-stats"><span><b class="num">${sent}</b> trimise</span><span><b class="num">${all.length-sent}</b> rămase</span><span><b class="num">${withMail}</b> săli cu email</span><span><b class="num">${all.length-withMail}</b> doar telefon sau formular</span></div>
+    <details class="req-tpl"><summary>Textul cererii</summary>
+      <p class="hint">Câmpuri completate automat: <code>{sala}</code>, <code>{data}</code> (din Setări: ${S.settings.date?esc(fmtDate(S.settings.date)):'nesetată'}), <code>{invitati}</code> (acum ${n0(c.n)}: toți cei care nu au refuzat), <code>{copii}</code> (${n0(c.k)}).</p>
+      <label class="field"><span>Subiect</span><input class="input" data-tpl="reqSubj" value="${esc(S.settings.reqSubj||TPL_SUBJ)}"></label>
+      <label class="field" style="margin-top:10px"><span>Mesaj</span><textarea class="input" rows="16" data-tpl="reqTpl">${esc(S.settings.reqTpl||TPL_BODY)}</textarea></label>
+      <div style="margin-top:8px"><button class="btn ghost" data-act="tplreset">Revino la textul inițial</button></div>
+    </details>
+  </section>
+  <div class="toolbar" style="margin-top:16px"><button class="toggle" data-act="reqfit" aria-pressed="${UI.reqFit}"><i></i>Doar sălile în care încap ${n0(e)} invitați</button></div>
+  <div class="req-list">${vs.map(v=>{ const [fl,fc] = fit(v,C); const ems = vEmails(v), tels = vTels(v); return `<div class="req-item ${v.req?'done':''}">
+      <div class="req-main"><button class="link req-name" data-act="openv" data-id="${v.id}">${esc(v.n)}</button>
+        <div class="req-meta">${v.zone?esc(v.zone):''}${kmTxt(v)?' · '+kmTxt(v):''} <span class="tag ${fc}">${fl}</span> <span class="tag">${STAGES[v.st]}</span> ${reqStatus(v)}</div>
+        <div class="req-meta muted">${ems.length?esc(ems.join(', ')):'Fără email'}${tels.length?' · '+tels.map(t=>`<a href="${esc(telHref(t))}">${esc(t)}</a>`).join(', '):''}</div></div>
+      <div class="req-act">${reqActions(v, true)}</div></div>`; }).join('') || '<div class="empty">Nicio sală de afișat.</div>'}</div>`;
+}
 function fsize(b){ return b>1048576 ? (b/1048576).toFixed(1).replace('.',',')+' MB' : Math.max(1,Math.round(b/1024))+' KB'; }
 async function addFiles(v, list){
   const o = offerOf(v); let ok=0;
@@ -384,7 +469,7 @@ async function viewFile(vid, fid){
 function save(){ schedule(); }
 function log(msg){ LOGS.unshift({t:Date.now(), who:WHO, m:msg}); LOGS = LOGS.slice(0,30); PENDING_LOG.push(msg); }
 
-const UI = {view:'acasa', q:'', cat:'all', gf:'all', open:new Set(), vopen:new Set(), bopen:new Set(), mopen:new Set(), mall:new Set(), stageM:0, vendAdd:null, flash:null, gview:'cards', vtab:'board', vq:'', drawer:null, showRejected:false};
+const UI = {view:'acasa', q:'', cat:'all', gf:'all', open:new Set(), vopen:new Set(), bopen:new Set(), mopen:new Set(), mall:new Set(), stageM:0, vendAdd:null, flash:null, gview:'cards', vtab:'board', vq:'', drawer:null, showRejected:false, reqFit:true};
 try{ const h = location.hash.slice(1); if (VIEWS.some(v=>v[0]===h)) UI.view = h; }catch(e){}
 
 /* ---------- utilitare ---------- */
@@ -704,13 +789,14 @@ function vVenues(C){
   const e = Math.round(C.expected);
   const ref = C.ref;
   const head = `<div class="page-head"><div><h1>Săli</h1><p>Fiecare sală trece prin aceleași etape, de la primul contact la rezervare. Costul estimat se calculează pentru cei ${n0(e)} invitați așteptați acum.</p></div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap"><div class="vtabs"><button data-vtab="board" aria-pressed="${UI.vtab==='board'}">Etape</button><button data-vtab="cmp" aria-pressed="${UI.vtab==='cmp'}">Comparație${S.v.filter(v=>v.cmp).length?` (${S.v.filter(v=>v.cmp).length})`:''}</button></div><button class="btn primary" data-act="addv">${I.plus}Adaugă sală</button></div></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap"><div class="vtabs"><button data-vtab="board" aria-pressed="${UI.vtab==='board'}">Etape</button><button data-vtab="req" aria-pressed="${UI.vtab==='req'}">Solicitări${S.v.filter(v=>v.st!==6&&!v.req).length?` (${S.v.filter(v=>v.st!==6&&!v.req).length})`:''}</button><button data-vtab="cmp" aria-pressed="${UI.vtab==='cmp'}">Comparație${S.v.filter(v=>v.cmp).length?` (${S.v.filter(v=>v.cmp).length})`:''}</button></div><button class="btn primary" data-act="addv">${I.plus}Adaugă sală</button></div></div>
     <div class="ref">${ref?`<span>Calculele folosesc <strong>${esc(ref.n)}</strong>${ref.st===5?' (rezervată)':''}: ${ref.ppp?lei(ref.ppp)+' / pers.':'preț necunoscut, deci rămâne ipoteza'}</span>`:`<span>Nicio sală aleasă pentru calcule. Până primiți oferte, folosim ipoteza de <strong>${lei(S.settings.assumedPrice)}</strong> / persoană.</span>`}
     <label class="dar" style="margin-left:auto">Ipoteză <input class="input num" data-set="assumedPrice" value="${S.settings.assumedPrice}" inputmode="numeric" aria-label="Preț ipotetic per persoană"> lei / pers.</label></div>`;
   if (UI.vtab==='cmp') return head + venueCompare(C);
+  if (UI.vtab==='req') return head + venueRequests(C);
   const searchBar = `<div class="toolbar"><input class="input vsearch" type="search" id="vq" placeholder="Caută o sală" value="${esc(UI.vq)}" aria-label="Caută săli"></div>`;
   const cols = STAGES.map((s,i)=>i).filter(i=>i<6 || UI.showRejected);
-  const inCol = i => S.v.filter(v=>v.st===i && (!UI.vq || v.n.toLowerCase().includes(UI.vq.toLowerCase())));
+  const inCol = i => S.v.filter(v=>v.st===i && (!UI.vq || (v.n+' '+(v.zone||'')).toLowerCase().includes(UI.vq.toLowerCase())));
   const picker = `<div class="stagepick seg" role="tablist" aria-label="Etapă">${cols.map(i=>`<button data-act="stagem" data-i="${i}" aria-pressed="${UI.stageM===i}">${STAGES[i]}<em>${inCol(i).length}</em></button>`).join('')}</div>`;
   return head + searchBar + picker + `<div class="board">${cols.map(i=>{
     const vs = inCol(i).sort((a,b)=>(b.rt||0)-(a.rt||0));
@@ -726,6 +812,8 @@ function venueCard(v,C){
   return `<button class="vc ${isRef?'isref':''}" data-act="openv" data-id="${v.id}">
     <span class="vn">${esc(v.n)}</span>
     <span class="vm">${v.rt?`<span class="r">★ ${String(v.rt).replace('.',',')} (${n0(v.rc)})</span>`:''}<span class="tag ${fc}">${fl}</span>${isRef?'<span class="tag gold">în calcule</span>':''}${v.cmp?'<span class="tag wine">compar</span>':''}${nf?`<span class="tag gold">ofertă${nf>1?' ×'+nf:''}</span>`:''}</span>
+    ${v.zone||kmTxt(v)?`<span class="vz">${esc(v.zone||'')}${v.zone&&kmTxt(v)?' · ':''}${kmTxt(v)}</span>`:''}
+    ${v.req?'<span class="vz"><span class="tag ok">cerere trimisă</span></span>':''}
     <span class="cost">${est?`Estimat <b>${est}</b> · ${lei(v.ppp)}/pers.`:'Preț neprimit încă'}${mailsOf(v.id).length?` · ✉ ${mailsOf(v.id).length}`:''}</span>
   </button>`;
 }
@@ -734,6 +822,9 @@ function venueCompare(C){
   if (!vs.length) return `<div class="empty">Deschideți o sală și apăsați „Adaugă la comparație”. Puteți compara oricâte vreți.</div>`;
   const rows = [
     ['Etapă', v=>STAGES[v.st]],
+    ['Zonă și distanță', v=>v.zone||kmTxt(v)?esc(v.zone||'')+(kmTxt(v)?'<br><small class="muted">'+kmTxt(v)+' de Palatul Culturii</small>':''):'<span class="muted">—</span>'],
+    ['Cerere de disponibilitate', v=>v.req?new Date(v.req).toLocaleDateString('ro-RO'):'<span class="muted">netrimisă</span>'],
+    ['Ofertă publicată', v=>esc(v.pub)||'<span class="muted">—</span>'],
     ['Capacitate', v=>{const [l,c]=fit(v,C);return `<span class="tag ${c}">${l}</span>`}],
     ['Disponibilitate', v=>esc(v.av)||'<span class="muted">—</span>'],
     ['Preț adult', v=>v.ppp?lei(v.ppp):'<span class="muted">—</span>'],
@@ -748,6 +839,8 @@ function venueCompare(C){
     ['Rating public', v=>v.rt?`★ ${String(v.rt).replace('.',',')} (${n0(v.rc)})`:'—'],
     ...SCORE_LABELS.map((l,i)=>['Notă '+l.toLowerCase(), v=>v.sc[i]?'★'.repeat(v.sc[i]):'<span class="muted">—</span>']),
     ['Media notelor voastre', v=>{const s=venueScore(v);return s?s.toFixed(1).replace('.',','):'<span class="muted">—</span>'}],
+    ['Recenzii publice', v=>esc(v.rv)||'<span class="muted">—</span>'],
+    ['Telefon', v=>vTels(v).map(t=>`<a href="${esc(telHref(t))}">${esc(t)}</a>`).join('<br>')||'<span class="muted">—</span>'],
     ['Note', v=>esc(v.nt||v.cond)]
   ];
   return `<div class="cmpwrap"><table><thead><tr><th></th>${vs.map(v=>`<th><button class="link" data-act="openv" data-id="${v.id}">${esc(v.n)}</button></th>`).join('')}</tr></thead><tbody>${rows.map(([l,f])=>`<tr><th scope="row">${l}</th>${vs.map(v=>`<td>${f(v)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
@@ -766,9 +859,11 @@ function renderDrawer(C){
   const isRef = C.ref && C.ref.id===v.id;
   const kid = v.cp || v.ppp*S.settings.childPct/100;
   const html = `
-    <div class="dh"><div><h2>${esc(v.n)}</h2><div class="sub muted" style="margin-top:4px">Iași${v.rt?` · ★ ${String(v.rt).replace('.',',')} din ${n0(v.rc)} recenzii`:''}</div></div><button class="iconbtn" data-act="close" aria-label="Închide">${I.x}</button></div>
+    <div class="dh"><div><h2>${esc(v.n)}</h2><div class="sub muted" style="margin-top:4px">${esc(v.zone||'Iași')}${kmTxt(v)?' · '+kmTxt(v):''}${v.rt?` · ★ ${String(v.rt).replace('.',',')} din ${n0(v.rc)} recenzii`:''}</div></div><button class="iconbtn" data-act="close" aria-label="Închide">${I.x}</button></div>
     <div class="db">
       <div class="field"><span>Etapă</span><div class="stages">${STAGES.map((s,i)=>`<button data-act="stage" data-i="${i}" aria-pressed="${v.st===i}">${s}</button>`).join('')}</div></div>
+      <section class="reqbox"><div><h3>Disponibilitate</h3><div class="sub muted">${v.req?`Cerere trimisă pe ${new Date(v.req).toLocaleDateString('ro-RO')}.`:(vEmails(v).length?'Emailul se deschide gata scris; textul îl puteți modifica la Săli → Solicitări.':'Nu avem email pentru această sală: sunați sau folosiți formularul de pe site.')}</div></div><div class="req-act">${reqActions(v)}</div></section>
+      ${venueInfo(v)}
       <div class="calc">
         ${v.ppp?`<div class="eq"><b class="num">${n0(C.expA)}</b> adulți × <b>${lei(v.ppp)}</b> + <b class="num">${n0(C.expK)}</b> copii × <b>${lei(kid)}</b></div><div>Cost estimat: <b>${lei(venueTotal(v,C))}</b>${num(offerOf(v).extra)?` <span class="muted">(inclusiv ${lei(offerOf(v).extra)} costuri extra)</span>`:''}</div>`:'<div>Când introduceți prețul pe persoană, costul se calculează automat pentru invitații așteptați.</div>'}
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">
@@ -1031,6 +1126,10 @@ document.addEventListener('click', e=>{
     case 'cmp': { const v = byId(S.v,UI.drawer); v.cmp=!v.cmp; commit(null); break; }
     case 'star': { const v = byId(S.v,UI.drawer); const i=+a.dataset.i, n=+a.dataset.n; v.sc[i] = v.sc[i]===n?0:n; commit(null); break; }
     case 'rej': UI.showRejected=!UI.showRejected; render(); break;
+    case 'reqsent': case 'reqmark': { if (act==='reqsent'){ e.preventDefault(); window.location.href = a.getAttribute('href'); } const v = byId(S.v,id); v.req = Date.now(); if (v.st===0) v.st = 1; commit(`${v.n}: cerere de disponibilitate ${act==='reqsent'?'trimisă pe email':'trimisă'}`); break; }
+    case 'reqcopy': { const v = byId(S.v,id); const txt = reqSubj(v) + '\n\n' + reqBody(v); (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(()=>toast('Textul cererii a fost copiat')).catch(()=>{ window.prompt('Copiați textul:', txt); }); break; }
+    case 'reqfit': e.preventDefault(); UI.reqFit = !UI.reqFit; render(); break;
+    case 'tplreset': delete S.settings.reqSubj; delete S.settings.reqTpl; commit('Textul cererii de disponibilitate a revenit la cel inițial'); break;
     case 'addv': { const n = uid('V'); S.v.push({id:n,n:'Sală nouă',cap:0,ppp:0,min:0,rt:0,rc:0,cond:'',url:'',st:0,cp:0,av:'',sc:[0,0,0,0],nt:'',cmp:false}); commit('Sală nouă adăugată'); openDrawer(n); break; }
     case 'task': { const t = byId(S.tasks,id); t.done=!t.done; commit(`${t.title}: ${t.done?'bifat':'debifat'}`); break; }
     case 'deltask': { const s0=snap(); S.tasks = S.tasks.filter(t=>t.id!==id); commit('Pas șters'); toast('Pasul a fost șters', s0); break; }
@@ -1064,6 +1163,7 @@ document.addEventListener('input', e=>{
 document.addEventListener('change', e=>{
   const t = e.target, f = t.dataset.f;
   if (t.id==='catf'){ UI.cat = t.value; render(); return; }
+  if (t.dataset.tpl){ S.settings[t.dataset.tpl] = t.value; commit(null, false); return; }
   if (t.dataset.set){
     const k = t.dataset.set; S.settings[k] = k==='date' ? t.value : num(t.value);
     if (k==='pendingRate' && t.type==='range'){ commit(`Scenariu: ${t.value}% dintre cei fără răspuns vin`, false); return; }

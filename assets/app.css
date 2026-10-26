@@ -482,3 +482,34 @@ tr.bexp td{background:var(--sunk);padding:14px}
 .vc .tag{white-space:normal;text-align:left}
 .vc .cost{overflow-wrap:anywhere}
 .col h3 span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* Săli: detalii din cercetare și solicitări de disponibilitate (v0.3.0) */
+.vc .vz{display:block;font-size:12.5px;color:var(--muted);margin-top:2px}
+.reqbox{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:14px;border-radius:10px;background:var(--wine-soft)}
+.reqbox h3,.vinfo h3{font:500 17px/1.2 var(--display);margin:0}
+.reqbox .sub{font-size:12.5px;margin-top:2px;max-width:46ch}
+.req-act{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.req-act .btn{text-decoration:none}
+.req-act .btn svg{width:15px;height:15px}
+.vinfo{border:1px solid var(--line);border-radius:10px;padding:14px;background:var(--surface)}
+.vi-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}
+.vinfo dl{margin:0;display:grid;gap:0}
+.vi-row{display:grid;grid-template-columns:118px minmax(0,1fr);gap:10px;padding:7px 0;border-top:1px solid var(--line);font-size:13.5px}
+.vi-row:first-child{border-top:0}
+.vi-row dt{color:var(--muted);font-weight:500}
+.vi-row dd{margin:0;overflow-wrap:anywhere}
+.vinfo a,.req-item a:not(.btn){color:var(--wine);text-underline-offset:3px;text-decoration-thickness:1px}
+.req-stats{display:flex;gap:18px;flex-wrap:wrap;font-size:13.5px;color:var(--muted)}
+.req-stats b{font:600 20px var(--body);color:var(--ink);margin-right:4px}
+.req-tpl{margin-top:14px;border-top:1px solid var(--line);padding-top:12px}
+.req-tpl summary{cursor:pointer;font-weight:600}
+.req-tpl textarea{font:13.5px/1.5 var(--body)}
+.req-list{display:grid;gap:8px}
+.req-item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px 16px;align-items:center;padding:12px 14px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-m)}
+.req-item.done{background:var(--sunk)}
+.req-name{font-size:15px;font-weight:600;text-decoration:none}
+.req-meta{display:flex;gap:6px;flex-wrap:wrap;align-items:center;font-size:12.5px;margin-top:3px}
+@media (max-width:760px){
+  .req-item{grid-template-columns:minmax(0,1fr)}
+  .vi-row{grid-template-columns:minmax(0,1fr);gap:2px}
+}
