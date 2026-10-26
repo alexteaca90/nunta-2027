@@ -595,6 +595,9 @@ class Nn27_Store {
 				$emails[ strtolower( $e ) ] = true;
 			}
 		}
+		foreach ( (array) ( $nv['emDrop'] ?? array() ) as $e ) { // adrese vechi, greșite
+			unset( $emails[ strtolower( (string) $e ) ] );
+		}
 		$rec['n']    = (string) $nv['n'];
 		$rec['cap']  = (int) ( $nv['cap'] ?? 0 );
 		$rec['min']  = (int) ( $nv['min'] ?? 0 ) ? (int) $nv['min'] : (int) ( $base['min'] ?? 0 );

@@ -1151,7 +1151,7 @@
    "tel": [
     "0731 773 344"
    ],
-   "em": "office@sunriseclub.ro",
+   "em": "office@complexsunrise.ro",
    "web": "https://complexsunrise.ro/",
    "ph": [
     {
@@ -1169,13 +1169,16 @@
    "rc": 549,
    "rv": "4,5★ din 549 agregate. Fotografii laudă cadrul de lângă lac și piscina; unul critică iluminatul din sală.",
    "pub": "Preț nepublicat; meniu cu 3 sau 4 feluri și pachet de băuturi non-alcoolice, decor și lumini incluse.",
-   "tip": "Email-ul e vechi (sunriseclub.ro); confirmați la telefon. Vecină cu Kalipso, Elysium, Golden Stone.",
+   "tip": "Vecină cu Kalipso, Elysium, Golden Stone.",
    "src": [
     "https://complexsunrise.ro/",
     "https://www.fotografi-cameramani.ro/locatie/5714"
    ],
    "min": 0,
-   "maps": "https://www.google.com/maps/search/?api=1&query=Complex%20Sunrise%20Ciric%20Iasi"
+   "maps": "https://www.google.com/maps/search/?api=1&query=Complex%20Sunrise%20Ciric%20Iasi",
+   "emDrop": [
+    "office@sunriseclub.ro"
+   ]
   },
   {
    "key": "titanicdream",
