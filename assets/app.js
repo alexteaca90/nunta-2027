@@ -89,6 +89,7 @@ function applyServer(list){
     const k = x.col+':'+x.id, b = BASE[k];
     if (b && x.v <= b.v) continue;
     const sj = x.data===null ? null : norm(x.data);
+    const before = cur[k];
     const localDirty = (k in cur) ? (!b || b.j!==cur[k]) : !!b;
     if (!localDirty){ if (sj===null) delete cur[k]; else cur[k] = sj; }
     else if (sj===null){ /* șters pe server, modificat aici: îl păstrăm (se recreează) */ }
@@ -103,7 +104,7 @@ function applyServer(list){
     }
     else cur[k] = mergeJson(b.j, cur[k], sj);
     if (sj===null) delete BASE[k]; else BASE[k] = {v:x.v, j:sj};
-    changed = true;
+    if (cur[k]!==before) changed = true;
   }
   if (changed) S = migrate(fromRecords(cur));
   return changed;
@@ -185,9 +186,15 @@ async function poll(){
     if (['offline','error'].includes(SYNC.status)) schedule(0);
   }catch(e){ if (e.status===401 || e.status===403) setSync('auth'); else if (e.status===0) setSync('offline'); }
 }
+let POINTER = false;
+document.addEventListener('pointerdown', ()=>{ POINTER = true; }, true);
+['pointerup','pointercancel'].forEach(ev=>document.addEventListener(ev, ()=>{ POINTER = false; if (NEEDS_RENDER) setTimeout(tryDeferred, 350); }, true));
+function formDirty(){ return [...document.querySelectorAll('#view form input:not([type=hidden]), #view form textarea')].some(el=>el.value.trim()!==''); }
+function tryDeferred(){ if (!NEEDS_RENDER || POINTER || editing() || formDirty()) return; NEEDS_RENDER = false; render(); }
 function editing(){ const a = document.activeElement; return a && a.matches && a.matches('input:not([type=range]):not([type=file]),textarea,select') && (a.closest('#view') || a.closest('#drawer')); }
-function refreshAfterRemote(){ if (editing()){ NEEDS_RENDER = true; soft(); } else render(); }
-document.addEventListener('focusout', ()=>{ if (NEEDS_RENDER) setTimeout(()=>{ if (!editing() && NEEDS_RENDER){ NEEDS_RENDER = false; render(); } }, 50); });
+function refreshAfterRemote(){ if (POINTER || editing() || formDirty()){ NEEDS_RENDER = true; soft(); } else render(); }
+document.addEventListener('focusout', ()=>{ if (NEEDS_RENDER) setTimeout(tryDeferred, 350); });
+setInterval(tryDeferred, 2000);
 async function load(){
   const r = await api('state');
   REV = r.rev || 0; LOGS = r.log || []; BASE = {};
@@ -383,7 +390,11 @@ function render(){
   const C = compute();
   renderNav(); renderThread(C);
   const fn = {acasa:vHome, invitati:vGuests, sali:vVenues, buget:vBudget, calendar:vCal, furnizori:vVendors, setari:vSettings}[UI.view];
+  const keep = {}, keyOf = el => { const fm = el.closest('form'); return fm ? (fm.id || fm.className + (fm.dataset.line||'')) + '|' + (el.name || el.id) : null; };
+  document.querySelectorAll('#view form input, #view form select, #view form textarea').forEach(el=>{ const k = keyOf(el); if (k) keep[k] = el.value; });
+  const act = document.activeElement, actKey = act && act.closest && act.closest('#view form') ? keyOf(act) : null;
   $('#view').innerHTML = fn(C);
+  document.querySelectorAll('#view form input, #view form select, #view form textarea').forEach(el=>{ const k = keyOf(el); if (k && k in keep && keep[k]!=='' ) el.value = keep[k]; if (actKey && k===actKey) el.focus(); });
   if (UI.drawer) renderDrawer(C);
 }
 function soft(){ // actualizare fără a reconstrui vizualizarea (păstrează focusul)
@@ -928,13 +939,13 @@ document.addEventListener('change', e=>{
 });
 document.addEventListener('submit', e=>{
   e.preventDefault();
-  if (e.target.id==='catForm'){ const v = $('#catNew').value.trim(); if (!v) return; if (S.cats.some(c=>c.n.toLowerCase()===v.toLowerCase())){ toast('Există deja o categorie cu acest nume'); return; } S.cats.push({id:'C'+Date.now(),n:v}); commit(`Categorie nouă: ${v}`); setTimeout(()=>{ const i=$('#catNew'); if(i) i.focus(); },0); return; }
-  if (e.target.id==='taskForm'){ S.tasks.push({id:'T'+Date.now(),date:$('#tDate').value,title:$('#tTitle').value.trim(),note:'',done:false}); commit('Pas nou în calendar'); }
+  if (e.target.id==='catForm'){ const v = $('#catNew').value.trim(); if (!v) return; if (S.cats.some(c=>c.n.toLowerCase()===v.toLowerCase())){ toast('Există deja o categorie cu acest nume'); return; } e.target.reset(); S.cats.push({id:'C'+Date.now(),n:v}); commit(`Categorie nouă: ${v}`); setTimeout(()=>{ const i=$('#catNew'); if(i) i.focus(); },0); return; }
+  if (e.target.id==='taskForm'){ const td = $('#tDate').value, tt = $('#tTitle').value.trim(); e.target.reset(); S.tasks.push({id:'T'+Date.now(),date:td,title:tt,note:'',done:false}); commit('Pas nou în calendar'); }
   if (e.target.classList.contains('vendForm')){
     const fm = e.target, name = fm.querySelector('[name=vn]').value.trim(); if (!name){ toast('Scrieți numele furnizorului'); return; }
     const line = fm.dataset.line, b = byId(S.budget,line), id = uid('D');
     S.vendors.push({id, name, line, price:num(fm.querySelector('[name=vp]').value), status:fm.querySelector('[name=vs]').value, phone:fm.querySelector('[name=vt]').value.trim(), contact:'', email:'', notes:'', pays:[]});
-    UI.vendAdd = null; UI.flash = id;
+    fm.reset(); UI.vendAdd = null; UI.flash = id;
     commit(`Furnizor adăugat la ${b?b.cat:'buget'}: ${name}`);
     toast(`${name} a fost adăugat la ${b?b.cat:'buget'}`);
     setTimeout(()=>{ const el = document.getElementById('vend-'+id); if (el) el.scrollIntoView({block:'center', behavior:'smooth'}); }, 0);

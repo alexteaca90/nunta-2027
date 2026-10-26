@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.3 (26 octombrie 2026)
+
+- Reparat: formularele (furnizor, pas în calendar, categorie) nu se mai golesc și butonul nu mai „pierde” click-ul. Sincronizarea redesena pagina chiar și când nu se schimbase nimic (după ștergeri recente), exact în momentul click-ului.
+- Pagina nu se mai redesenează cât timp butonul mouse-ului e apăsat sau cât timp un formular are text completat.
+- Ce ai scris într-un formular se păstrează dacă pagina se actualizează între timp.
+
 ## 0.1.2 (26 octombrie 2026)
 
 - Furnizorii sunt grupați pe categoriile din buget. Fiecare categorie are buton propriu de adăugare și sumar: rezervat, interval de oferte, achitat, rest de plată.
