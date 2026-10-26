@@ -386,3 +386,19 @@ td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
 .whobtns .btn{justify-content:center;padding:12px}
 .viewer header a.btn{background:#fff;color:#2B1E23;border-color:#fff;text-decoration:none}
 @media (max-width:560px){.viewer header{flex-wrap:wrap}}
+
+/* furnizori pe categorii */
+.vsecs{display:grid;gap:22px}
+.vsec{display:grid;gap:8px}
+.vsec-h{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;padding-bottom:6px;border-bottom:1px solid var(--line)}
+.vsec-h h2{font:500 21px/1.2 var(--display)}
+.vsum{font-size:13px;color:var(--muted)}
+.vsum b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+.vend{padding:12px 14px}
+.vend.flash{box-shadow:0 0 0 2px var(--gold);transition:box-shadow .6s}
+.vend-body{display:grid;gap:14px;border-top:1px solid var(--line);padding-top:12px}
+.df4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.vendForm{padding:14px;border-radius:10px;background:var(--gold-soft)}
+@media (max-width:960px){.df4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.df4{grid-template-columns:minmax(0,1fr)}}
+.vend .hh-name[aria-expanded="true"] .caret{transform:rotate(90deg)}

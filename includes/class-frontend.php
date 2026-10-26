@@ -44,7 +44,10 @@ class Nn27_Frontend {
 			return $template;
 		}
 		$post = get_queried_object();
-		if ( (int) get_option( Nn27_Auth::PAGE_OPTION ) !== (int) $post->ID ) {
+		// Pagina aplicației se schimbă doar dacă cea salvată nu mai e validă sau nu are parolă,
+		// ca o pagină veche de test cu același shortcode să nu preia controlul.
+		$current = Nn27_Auth::page();
+		if ( ! $current || ( '' === $current->post_password && '' !== $post->post_password && 'publish' === $post->post_status ) ) {
 			update_option( Nn27_Auth::PAGE_OPTION, (int) $post->ID, false );
 		}
 		if ( ! defined( 'DONOTCACHEPAGE' ) ) {

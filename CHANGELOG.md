@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.2 (26 octombrie 2026)
+
+- Furnizorii sunt grupați pe categoriile din buget. Fiecare categorie are buton propriu de adăugare și sumar: rezervat, interval de oferte, achitat, rest de plată.
+- După adăugare, furnizorul nou apare evidențiat, cu confirmare.
+- Detalii furnizor: contact, telefon, email, note și mutarea în altă categorie.
+- În buget, coloana „Furnizori” arată numărul de furnizori și intervalul ofertelor și duce direct la categoria respectivă.
+- Pe Acasă: următoarea plată scadentă.
+- O pagină veche cu același shortcode nu mai poate prelua pagina aplicației.
+
 ## 0.1.1 (26 octombrie 2026)
 
 - Prefix tehnic propriu (`nn27`) pentru constante, tabele, opțiuni și API (`/wp-json/nn27/v1/`). Prefixul vechi, `atwn27`, era folosit și de un plugin mai vechi de pe site, iar cele două intrau în conflict.
