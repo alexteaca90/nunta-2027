@@ -9,6 +9,7 @@
  *     (se recunosc și „GrandMarion”, „HR-HotelCapitol”, „ComplexEOS”) e citit:
  *     poze, PDF-uri, Word, conversații WhatsApp (.txt / .zip), documente Google.
  *     Un fișier care există deja în platformă (venit pe email) nu se mai adaugă.
+ *     Video și fișierele prea mari pentru site apar în platformă ca link spre Drive.
  * Restul căsuței și restul Drive-ului nu sunt citite și nu pleacă nicăieri.
  *
  * Instalare (o singură dată; la o versiune nouă se repetă pașii 1 și 3):
@@ -234,17 +235,40 @@ function drive_(contacts, start) {
         sent += trimiteFisier_(file, vid);
         props.setProperty(key, ver);
       } catch (e) {
-        Logger.log('Drive: ' + file.getName() + ': ' + e.message +
-          (/413|too large|exceeds/i.test(e.message) ? ' (serverul site-ului refuză fișiere atât de mari; adăugați-l manual sau comprimați-l)' : ''));
+        if (/413|too large|exceeds|Limit/i.test(e.message) || file.getSize() > 2 * 1024 * 1024) {
+          // Serverul site-ului nu primește un fișier atât de mare (limita de upload a găzduirii):
+          // îl punem ca link spre Drive, ca să nu lipsească din platformă.
+          Logger.log('Drive: ' + file.getName() + ' pus ca link (' + e.message.slice(0, 80) + ')');
+          trimiteLink_(file, vid); sent++; props.setProperty(key, ver);
+        } else {
+          Logger.log('Drive: ' + file.getName() + ': ' + e.message);
+        }
       }
     }
   }
   if (sent) Logger.log('Drive: trimise în platformă: ' + sent);
 }
 
+function baza_(file, vid) {
+  return { threadId: file.getId(), date: file.getLastUpdated().getTime(), venue: vid, direction: 'in' };
+}
+
+/** Video, audio sau fișiere peste limită: în platformă apar ca link spre Drive. */
+function trimiteLink_(file, vid) {
+  api_('POST', 'inbox', {
+    message: merge_(baza_(file, vid), {
+      id: 'drv' + file.getId(), from: 'Google Drive', subject: file.getName(), body: '',
+      links: [{ name: file.getName(), url: file.getUrl(), mime: file.getMimeType(), size: file.getSize() }]
+    }),
+    attachments: []
+  });
+  return 1;
+}
+
 function trimiteFisier_(file, vid) {
   var mime = file.getMimeType(), name = file.getName(), id = 'drv' + file.getId();
-  var base = { threadId: file.getId(), date: file.getLastUpdated().getTime(), venue: vid, direction: 'in' };
+  var base = baza_(file, vid);
+  if (/^(video|audio)\//.test(mime) || file.getSize() > CONFIG.maxMB * 1024 * 1024) return trimiteLink_(file, vid);
   if (mime === MimeType.GOOGLE_DOCS) {
     return trimiteText_(base, id, name, DocumentApp.openById(file.getId()).getBody().getText());
   }
@@ -283,7 +307,7 @@ function trimiteBlob_(base, id, name, blob) {
   if (/^text\//.test(type) || ext === 'txt') return trimiteText_(base, id, name, blob.getDataAsString('UTF-8'));
   if (ext === 'pdf') type = 'application/pdf';
   if (!/pdf|^image\/(jpe?g|png|webp)/i.test(type)) return 0; // video, audio etc. nu se trimit
-  if (blob.getBytes().length > CONFIG.maxMB * 1024 * 1024) { Logger.log('Drive: ' + name + ' depășește ' + CONFIG.maxMB + ' MB, adăugați-l manual.'); return 0; }
+  if (blob.getBytes().length > CONFIG.maxMB * 1024 * 1024) { Logger.log('Drive: ' + name + ' (din arhivă) depășește ' + CONFIG.maxMB + ' MB.'); return 0; }
   api_('POST', 'inbox', {
     message: merge_(base, { id: id, from: 'Google Drive', subject: name, body: '' }),
     attachments: [{ name: name, mime: type, data: Utilities.base64Encode(blob.getBytes()), text: ocr_(blob, name) }]

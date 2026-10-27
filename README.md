@@ -80,3 +80,9 @@ Același script din Gmail citește și folderul **Nunta 2027 – Săli** din Goo
 - Un fișier din Drive identic ca și conținut (SHA-1) cu unul deja salvat (din email sau încărcat manual) nu se mai adaugă; rândul rămâne ascuns. În aplicație, fișierele cu același nume și aceeași mărime nu se afișează de două ori.
 - Word (.docx, .doc, .odt) → PDF prin Drive, cu textul pentru citirea ofertei. Limita: 25 MB pe fișier (atât în Gmail, cât și în Drive).
 
+## Nimic lăsat pe dinafară (v0.4.2)
+
+- Video, audio și fișierele peste 25 MB nu se mai sar: apar la sală ca **link spre Drive** (eticheta VIDEO sau DRIVE), care se deschide în Drive.
+- Dacă serverul site-ului refuză un fișier mare (limita de upload a găzduirii), scriptul îl pune tot ca link, în loc să-l piardă.
+- Linkurile acceptate sunt doar spre drive.google.com / docs.google.com.
+

@@ -377,6 +377,22 @@ class Nn27_Mail {
 			}
 		}
 
+		// Fișiere care rămân în Drive (video, prea mari pentru server): doar link.
+		foreach ( array_slice( (array) ( $msg['links'] ?? array() ), 0, 10 ) as $l ) {
+			$url = esc_url_raw( (string) ( $l['url'] ?? '' ) );
+			if ( ! preg_match( '#^https://(drive|docs)\.google\.com/#', $url ) ) {
+				continue;
+			}
+			$files[] = array(
+				'id'    => 'L' . substr( md5( $id . '|' . $url ), 0, 20 ),
+				'name'  => mb_substr( sanitize_text_field( (string) ( $l['name'] ?? 'fișier' ) ), 0, 200 ),
+				'type'  => sanitize_text_field( (string) ( $l['mime'] ?? '' ) ),
+				'size'  => (int) ( $l['size'] ?? 0 ),
+				'url'   => $url,
+				'added' => $when * 1000,
+			);
+		}
+
 		$offer = 'in' === $direction ? self::parse_offer( implode( "\n", $texts ) ) : array();
 		$row   = array(
 			'id'        => $id,

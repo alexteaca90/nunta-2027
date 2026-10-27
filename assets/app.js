@@ -290,7 +290,7 @@ function offerChips(of){
   return c.map(x=>`<span class="tag gold">${esc(x)}</span>`).join('');
 }
 function mailItem(m, opts={}){
-  const files = (m.files||[]).map(f=>`<button class="chip" data-act="viewfile" data-vid="${esc(m.venue)}" data-id="${f.id}">${f.type==='application/pdf'?'PDF':'IMG'} · ${esc(f.name.length>30?f.name.slice(0,28)+'…':f.name)}</button>`).join('');
+  const files = (m.files||[]).map(f=>`<button class="chip" data-act="viewfile" data-vid="${esc(m.venue)}" data-id="${f.id}">${ftag(f)} · ${esc(f.name.length>30?f.name.slice(0,28)+'…':f.name)}</button>`).join('');
   return `<article class="mail ${m.dir}">
     <div class="mail-h"><span class="mdir" title="${m.dir==='in'?'Primit':'Trimis'}">${isDrv(m)?'⧉':m.dir==='in'?'↙':'↗'}</span>
       <div class="mail-who"><b>${esc(m.dir==='in' ? (m.name||m.from) : 'Tu')}</b> <span class="muted">${isDrv(m) ? 'din folderul sălii' : esc(m.dir==='in' ? m.from : '→ '+(m.to||'').split(',')[0])}</span></div>
@@ -458,10 +458,12 @@ async function addFiles(v, list){
   }
   if (ok){ if (v.st<2) v.st = 2; if (!o.date) o.date = new Date().toISOString().slice(0,10); commit(`${v.n}: ${ok===1?'ofertă atașată':ok+' fișiere atașate'}`); toast(ok===1?'Oferta a fost atașată':`${ok} fișiere atașate`); }
 }
+const ftag = f => f.url ? ((f.type||'').startsWith('video/') ? 'VIDEO' : 'DRIVE') : (f.type==='application/pdf' ? 'PDF' : 'IMG');
 async function viewFile(vid, fid){
   const v = byId(S.v,vid); let f = v ? offerOf(v).files.find(x=>x.id===fid) : null;
   if (!f) for (const m of MAIL){ f = (m.files||[]).find(x=>x.id===fid); if (f) break; }
   if (!f){ toast('Fișierul nu mai există'); return; }
+  if (f.url){ window.open(f.url, '_blank', 'noopener'); return; } // video sau fișier prea mare: rămâne în Drive
   let blob;
   try{ const r = await api('files/'+fid, {raw:true}); blob = await r.blob(); }
   catch(e){ toast(e.status===404 ? 'Fișierul nu mai există pe server' : 'Fișierul nu a putut fi deschis: '+e.message); return; }
@@ -900,7 +902,7 @@ function offerBlock(v){
     <div><h3>Oferta primită</h3><div class="sub muted">Atașați PDF-ul sau pozele ofertei aici, sau puneți-le în folderul sălii din Google Drive („Nunta 2027 – Săli”), iar platforma le aduce singură. Completați apoi câmpurile de mai jos, ca să puteți compara sălile.</div></div>
     <label class="drop" id="drop" for="offerFile"><b>Atașează oferta</b><span>PDF sau imagine · trageți fișierul aici sau apăsați</span></label>
     <input type="file" id="offerFile" accept="application/pdf,image/*" multiple hidden>
-    ${o.files.length?`<div class="files">${o.files.map(f=>`<div class="file"><span class="fi">${f.type==='application/pdf'?'PDF':'IMG'}</span><span class="fn" title="${esc(f.name)}">${esc(f.name)}<br><small>${fsize(f.size)} · ${new Date(f.added).toLocaleDateString('ro-RO')}</small></span><button class="btn" data-act="viewfile" data-id="${f.id}">Vezi</button><button class="iconbtn" data-act="delfile" data-id="${f.id}" aria-label="Șterge ${esc(f.name)}">${I.x}</button></div>`).join('')}</div>`:''}
+    ${o.files.length?`<div class="files">${o.files.map(f=>`<div class="file"><span class="fi">${ftag(f)}</span><span class="fn" title="${esc(f.name)}">${esc(f.name)}<br><small>${fsize(f.size)} · ${new Date(f.added).toLocaleDateString('ro-RO')}</small></span><button class="btn" data-act="viewfile" data-id="${f.id}">Vezi</button><button class="iconbtn" data-act="delfile" data-id="${f.id}" aria-label="Șterge ${esc(f.name)}">${I.x}</button></div>`).join('')}</div>`:''}
     <div class="df">
       <label class="field"><span>Data ofertei</span><input class="input" type="date" data-of="${v.id}" data-f="date" value="${esc(o.date)}"></label>
       <label class="field"><span>Valabilă până la</span><input class="input" type="date" data-of="${v.id}" data-f="valid" value="${esc(o.valid)}"></label>
