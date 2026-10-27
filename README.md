@@ -86,3 +86,8 @@ Același script din Gmail citește și folderul **Nunta 2027 – Săli** din Goo
 - Dacă serverul site-ului refuză un fișier mare (limita de upload a găzduirii), scriptul îl pune tot ca link, în loc să-l piardă.
 - Linkurile acceptate sunt doar spre drive.google.com / docs.google.com.
 
+
+## Ofertele 2027 analizate (v0.4.3)
+
+- `includes/data/sali-cercetare-2027.json` are acum, la 17 săli, câmpul `o27`: oferta primită pe email/WhatsApp, analizată pe 27.10.2026 (preț estimat pe invitat, costuri extra de personal la 175 de invitați, avans, valabilitate, băuturi, disponibilitate mai/septembrie 2027 și un text complet: meniuri, ce include, ce se plătește separat, condiții). Capacitatea și minimul de invitați sunt corectate după oferte.
+- WordPress → Nunta 2027 → Săli din cercetare → **Actualizează sălile** le pune în platformă. Se completează doar câmpurile goale, cele completate automat din emailuri sau cele care au încă valoarea pusă de analiză; ce ați scris voi rămâne. În „Ce include” se înlocuiește doar blocul „ANALIZĂ OFERTĂ 2027”. Sălile trec în etapa „Ofertă primită” dacă erau înainte de ea.

@@ -626,6 +626,65 @@ class Nn27_Store {
 			$rec[ $k ] = $nv[ $k ] ?? '';
 		}
 		$rec['res'] = 1;
+		if ( ! empty( $nv['o27'] ) && is_array( $nv['o27'] ) ) {
+			$rec = self::apply_offer( $rec, $nv['o27'] );
+		}
+		return $rec;
+	}
+
+	/**
+	 * Oferta 2027 analizată: completează prețul, disponibilitatea și fișa ofertei.
+	 * Nu suprascrie ce ați scris voi; câmpurile completate automat (din emailuri sau
+	 * dintr-o analiză anterioară) se actualizează. Blocul „ANALIZĂ OFERTĂ” din
+	 * „Ce include” se înlocuiește, restul textului rămâne.
+	 */
+	private static function apply_offer( $rec, $o ) {
+		$of   = ( isset( $rec['of'] ) && is_array( $rec['of'] ) ) ? $rec['of'] : array( 'date' => '', 'valid' => '', 'drinks' => 0, 'deposit' => '', 'extra' => 0, 'inc' => '', 'files' => array() );
+		$auto = isset( $of['auto'] ) && is_array( $of['auto'] ) ? $of['auto'] : array();
+		$prev = isset( $of['anv'] ) && is_array( $of['anv'] ) ? $of['anv'] : array(); // valorile puse de analiză data trecută
+		$anv  = array();
+		// Un câmp se poate completa dacă e gol, dacă a fost completat automat din emailuri
+		// sau dacă are încă valoarea pusă de analiza anterioară (nu l-ați schimbat voi).
+		$free = static function ( $k, $cur ) use ( $auto, $prev ) {
+			return empty( $cur ) || in_array( $k, $auto, true ) || ( array_key_exists( $k, $prev ) && (string) $prev[ $k ] === (string) $cur );
+		};
+		foreach ( array( 'ppp', 'cp' ) as $k ) {
+			if ( ! empty( $o[ $k ] ) && $free( $k, $rec[ $k ] ?? 0 ) ) {
+				$rec[ $k ] = (int) $o[ $k ];
+				$anv[ $k ] = $rec[ $k ];
+			}
+		}
+		foreach ( array( 'extra', 'drinks' ) as $k ) {
+			if ( ! empty( $o[ $k ] ) && $free( $k, $of[ $k ] ?? 0 ) ) {
+				$of[ $k ]  = (int) $o[ $k ];
+				$anv[ $k ] = $of[ $k ];
+			}
+		}
+		foreach ( array( 'deposit', 'valid', 'date' ) as $k ) {
+			if ( '' !== (string) ( $o[ $k ] ?? '' ) && $free( $k, trim( (string) ( $of[ $k ] ?? '' ) ) ) ) {
+				$of[ $k ]  = (string) $o[ $k ];
+				$anv[ $k ] = $of[ $k ];
+			}
+		}
+		if ( ! empty( $o['av'] ) ) {
+			if ( $free( 'av', trim( (string) ( $rec['av'] ?? '' ) ) ) ) {
+				$rec['av'] = (string) $o['av'];
+				$anv['av'] = $rec['av'];
+			} elseif ( false === strpos( (string) $rec['av'], (string) $o['av'] ) ) {
+				$mine      = trim( (string) preg_replace( '/\s*·\s*Din ofertă: .*$/us', '', (string) $rec['av'] ) );
+				$rec['av'] = $mine . ' · Din ofertă: ' . (string) $o['av'];
+			}
+		}
+		if ( ! empty( $o['inc'] ) ) {
+			// Textul vostru rămâne; doar blocul analizei se înlocuiește.
+			$mine      = trim( (string) preg_replace( '/ANALIZĂ OFERTĂ 2027.*$/us', '', (string) ( $of['inc'] ?? '' ) ) );
+			$of['inc'] = ( '' !== $mine ? $mine . "\n\n" : '' ) . (string) $o['inc'];
+		}
+		$of['anv'] = $anv + array_diff_key( $prev, $anv );
+		$rec['of'] = $of;
+		if ( (int) $rec['st'] < 2 && ! empty( $o['ppp'] ) ) {
+			$rec['st'] = 2; // Ofertă primită.
+		}
 		return $rec;
 	}
 

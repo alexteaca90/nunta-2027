@@ -66,7 +66,7 @@
      "u": "https://www.ouido.ro/locatii/amouria-events"
     }
    ],
-   "cap": 180,
+   "cap": 200,
    "halls": "Sală de 340 mp fără stâlpi, pereți de sticlă, ponton pe lac pentru cununie. Exclusivitate.",
    "rv": "Deschisă în 2024; peste 50 de rezervări la deschidere (Ziarul de Iași). Testimonialele de pe site sunt ale sălii-soră Liria.",
    "pub": "Pachet: meniu 3 feluri, personal, exclusivitate, open bar fără alcool, Prosecco la primire, fructe, recuzită, cununie pe ponton. Preț nepublicat.",
@@ -76,10 +76,21 @@
     "https://www.ziaruldeiasi.ro/stiri/amouria-o-noua-destinatie-pentru-evenimente-pe-malul-lacului-aroneanu-investitie-de-aproape-un-milion-de-euro-peste-50-de-rezervari-facute-deja--1751848.html"
    ],
    "aliases": [],
-   "min": 0,
+   "min": 150,
    "rt": 0,
    "rc": 0,
-   "maps": "https://www.google.com/maps/search/?api=1&query=Amouria%20Events%20Aroneanu"
+   "maps": "https://www.google.com/maps/search/?api=1&query=Amouria%20Events%20Aroneanu",
+   "o27": {
+    "ppp": 733,
+    "extra": 0,
+    "drinks": 3,
+    "deposit": "5.500 lei la contract",
+    "av": "Sâmbete: doar 1 mai (Sâmbăta Mare). Vineri: 7, 14, 21, 28 mai (−10%); 3, 10 sept. Duminici: 2 (Paște), 9 (Săpt. Luminată), 23 mai.",
+    "inc": "ANALIZĂ OFERTĂ 2027 (27.10.2026)\nMeniuri: „Viva la vida” – V 599 / S 670 / D 645 lei · „Sky full of stars” – V 620 / S 690 / D 665 lei · „Paradise” – V 650 / S 720 / D 695 lei · Toate: antreu 350 g, gustare caldă 300 g, fel principal 350 g (3 feluri). Mai 2027: −10% la toate datele.\nInclude: Personal complet (bucătari, ospătari, auxiliar); Închiriere exclusivă; Open bar non-alcoolic (suc, apă, cafea); Prosecco la primire, fructe; Recuzită (scaune, fețe de masă, șervete); Cununie civilă pe pontonul de pe lac (Primăria Aroneanu, fără taxă); Meniu copii <12 ani redus, meniu vegetarian; Cameră miri, cadou surpriză\nSe plătește separat / lipsește: Alcool: open bar Bronze 63 / Silver 68 / Gold 80 / Platinum 105 lei/pers (prețuri 2026, +până la 10%); Tortul nu apare în ofertă; Tort de shoturi 650 lei, lemonade bar 19 lei/pers\nCondiții: Min 150 invitați S/D, 120 vineri; Max 200 cu tot cu personalul și ring de dans (230 fără ring); Fără manele, fără flori artificiale\nCost estimat: 733 lei/invitat (meniu sâmbăta + alcool de bază).",
+    "date": "2026-10-27",
+    "valid": "",
+    "cp": 0
+   }
   },
   {
    "key": "bellaria",
@@ -105,7 +116,7 @@
      "u": "https://www.weddingo.ro/locatii-nunta/iasi/hotel-bellaria"
     }
    ],
-   "cap": 240,
+   "cap": 220,
    "halls": "Restaurant Gourmet 220–240, Loja Domnească 180, Restaurant Clasic 170. Hotel cu 47 de camere.",
    "rt": 4.4,
    "rc": 100,
@@ -119,7 +130,18 @@
    ],
    "aliases": [],
    "min": 0,
-   "maps": "https://www.google.com/maps/search/?api=1&query=Hotel%20Bellaria%20Iasi"
+   "maps": "https://www.google.com/maps/search/?api=1&query=Hotel%20Bellaria%20Iasi",
+   "o27": {
+    "ppp": 482,
+    "extra": 0,
+    "drinks": 3,
+    "deposit": "3.000 lei, se scad din total",
+    "av": "Sâmbete cu salonul Gourmet (220 locuri): 15, 22, 29 mai; 18 sept. Pe 4 sept doar Clasic (170 locuri). Duminici: 16, 30 mai; 12, 19, 26 sept. Sâmbetele la preț întreg; V/D −10–15%.",
+    "inc": "ANALIZĂ OFERTĂ 2027 (27.10.2026)\nMeniuri: Meniu 1 – 407 lei (antreuri, preparat din pui, fel principal) · Meniu 2 – 425 lei (3 feluri) · Meniu 3 – 448 lei (antreuri, pește, pui, fel principal = 4 feluri) · Meniu 4 – 477 lei (4 feluri) · Meniu 5 – 525 lei (4 feluri, mușchi de vită)\nInclude: Spumant la primire; Tort, prăjituri, fructe; Suc, apă, ceai, cafea nelimitat; Personal complet; Cameră miri; Degustare; Fețe de masă, flori din mătase, meniuri, numere de masă; Meniu copii redus, vegan/vegetarian\nSe plătește separat / lipsește: Alcool: vin 35 / bere 35 / vin+bere 65 / standard 75 (Jameson, Absolut) / premium 95 lei/pers (Chivas, Glenlivet); Cazare invitați 320 lei/noapte, mic dejun 55 lei\nCondiții: Fără minim de invitați, fără alte taxe; Saloane: Clasic 170, Loja Domnească 180, Gourmet 220 locuri\nCost estimat: 482 lei/invitat (meniu sâmbăta + alcool de bază).",
+    "date": "2026-10-27",
+    "valid": "",
+    "cp": 0
+   }
   },
   {
    "key": "bizantiq",
@@ -211,7 +233,18 @@
    "min": 0,
    "rt": 0,
    "rc": 0,
-   "maps": "https://www.google.com/maps/search/?api=1&query=Restaurant%20Casablanca%20Rediu%20Iasi"
+   "maps": "https://www.google.com/maps/search/?api=1&query=Restaurant%20Casablanca%20Rediu%20Iasi",
+   "o27": {
+    "ppp": 443,
+    "extra": 0,
+    "drinks": 2,
+    "deposit": "1.500 lei la semnare + 2.500 lei după 6 luni (se scad din total)",
+    "av": "„Câteva date libere în mai și în septembrie” – sâmbetele exacte de cerut.",
+    "inc": "ANALIZĂ OFERTĂ 2027 (27.10.2026)\nMeniuri: Sâmbătă 443 / duminică 420 / luni–vineri 399 lei · 3 feluri: antreu 9 piese 350 g, gustare caldă 400 g, fel principal 450 g; fără variantă cu 4 feluri\nInclude: Șampanie și Raffaello la primire; Apă, sucuri, cafea, ceai nelimitat; Vin (căpșunică, alb demisec, rose Bohotin); Pălincă pentru domni, 4 băuturi pentru doamne; Tort machetă + porții, prăjituri, fructe; Decor masă primire și prezidiu, pahare miri/nași, căsuțe dar, lumânări; Artificii la tort, shoturi, photocorner; Personal (ospătari, manageri), valet\nSe plătește separat / lipsește: Open bar alcoolic complet (whisky, vodcă) – preț nepublicat; Cocktail bar 10 €/pers\nCondiții: Ballroom până la 300, ring 220 m²; Imperial până la 200; Parcare 100 locuri\nCost estimat: 443 lei/invitat (meniu sâmbăta + alcool de bază).",
+    "date": "2026-10-27",
+    "valid": "Preț garantat la contracte semnate până la 28.02.2027",
+    "cp": 0
+   }
   },
   {
    "key": "chalette",
@@ -253,8 +286,19 @@
     "https://www.ouido.ro/locatii/chalette-events"
    ],
    "aliases": [],
-   "min": 0,
-   "maps": "https://www.google.com/maps/search/?api=1&query=Chalette%20Events%20Paun%20Iasi"
+   "min": 130,
+   "maps": "https://www.google.com/maps/search/?api=1&query=Chalette%20Events%20Paun%20Iasi",
+   "o27": {
+    "ppp": 738,
+    "extra": 7500,
+    "drinks": 2,
+    "deposit": "În tranșe",
+    "av": "Glass Garden: sâmbătă doar 1 mai (Sâmbăta Mare); vineri 14, 21, 28 mai; duminici 16, 23, 30 mai. Septembrie: lista lipsește. Datele se rețin 1–2 săptămâni fără cost.",
+    "inc": "ANALIZĂ OFERTĂ 2027 (27.10.2026)\nMeniuri: 125 €/pers cu TVA, meniu complet personalizabil (antreu, gustare caldă, fel principal), fără variante de preț · Degustare gratuită\nInclude: Chifle, prăjituri 100 g, tort 100 g, fructe; Vin spumant, vin alb/rose/roșu Chateau Cristi nelimitat; Apă, sucuri, cafea nelimitat; Manager eveniment, șef sală, barman; Chirie, electricitate; Terasă în pădure, photocorner, cameră miri\nSe plătește separat / lipsește: Personal: 500 lei/om (1 ospătar/20, 1 auxiliar/30 invitați) ≈ 7.500 lei la 175; Furnizori externi 300 €/serviciu (cocktail bar, flori, proțap); Tării: open bar Silver 70 / Gold 110 / Platinum 145 lei/pers sau cocktail bar 65 lei/pers; Live cooking 100–135 lei/pers\nCondiții: Glass Garden: min 130 sâmbăta, 100 V/D, max 200 (240 posibil); Se plătește numărul real de meniuri anunțat cu o zi înainte; Sunet max 95 dB interior / 65 dB exterior; sala își rezervă dreptul de a selecta formația/DJ-ul\nCost estimat: 738 lei/invitat (meniu sâmbăta + alcool de bază) + 7.500 lei personal la 175 invitați.",
+    "date": "2026-10-27",
+    "valid": "Preț garantat la semnarea contractului",
+    "cp": 0
+   }
   },
   {
    "key": "cityview",
@@ -333,7 +377,18 @@
    "min": 0,
    "rt": 0,
    "rc": 0,
-   "maps": "https://www.google.com/maps/search/?api=1&query=Congress%20Hall%20Palas%20Iasi"
+   "maps": "https://www.google.com/maps/search/?api=1&query=Congress%20Hall%20Palas%20Iasi",
+   "o27": {
+    "ppp": 418,
+    "extra": 6650,
+    "drinks": 2,
+    "deposit": "",
+    "av": "Reținut de principiu, sălile Chopin + Vivaldi: sâmbătă 8 mai (Săptămâna Luminată – fără cununii religioase) și sâmbătă 25 sept.",
+    "inc": "ANALIZĂ OFERTĂ 2027 (27.10.2026)\nMeniuri: 3 preparate de la 379 lei / 4 preparate de la 459 lei (meniu construit din listă, prețuri pe preparat) · Include pachetul de bază de 149 lei: prăjituri, tort, chifle, apă, Coca-Cola, limonadă, suc natural, vin Averești, cafea, șampanie · Meniu copii 180 lei\nInclude: Cununie civilă în Grădina Palas, cu șampanie; Terase pentru cununia religioasă; Decor sală: huse, fețe de masă, flori artificiale, sfeșnice, casetă dar; Scenă formație, covor roșu, lumini, foto corner; Ședință foto în Grădina Palas, artificii la tort, plasma; Degustare, meniuri miri gratuite, 4 locuri parcare, pază; −5% vineri/duminică\nSe plătește separat / lipsește: Personal: ospătar 450 lei/20, cleaning 350/50, bucătari 400/75 ≈ 6.650 lei la 175; Alcool: pachete 39 / 60 / 69 / 79 lei/invitat (cantități limitate/persoană)\nCondiții: Prețuri 2026\nCost estimat: 418 lei/invitat (meniu sâmbăta + alcool de bază) + 6.650 lei personal la 175 invitați.",
+    "date": "2026-10-27",
+    "valid": "Oferta trimisă e pentru 2026 – prețuri 2027 de confirmat",
+    "cp": 180
+   }
   },
   {
    "key": "coral",
@@ -358,7 +413,7 @@
      "u": "https://hotelcoraliasi.ro/"
     }
    ],
-   "cap": 250,
+   "cap": 330,
    "halls": "Săli modulare, total aprox. 250; altă listare: Grande 250, Regal 350, Mignon 40, terasă 70. 22 de camere.",
    "rv": "Puține recenzii de nuntă găsite.",
    "pub": "Niciun preț public.",
@@ -370,7 +425,18 @@
    "min": 0,
    "rt": 0,
    "rc": 0,
-   "maps": "https://www.google.com/maps/search/?api=1&query=Hotel%20Coral%20Iasi%20Valea%20lui%20David"
+   "maps": "https://www.google.com/maps/search/?api=1&query=Hotel%20Coral%20Iasi%20Valea%20lui%20David",
+   "o27": {
+    "ppp": 499,
+    "extra": 0,
+    "drinks": 2,
+    "deposit": "2.000 lei, nereturnabil, în 2 tranșe",
+    "av": "„Destulă disponibilitate în mai și septembrie” – de spus ce sâmbete vrem.",
+    "inc": "ANALIZĂ OFERTĂ 2027 (27.10.2026)\nMeniuri: Meniu 399 lei (sarmale, ceafă de porc) · Meniu 409 lei (ruladă de curcan, cotlet) · Meniu 419 lei (piept de pui umplut, mușchiuleț; + ciorbă de potroace a doua zi pentru 20 pers) · Doar 3 feluri; al 4-lea negociabil\nInclude: Apă, Coca-Cola, cafea; Vin alb și rose Jidvei, 1 butoi bere Heineken; Tort și prăjituri, șampanie la primire; Cameră miri + cameră nași; Aranjamente mese și prezidiu, numere, căsuță dar, mese cocktail; Meniuri vegetariene/copii, cazare invitați −10%; Program până la 4:00\nSe plătește separat / lipsește: Ospătari 1/20 invitați + șef de sală – tarif necomunicat; Pachet extra 100 lei/pers: cocktail bar, tort shoturi, fum greu, oglindă foto, spirtoase la masă\nCondiții: Sala Grande 330 (recomandată); Fără minim, fără taxe pentru furnizori externi\nCost estimat: 499 lei/invitat (meniu sâmbăta + alcool de bază).",
+    "date": "2026-10-27",
+    "valid": "„Prețurile pot varia în funcție de inflație”",
+    "cp": 0
+   }
   },
   {
    "key": "goldenstone",
@@ -456,7 +522,18 @@
     "https://www.restauranteiasi.com/index.php"
    ],
    "min": 0,
-   "maps": "https://www.google.com/maps/search/?api=1&query=Restaurant%20Crystal%20Valea%20Lupului"
+   "maps": "https://www.google.com/maps/search/?api=1&query=Restaurant%20Crystal%20Valea%20Lupului",
+   "o27": {
+    "ppp": 469,
+    "extra": 0,
+    "drinks": 1,
+    "deposit": "2.000 lei",
+    "av": "Doar sâmbătă 4 sept 2027 (sala Crystal).",
+    "inc": "ANALIZĂ OFERTĂ 2027 (27.10.2026)\nMeniuri: 310 lei – 3 feluri, fără alcool și tort (+50 alcool, +20 bere, +35 tort) · 430 lei – 3 feluri cu alcool nelimitat, bere, tort · 469 lei all inclusive – plus personal, tradiții, flori textile, fum greu\nInclude: Șampanie și pișcoturi; Apă, Fanta, Coca-Cola, cafea; Whisky/coniac, cremă whisky, vin alb/rose, Martini, vodcă, bere draft – nelimitat; Tort, artificii, fructe, prăjituri; Personal, coordonator; Tradiții: găina nașului, colacii, ou și dulceață; Flori textile, fum greu, cameră dublă, parcare, foto corner\nSe plătește separat / lipsește: La varianta de 430 lei personalul nu e menționat\nCost estimat: 469 lei/invitat (meniu sâmbăta + alcool de bază).",
+    "date": "2026-10-27",
+    "valid": "",
+    "cp": 0
+   }
   },
   {
    "key": "diamond",
@@ -496,7 +573,18 @@
     "https://www.fotografi-cameramani.ro/locatie/4497"
    ],
    "min": 0,
-   "maps": "https://www.google.com/maps/search/?api=1&query=Diamond%20Ballroom%20Dumbrava%20Iasi"
+   "maps": "https://www.google.com/maps/search/?api=1&query=Diamond%20Ballroom%20Dumbrava%20Iasi",
+   "o27": {
+    "ppp": 525,
+    "extra": 6550,
+    "drinks": 1,
+    "deposit": "2.000 lei",
+    "av": "Doar vineri: 7, 28 mai; 10 sept.",
+    "inc": "ANALIZĂ OFERTĂ 2027 (27.10.2026)\nMeniuri: 525 lei/pers all inclusive, 3 feluri (starter, gustare caldă, fel principal)\nInclude: Tort, fructe, șampanie la primire; Cafea, apă, Coca-Cola; Whisky, vodcă, Sheridan's, vin alb/rose, bere Heineken – nelimitat; Cameră miri; Flori la mese și prezidiu, lumini, arcadă, covor roșu, fum greu, panou foto, parcare\nSe plătește separat / lipsește: Personal: ospătar 450 lei/20, bucătar 500 lei/40 ≈ 6.550 lei; Extra: bar mobil, candy bar (−25%), proțap, cabină foto, limuzină\nCost estimat: 525 lei/invitat (meniu sâmbăta + alcool de bază) + 6.550 lei personal la 175 invitați.",
+    "date": "2026-10-27",
+    "valid": "",
+    "cp": 0
+   }
   },
   {
    "key": "elysium",
@@ -526,7 +614,7 @@
      "u": "https://www.facebook.com/elysium.whitehall/"
     }
    ],
-   "cap": 400,
+   "cap": 200,
    "halls": "Cort White Hall 1.000 mp (50–400, unele listări până la 600), săli noi Lotus și Bloom, Winery 50, ponton pentru cununie.",
    "rv": "96% recomandă pe Facebook din 628 recenzii, cel mai mare volum din listă.",
    "pub": "„De la 240 lei” (eventfull.ro, listare veche). Restaurant Guru: 110–230 lei/pers. la restaurant. Preț 2027 nepublicat.",
@@ -538,7 +626,18 @@
    "min": 0,
    "rt": 0,
    "rc": 0,
-   "maps": "https://www.google.com/maps/search/?api=1&query=Elysium%20Events%20Ciric%20Iasi"
+   "maps": "https://www.google.com/maps/search/?api=1&query=Elysium%20Events%20Ciric%20Iasi",
+   "o27": {
+    "ppp": 450,
+    "extra": 5000,
+    "drinks": 3,
+    "deposit": "5.000 lei",
+    "av": "Sala Bloom: vineri 7, 14, 21, 28 mai; duminici 9, 16 mai; vineri 3, 10, 17, 24 sept. Fără sâmbete. Sala Lotus: necomunicat.",
+    "inc": "ANALIZĂ OFERTĂ 2027 (27.10.2026)\nMeniuri: 450 lei/invitat, 3 feluri (gustare rece, caldă, fel principal); al 4-lea la cerere · L–J −10%\nInclude: Tort 100 g, prăjituri 100 g, fructe, pâine; Soft și cafea nelimitat; Flori pe mese (fără prezidiu), fețe de masă; Lumini, schelă lumini pe ring, covor roșu; Personal de bucătărie, curățenie, pază, parcare; Degustare, discount la cununia civilă pe ponton\nSe plătește separat / lipsește: Ospătari + șef sală: 500 lei (1 ospătar la 2 mese) ≈ 5.000 lei; Alcool: pachete separate, preț necomunicat\nCondiții: Bloom 50–200 (ring exterior pe malul lacului mai–sept); Lotus 180–360\nCost estimat: 450 lei/invitat (meniu sâmbăta + alcool de bază) + 5.000 lei personal la 175 invitați.",
+    "date": "2026-10-27",
+    "valid": "",
+    "cp": 0
+   }
   },
   {
    "key": "eos",
@@ -572,7 +671,7 @@
      "u": "https://www.weddingo.ro/locatii-nunta/iasi/complex-eos"
     }
    ],
-   "cap": 290,
+   "cap": 280,
    "halls": "Silver Ballroom 270 (cu piscină), Gold Ballroom, EOS Garden 60. Cazare.",
    "rt": 4.4,
    "rc": 80,
@@ -584,7 +683,18 @@
     "https://vinenunta.ro/furnizor/complex-eos/"
    ],
    "min": 0,
-   "maps": "https://www.google.com/maps/search/?api=1&query=Complex%20EOS%20Rediu%20Iasi"
+   "maps": "https://www.google.com/maps/search/?api=1&query=Complex%20EOS%20Rediu%20Iasi",
+   "o27": {
+    "ppp": 489,
+    "extra": 0,
+    "drinks": 1,
+    "deposit": "",
+    "av": "Mai: 8 (S, Săpt. Luminată), 21 (V), 16, 23, 30 (D). Sept: 3, 10, 17, 24 (V), 12, 19 (D). Fără alte sâmbete.",
+    "inc": "ANALIZĂ OFERTĂ 2027 (27.10.2026)\nMeniuri: Silver, 3 feluri: 435 (fără alcool) / 459 (vin+bere) / 489 (all incl. JB) / 509 lei (ultra: JD, Finlandia) · Silver, 4 feluri (+pește): 475 / 495 / 530 / 540 lei · Gold (150 locuri): −20…30 lei\nInclude: Aperitiv 8 produse, antreu cald, fel principal; Tort 100 g, prăjituri 80 g, fructe; Soft, cafea, ceai; vin spumant la primire; Decor mese, huse, panou foto, cameră miri; Deschidere la piscină cu lasere și artificii, tort cu vulcani; Cununie la piscină/grădină, parcare, cazare −20%\nSe plătește separat / lipsește: Personal și avans – nemenționate\nCondiții: Silver Ballroom 280 locuri, acces la piscină\nCost estimat: 489 lei/invitat (meniu sâmbăta + alcool de bază).",
+    "date": "2026-10-27",
+    "valid": "Ofertă din 5 oct 2025, „poate fi actualizată”",
+    "cp": 0
+   }
   },
   {
    "key": "capitol",
@@ -617,7 +727,7 @@
      "u": "https://www.tiktok.com/@events.by.capitol"
     }
    ],
-   "cap": 600,
+   "cap": 250,
    "halls": "Ballroom 250–600, Monalisa 100–250, Da Vinci 100–250, Clasic 80–200, Panoramic până la 150, terase.",
    "rv": "96% recomandă pe Facebook (49).",
    "pub": "Niciun preț public.",
@@ -626,10 +736,21 @@
     "https://eventsbycapitol.ro/",
     "https://capitol-hotel.ro/evenimente"
    ],
-   "min": 0,
+   "min": 100,
    "rt": 0,
    "rc": 0,
-   "maps": "https://www.google.com/maps/search/?api=1&query=Hotel%20Capitol%20Iasi%20Nicolina%20203A"
+   "maps": "https://www.google.com/maps/search/?api=1&query=Hotel%20Capitol%20Iasi%20Nicolina%20203A",
+   "o27": {
+    "ppp": 400,
+    "extra": 0,
+    "drinks": 0,
+    "deposit": "",
+    "av": "Necomunicată (tel. Cristina Surdu Tofan 0755 083 638).",
+    "inc": "ANALIZĂ OFERTĂ 2027 (27.10.2026)\nMeniuri: Monalisa / Da Vinci (100–250 locuri): 400 lei · Clasic (80–200): 400 lei; Ballroom (250–600): 440 lei · 3 preparate: aperitiv, gustare caldă, fel principal\nInclude: Tort și prăjituri (Cofetăria Blanca); Șampanie la primire, apă, Coca-Cola, espresso, chifle; Degustare, iluminat, flori artificiale, huse, cufăr dar; Apartament miri, reducere cazare invitați, parcare 300 locuri\nSe plătește separat / lipsește: Vin/alcool, personal, avans – necomunicate\nCondiții: Reduceri în timpul săptămânii\nCost estimat: 400 lei/invitat (meniu sâmbăta + alcool de bază).",
+    "date": "2026-10-27",
+    "valid": "",
+    "cp": 0
+   }
   },
   {
    "key": "everly",
@@ -710,7 +831,18 @@
    "min": 0,
    "rt": 0,
    "rc": 0,
-   "maps": "https://www.google.com/maps/search/?api=1&query=Popasul%20Mariei%20Letcani"
+   "maps": "https://www.google.com/maps/search/?api=1&query=Popasul%20Mariei%20Letcani",
+   "o27": {
+    "ppp": 528,
+    "extra": 8550,
+    "drinks": 3,
+    "deposit": "3.000 lei, se scad din total",
+    "av": "Sâmbete: 15 mai; 4, 18 sept. Duminici: 16, 23, 30 mai; 5, 19, 26 sept.",
+    "inc": "ANALIZĂ OFERTĂ 2027 (27.10.2026)\nMeniuri: „De la 80 €/pers” cu TVA (conversație) · Meniu PDF 2023: Silver 350 / Gold 400 / Platinum 450 lei\nInclude: 3 preparate (alese cu o lună înainte); Apă, suc, cafea; fructe, prăjituri; Aranjamente sală, cutie daruri; Șampanie la primire, pălincă la bar; Vilă cu 6 camere în noaptea nunții; Degustare, artificii\nSe plătește separat / lipsește: Tort – preț separat; Vin 40 lei/sticlă (~1 la 2 pers), whisky 80 lei/pers, bar mobil 12 €/pers (sau aduceți voi băutura); Personal: ospătar 550 lei/20, auxiliar 600 lei/30 ≈ 8.550 lei; Cununie civilă în grădină 4.000 lei; religioasă în biserica proprie 4.000 lei; Furnizori externi (cocktail bar, live cooking, proțap) 200 €; Cabină foto + fum greu 2.500 lei; candy bar 45 lei/pers\nCondiții: Sala 300 locuri (600 mp); 40 camere de la 350 lei\nCost estimat: 528 lei/invitat (meniu sâmbăta + alcool de bază) + 8.550 lei personal la 175 invitați.",
+    "date": "2026-10-27",
+    "valid": "Meniul trimis e din 2023",
+    "cp": 0
+   }
   },
   {
    "key": "international",
@@ -741,7 +873,7 @@
      "u": "https://www.facebook.com/MagnumBallroom/"
     }
    ],
-   "cap": 300,
+   "cap": 280,
    "halls": "Magnum Ballroom 423 mp, 300 la banchet (600 cocktail), scenă, foaier separat; Restaurant Panoramic până la 300.",
    "rt": 4.3,
    "rc": 70,
@@ -753,7 +885,18 @@
     "https://www.weddingo.ro/locatii-nunta/iasi/hotel-international"
    ],
    "min": 0,
-   "maps": "https://www.google.com/maps/search/?api=1&query=Hotel%20International%20Iasi"
+   "maps": "https://www.google.com/maps/search/?api=1&query=Hotel%20International%20Iasi",
+   "o27": {
+    "ppp": 505,
+    "extra": 8550,
+    "drinks": 1,
+    "deposit": "2.500 lei, nereturnabil",
+    "av": "Magnum Ballroom: sâmbete 4, 11 sept; duminici 16, 30 mai. Alte date prerezervate – se pot cere.",
+    "inc": "ANALIZĂ OFERTĂ 2027 (27.10.2026)\nMeniuri: Silver 505 lei (3 feluri) · Gold 550 lei (4 feluri, cu pește) · Platinum 590 lei (4 feluri) · Caviar 615 lei (3 feluri premium)\nInclude: Open cocktail bar nelimitat: whisky, vodcă, rom, cocktailuri, shoturi, bere, vin, soft, cafea; Tort 100 g, mini-prăjituri 100 g, lemonade bar; Șampanie la primire, fețe de masă; Junior Suite gratuit, degustare; −20% after-party la Tirol\nSe plătește separat / lipsește: Personal 450 lei/om: ospătar 1/20, auxiliar+bucătar 1/25, barman 1/50–100, manager ≈ 8.550 lei; Upgrade bar 15–45 lei/pers\nCondiții: Magnum Ballroom 150–280 locuri, centru\nCost estimat: 505 lei/invitat (meniu sâmbăta + alcool de bază) + 8.550 lei personal la 175 invitați.",
+    "date": "2026-10-27",
+    "valid": "Ofertă informativă; data garantată doar după avans; preț ajustat dacă se schimbă TVA",
+    "cp": 0
+   }
   },
   {
    "key": "iriss",
@@ -783,7 +926,7 @@
      "u": "https://www.facebook.com/IrissEventsIasi/"
     }
    ],
-   "cap": 350,
+   "cap": 300,
    "halls": "Iriss Events până la 350 (fără stâlpi), Sala Iriss 120. Cazare.",
    "rt": 4.5,
    "rc": 80,
@@ -794,8 +937,19 @@
     "https://www.restauranteiasi.com/Restaurante/",
     "https://www.saloane-evenimente.ro/Restaurant-Pensiune-Iriss-Iasi.html"
    ],
-   "min": 0,
-   "maps": "https://www.google.com/maps/search/?api=1&query=Pensiunea%20Iriss%20Valea%20Lupului"
+   "min": 150,
+   "maps": "https://www.google.com/maps/search/?api=1&query=Pensiunea%20Iriss%20Valea%20Lupului",
+   "o27": {
+    "ppp": 465,
+    "extra": 0,
+    "drinks": 1,
+    "deposit": "",
+    "av": "Sâmbete: 22, 29 mai; 11, 25 sept. Duminici: 16, 23, 30 mai; 12, 19, 26 sept.",
+    "inc": "ANALIZĂ OFERTĂ 2027 (27.10.2026)\nMeniuri: Sâmbătă: 75 € (fără alcool) / 87 € all inclusive / 97 € ultra (+ bar mobil) · Vineri/duminică/extrasezon: 70 € all inclusive / 80 € ultra · 3 preparate\nInclude: Personal inclus la toate variantele; Alcool (all incl.): Jameson, vișinată, Sheridan's, bere la dozator, vin alb/rose Cotnari – la discreție; Aranjamente florale; Tort 100 g cu artificii, prăjituri 100 g, fructe; Apă, Coca-Cola, Fanta, cafea; Șampanie la primire, degustare; 2 camere în noaptea nunții, cazare invitați −10%\nSe plătește separat / lipsește: Avansul nu e menționat\nCondiții: Min 150 sâmbăta, 120 alte zile; max 300; fără stâlpi, parcare, generator\nCost estimat: 465 lei/invitat (meniu sâmbăta + alcool de bază).",
+    "date": "2026-10-27",
+    "valid": "Ofertă „orientativă”",
+    "cp": 0
+   }
   },
   {
    "key": "kalipso",
@@ -927,7 +1081,18 @@
    "min": 0,
    "rt": 0,
    "rc": 0,
-   "maps": "https://www.google.com/maps/search/?api=1&query=Grand%20Ballroom%20by%20Le%20GaGa%20Iasi"
+   "maps": "https://www.google.com/maps/search/?api=1&query=Grand%20Ballroom%20by%20Le%20GaGa%20Iasi",
+   "o27": {
+    "ppp": 487,
+    "extra": 7270,
+    "drinks": 0,
+    "deposit": "",
+    "av": "Doar calendarul de pe grandballroom.ro/calendar.",
+    "inc": "ANALIZĂ OFERTĂ 2027 (27.10.2026)\nMeniuri: Pachet complet 91 €/invitat, 3 preparate\nInclude: Șampanie la primire; Candy bar și tort; Răcoritoare și cafea nelimitat; Flori artificiale, lumini și LED\nSe plătește separat / lipsește: Personal: ospătar 85 €/20, bucătar 85 €/30, manager 85 € ≈ 1.360 € (~7.270 lei); Alcool – nemenționat\nCost estimat: 487 lei/invitat (meniu sâmbăta + alcool de bază) + 7.270 lei personal la 175 invitați.",
+    "date": "2026-10-27",
+    "valid": "",
+    "cp": 0
+   }
   },
   {
    "key": "liria",
@@ -952,7 +1117,7 @@
      "u": "https://www.facebook.com/liriaevents/"
     }
    ],
-   "cap": 330,
+   "cap": 350,
    "halls": "Cort circular construit pe jumătate pe apă, pavilion de cununie pe ponton.",
    "rv": "Testimoniale bune pe site; o nuntă de 200 de invitați descrisă ca reușită de la cununie (11:00) la final (04:00).",
    "pub": "Niciun preț public.",
@@ -961,10 +1126,21 @@
     "https://liria-events.ro/contact-rezervari/"
    ],
    "aliases": [],
-   "min": 0,
+   "min": 180,
    "rt": 0,
    "rc": 0,
-   "maps": "https://www.google.com/maps/search/?api=1&query=Liria%20Events%20Aroneanu"
+   "maps": "https://www.google.com/maps/search/?api=1&query=Liria%20Events%20Aroneanu",
+   "o27": {
+    "ppp": 643,
+    "extra": 0,
+    "drinks": 3,
+    "deposit": "5.500 lei la contract",
+    "av": "Sâmbete: doar 1 mai (Sâmbăta Mare). Vineri: 7, 14, 28 mai; 3, 17, 24 sept. Duminici: 2 (Paște), 9 mai; 26 sept.",
+    "inc": "ANALIZĂ OFERTĂ 2027 (27.10.2026)\nMeniuri: Light Fusion – S/D 580 / V 525 lei · Dancing Aromas – S/D 615 / V 555 lei · Precious Bites – S/D 655 / V 590 lei · 3 feluri. Aprilie–mai −10% (la vineri deja aplicat); peste 250 pers −10%\nInclude: Personal complet; Șampanie la primire, fructe; Open bar non-alcoolic (suc, apă, espresso); Recuzită; Cununie civilă pe ponton fără cost; Meniu copii <12 ani redus; Cameră miri, cadou\nSe plătește separat / lipsește: Alcool: open bar Bronze 63 / Silver 68 / Gold 80 / Platinum 105 lei/pers (2026); Tortul nu apare în ofertă; Sub minim: servicii suplimentare obligatorii (cocktail bar, bufete)\nCondiții: Min 180 S/D, 150 vineri; max 350\nCost estimat: 643 lei/invitat (meniu sâmbăta + alcool de bază).",
+    "date": "2026-10-27",
+    "valid": "",
+    "cp": 0
+   }
   },
   {
    "key": "paradisulverde",
@@ -1089,7 +1265,18 @@
    "min": 0,
    "rt": 0,
    "rc": 0,
-   "maps": "https://www.google.com/maps/search/?api=1&query=Sky%20Wedding%20Events%20Costuleni"
+   "maps": "https://www.google.com/maps/search/?api=1&query=Sky%20Wedding%20Events%20Costuleni",
+   "o27": {
+    "ppp": 549,
+    "extra": 0,
+    "drinks": 3,
+    "deposit": "5.000 lei, în tranșe",
+    "av": "Nicio dată comunicată.",
+    "inc": "ANALIZĂ OFERTĂ 2027 (27.10.2026)\nMeniuri: De la 469 lei/pers, 3 feluri (starter, gustare caldă, fel principal)\nInclude: Pâine, prăjituri; Apă, răcoritoare, espresso, cappuccino; Șampanie; Aranjamente mese, decor prezidiu și întâmpinare, photocorner; Machetă tort 3 etaje, artificii tort 90 s; Schelă lumini, cameră miri (din 5 camere); Bucătăria inclusă; gătitul miresei gratuit\nSe plătește separat / lipsește: Ospătari – tarif necomunicat; Alcool pe mese + bere + vin + cocktail bar ≈ 80 lei/pers; Bere draft 990 lei/50 L; vin Averești 15 lei/L; candy bar 150 lei/kg; cabină foto 1.600 lei/4h; Aranjamente roșii 500 €\nCondiții: La min 200 de meniuri: bere draft și fum greu gratuite; 32 km de Iași (DN28)\nCost estimat: 549 lei/invitat (meniu sâmbăta + alcool de bază).",
+    "date": "2026-10-27",
+    "valid": "Meniul trimis e din 2026",
+    "cp": 0
+   }
   },
   {
    "key": "storya",
@@ -1222,5 +1409,6 @@
    "maps": "https://www.google.com/maps/search/?api=1&query=Titanic%20Dream%20Mogosesti"
   }
  ],
- "updated": "2026-10-26"
+ "updated": "2026-10-26",
+ "offers": "2026-10-27"
 }
