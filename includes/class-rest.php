@@ -112,7 +112,14 @@ class Nn27_Rest {
 	}
 
 	public static function contacts() {
-		return rest_ensure_response( array( 'emails' => Nn27_Mail::known_emails(), 'label' => Nn27_Mail::LABEL, 'server' => NN27_VERSION ) );
+		$venues = array();
+		foreach ( Nn27_Store::all() as $r ) {
+			if ( 'v' === $r['col'] && is_array( $r['data'] ) ) {
+				$venues[] = array( 'id' => $r['id'], 'n' => (string) ( $r['data']['n'] ?? '' ), 'st' => (int) ( $r['data']['st'] ?? 0 ), 'o' => (int) ( $r['data']['o'] ?? 0 ) );
+			}
+		}
+		usort( $venues, static function ( $a, $b ) { return $a['o'] <=> $b['o']; } );
+		return rest_ensure_response( array( 'emails' => Nn27_Mail::known_emails(), 'venues' => $venues, 'label' => Nn27_Mail::LABEL, 'server' => NN27_VERSION ) );
 	}
 
 	public static function mail_list( WP_REST_Request $req ) {

@@ -210,6 +210,9 @@ let MAIL = [], MAILREV = 0;
 const PUBLIC_DOMAINS = ['gmail.com','yahoo.com','yahoo.ro','outlook.com','hotmail.com','icloud.com','live.com','ymail.com'];
 const mailsOf = vid => MAIL.filter(m=>m.venue===vid && !m.hidden);
 const gmailUrl = m => 'https://mail.google.com/mail/u/0/#all/' + encodeURIComponent(m.thread || m.id);
+const isDrv = m => String(m.id).startsWith('drv');
+const driveUrl = m => 'https://drive.google.com/file/d/' + encodeURIComponent(m.thread || String(m.id).slice(3)) + '/view';
+function msgCount(ms){ const d = ms.filter(isDrv).length, e = ms.length - d; return [e ? `${e} ${e===1?'email':'emailuri'}` : '', d ? `${d} din Drive` : ''].filter(Boolean).join(' · '); }
 async function loadMail(force){
   try{
     const r = await api('mail' + (force||!MAILREV ? '' : '?since='+MAILREV));
@@ -251,13 +254,14 @@ function applyMailOffers(){
     if (of.extraHint && !(o.inc||'').includes(of.extraHint)){ o.inc = (o.inc ? o.inc + '\n' : '') + of.extraHint; }
     if (got.length && !o.date) o.date = new Date(m.t).toISOString().slice(0,10);
     if (v.st < 1) v.st = 1;
-    if ((of.ppp || (m.files||[]).length) && v.st < 2) v.st = 2;
+    const offerish = of.ppp || (isDrv(m) ? (m.files||[]).some(f=>f.type==='application/pdf') : (m.files||[]).length);
+    if (offerish && v.st < 2) v.st = 2;
     const dom = (m.from||'').split('@')[1]||'';
     if (m.auto===0 || !PUBLIC_DOMAINS.includes(dom)) learnEmail(v, m.from);
     o.auto = [...new Set(o.auto)];
-    msgs.push(got.length ? `${v.n}: ofertă citită automat din email` : `${v.n}: email nou`);
+    msgs.push(isDrv(m) ? `${v.n}: ${m.name==='WhatsApp'?'conversație WhatsApp':'fișier'} din Drive${of.ppp?', preț citit automat':''}` : got.length ? `${v.n}: ofertă citită automat din email` : `${v.n}: email nou`);
   }
-  if (msgs.length) commit(msgs.length===1 ? msgs[0] : `Emailuri noi procesate: ${msgs.length}`, false);
+  if (msgs.length) commit(msgs.length===1 ? msgs[0] : `Corespondență nouă procesată: ${msgs.length}`, false);
 }
 async function assignMail(id, venue){
   const m = MAIL.find(x=>x.id===id); if (!m) return;
@@ -266,7 +270,7 @@ async function assignMail(id, venue){
   const v = byId(S.v, venue);
   if (v){ offerOf(v).mails = (offerOf(v).mails||[]).filter(x=>x!==id); learnEmail(v, m.dir==='in' ? m.from : ''); }
   applyMailOffers(); render();
-  toast(v ? `Emailul a fost alocat la ${v.n}. Următoarele emailuri de la ${m.from} vin automat.` : 'Emailul a fost scos de la sală');
+  toast(v ? (m.from ? `Emailul a fost alocat la ${v.n}. Următoarele emailuri de la ${m.from} vin automat.` : `Mutat la ${v.n}.`) : 'Emailul a fost scos de la sală');
 }
 async function hideMail(id){
   try{ await api('mail/'+id, {method:'POST', json:{hidden:true}}); }catch(e){ toast(e.message); return; }
@@ -288,14 +292,14 @@ function offerChips(of){
 function mailItem(m, opts={}){
   const files = (m.files||[]).map(f=>`<button class="chip" data-act="viewfile" data-vid="${esc(m.venue)}" data-id="${f.id}">${f.type==='application/pdf'?'PDF':'IMG'} · ${esc(f.name.length>30?f.name.slice(0,28)+'…':f.name)}</button>`).join('');
   return `<article class="mail ${m.dir}">
-    <div class="mail-h"><span class="mdir" title="${m.dir==='in'?'Primit':'Trimis'}">${m.dir==='in'?'↙':'↗'}</span>
-      <div class="mail-who"><b>${esc(m.dir==='in' ? (m.name||m.from) : 'Tu')}</b> <span class="muted">${esc(m.dir==='in' ? m.from : '→ '+(m.to||'').split(',')[0])}</span></div>
+    <div class="mail-h"><span class="mdir" title="${m.dir==='in'?'Primit':'Trimis'}">${isDrv(m)?'⧉':m.dir==='in'?'↙':'↗'}</span>
+      <div class="mail-who"><b>${esc(m.dir==='in' ? (m.name||m.from) : 'Tu')}</b> <span class="muted">${isDrv(m) ? 'din folderul sălii' : esc(m.dir==='in' ? m.from : '→ '+(m.to||'').split(',')[0])}</span></div>
       <time class="muted">${new Date(m.t).toLocaleString('ro-RO',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</time></div>
     <div class="mail-s">${esc(m.subject||'(fără subiect)')}</div>
     ${UI.mopen.has(m.id)?`<div class="mail-body">${esc(m.body).replace(/\n/g,'<br>')}</div>`:`<div class="mail-sn muted">${esc(m.snippet)}</div>`}
     ${m.offer && Object.keys(m.offer).length?`<div class="mail-of"><span class="sub muted">Citit din ofertă:</span>${offerChips(m.offer)}</div>`:''}
     ${files?`<div class="mail-f">${files}</div>`:''}
-    <div class="mail-a"><button class="link" data-act="mtoggle" data-id="${m.id}">${UI.mopen.has(m.id)?'Restrânge':'Citește tot'}</button><a class="link" href="${gmailUrl(m)}" target="_blank" rel="noopener">Deschide în Gmail</a>
+    <div class="mail-a"><button class="link" data-act="mtoggle" data-id="${m.id}">${UI.mopen.has(m.id)?'Restrânge':'Citește tot'}</button>${isDrv(m)?`<a class="link" href="${driveUrl(m)}" target="_blank" rel="noopener">Deschide în Drive</a>`:`<a class="link" href="${gmailUrl(m)}" target="_blank" rel="noopener">Deschide în Gmail</a>`}
       ${opts.assign?`<select class="input" data-massign="${m.id}" aria-label="Alocă la sală"><option value="">${m.venue?'Mută la altă sală…':'Alocă la sală…'}</option>${S.v.filter(v=>v.st!==6).map(v=>`<option value="${v.id}">${esc(v.n)}</option>`).join('')}</select>`:''}
       ${!m.venue?`<button class="link" data-act="mhide" data-id="${m.id}">Ascunde</button>`:''}</div>
   </article>`;
@@ -308,12 +312,12 @@ function vMail(){
   const waiting = S.v.filter(v=>v.st===1 && mailsOf(v.id).length && mailsOf(v.id)[0].dir==='out' && Date.now()-mailsOf(v.id)[0].t > 4*86400000);
   if (!MAIL.length) return `<div class="page-head"><div><h1>Emailuri</h1><p>Aici apar emailurile schimbate cu sălile și ofertele citite automat din ele.</p></div></div>
     <div class="empty" style="text-align:left;max-width:640px"><b>Gmail nu e conectat încă.</b><br>Conectarea se face o singură dată, din WordPress: meniul <b>Nunta 2027 → Emailuri din Gmail</b>. Durează aproximativ 10 minute.${CFG.admin?`<br><br><a class="btn primary" href="${esc(CFG.admin)}#gmail">Deschide pașii de conectare</a>`:''}</div>`;
-  return `<div class="page-head"><div><h1>Emailuri</h1><p>Corespondența cu sălile, sincronizată din Gmail la fiecare 10 minute. Ofertele din emailuri și PDF-uri se citesc automat și completează sala, doar în câmpurile încă goale.</p></div>
-    <span class="muted" style="font-size:13px">Ultimul email: ${rel(last)}</span></div>
+  return `<div class="page-head"><div><h1>Emailuri</h1><p>Corespondența cu sălile, sincronizată din Gmail și din folderele sălilor din Google Drive la fiecare 10 minute. Ofertele din emailuri, PDF-uri, poze și conversații WhatsApp se citesc automat și completează sala, doar în câmpurile încă goale.</p></div>
+    <span class="muted" style="font-size:13px">Ultima sincronizare: ${rel(last)}</span></div>
     ${waiting.length?`<div class="ref"><span><b>Așteptați răspuns de peste 4 zile</b> de la: ${waiting.map(v=>`<button class="link" data-act="openv" data-id="${v.id}">${esc(v.n)}</button>`).join(', ')}</span></div>`:''}
     ${un.length?`<section class="msec"><h2 class="catsec">Nealocate<span>${un.length} ${un.length===1?'email':'emailuri'} · alegeți sala, iar următoarele emailuri de la aceeași adresă vin automat</span></h2>${un.map(m=>mailItem(m,{assign:true})).join('')}</section>`:''}
     ${groups.map(g=>`<section class="msec"><header class="vsec-h"><div><h2><button class="link" data-act="openv" data-id="${g.v.id}" style="font:inherit;text-decoration:none">${esc(g.v.n)}</button></h2>
-      <div class="vsum"><span class="tag">${STAGES[g.v.st]}</span> · ${g.ms.length} ${g.ms.length===1?'email':'emailuri'} · ultimul ${rel(g.ms[0].t)}${num(g.v.ppp)?` · <b>${lei(g.v.ppp)}/pers.</b>`:''}</div></div>
+      <div class="vsum"><span class="tag">${STAGES[g.v.st]}</span> · ${msgCount(g.ms)} · ultimul ${rel(g.ms[0].t)}${num(g.v.ppp)?` · <b>${lei(g.v.ppp)}/pers.</b>`:''}</div></div>
       <button class="btn" data-act="openv" data-id="${g.v.id}">Fișa sălii</button></header>
       ${(UI.mall.has(g.v.id)?g.ms:g.ms.slice(0,2)).map(m=>mailItem(m,{assign:true})).join('')}
       ${g.ms.length>2?`<button class="link" data-act="mall" data-id="${g.v.id}">${UI.mall.has(g.v.id)?'Arată mai puține':`Arată toate (${g.ms.length})`}</button>`:''}
@@ -891,9 +895,9 @@ function renderDrawer(C){
 function offerBlock(v){
   const o = offerOf(v), ms = mailsOf(v.id);
   const auto = (o.auto||[]).length ? `<p class="hint" style="margin:0"><span class="tag gold">citit automat din email</span> ${(o.auto||[]).map(k=>({ppp:'preț',cp:'preț copii',deposit:'avans',drinks:'băuturi',valid:'valabilitate',cap:'capacitate',min:'minim'})[k]||k).join(', ')}. Verificați cu oferta atașată.</p>` : '';
-  return `${ms.length?`<section class="offer" style="background:var(--surface)"><div><h3>Corespondență</h3><div class="sub muted">${ms.length} ${ms.length===1?'email':'emailuri'} · ultimul ${rel(ms[0].t)}</div></div>${ms.slice(0,3).map(m=>mailItem(m)).join('')}${ms.length>3?`<button class="link" data-go="emailuri">Toate emailurile</button>`:''}</section>`:''}
+  return `${ms.length?`<section class="offer" style="background:var(--surface)"><div><h3>Corespondență</h3><div class="sub muted">${msgCount(ms)} · ultimul ${rel(ms[0].t)}</div></div>${ms.slice(0,3).map(m=>mailItem(m)).join('')}${ms.length>3?`<button class="link" data-go="emailuri">Toate emailurile</button>`:''}</section>`:''}
   <section class="offer">${auto}${o.range?`<p class="hint" style="margin:0">Variante de meniu: <b>${esc(o.range)}</b></p>`:''}
-    <div><h3>Oferta primită</h3><div class="sub muted">Atașați PDF-ul sau pozele ofertei și completați câmpurile de mai jos, ca să puteți compara sălile.</div></div>
+    <div><h3>Oferta primită</h3><div class="sub muted">Atașați PDF-ul sau pozele ofertei aici, sau puneți-le în folderul sălii din Google Drive („Nunta 2027 – Săli”), iar platforma le aduce singură. Completați apoi câmpurile de mai jos, ca să puteți compara sălile.</div></div>
     <label class="drop" id="drop" for="offerFile"><b>Atașează oferta</b><span>PDF sau imagine · trageți fișierul aici sau apăsați</span></label>
     <input type="file" id="offerFile" accept="application/pdf,image/*" multiple hidden>
     ${o.files.length?`<div class="files">${o.files.map(f=>`<div class="file"><span class="fi">${f.type==='application/pdf'?'PDF':'IMG'}</span><span class="fn" title="${esc(f.name)}">${esc(f.name)}<br><small>${fsize(f.size)} · ${new Date(f.added).toLocaleDateString('ro-RO')}</small></span><button class="btn" data-act="viewfile" data-id="${f.id}">Vezi</button><button class="iconbtn" data-act="delfile" data-id="${f.id}" aria-label="Șterge ${esc(f.name)}">${I.x}</button></div>`).join('')}</div>`:''}

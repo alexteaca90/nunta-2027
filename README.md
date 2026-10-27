@@ -35,6 +35,16 @@ Pluginul conține lista de 29 de săli din cercetarea din 26 octombrie 2026 (`in
    Dacă lista din plugin primește completări (de ex. emailuri noi), același panou arată „Primesc date noi” și butonul **Actualizează sălile**, care nu atinge etapa, notele sau prețurile voastre.
 3. În platformă, la **Săli → Solicitări**, fiecare sală are butonul **Cere disponibilitatea**: deschide emailul gata scris, cu data din Setări și numărul de invitați. Textul se poate modifica. După trimitere, sala trece la „Contactată”.
 
+## Fișiere din Google Drive și WhatsApp (v0.4.0)
+
+Același script din Gmail citește și folderul **Nunta 2027 – Săli** din Google Drive, pe care îl creează singur, cu câte un subfolder pentru fiecare sală. Legătura folder–sală stă în descrierea folderului, deci folderele se pot redenumi.
+
+- În folderul unei săli puneți poze (JPG, PNG, WEBP), PDF-uri, conversații WhatsApp exportate (.txt, sau arhiva .zip de pe iPhone) ori un document Google cu textul conversației.
+- La 10 minute, fișierele noi sau modificate ajung la sala respectivă, în Corespondență și la oferta atașată. Textul din poze și PDF-uri scanate se citește prin Drive API (OCR).
+- Din conversațiile WhatsApp, prețul, avansul și condițiile se citesc doar din mesajele sălii. Mesajele voastre se recunosc după numele din `CONFIG.eu`.
+- Videourile și mesajele vocale nu se trimit. Fișierele peste 10 MB se adaugă manual.
+- Fișierele din Drive nu adaugă nicio adresă de email la sală.
+
 ## Securitate
 
 - Datele se citesc și se scriu numai prin `/wp-json/nn27/v1/`.

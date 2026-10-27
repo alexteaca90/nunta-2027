@@ -324,13 +324,20 @@ class Nn27_Mail {
 		$existing = $wpdb->get_row( $wpdb->prepare( "SELECT id, venue, auto FROM {$t['mail']} WHERE id = %s", $id ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
 		list( $venue, $why ) = self::match( $from_mail, $to, $from_name, $subject );
+		// Fișiere din Google Drive: sala vine din folderul în care stau.
+		$folder_venue = preg_replace( '/[^A-Za-z0-9_-]/', '', (string) ( $msg['venue'] ?? '' ) );
+		if ( $folder_venue && in_array( $folder_venue, array_map( static function ( $v ) { return $v['id']; }, self::venues() ), true ) ) {
+			$venue = $folder_venue;
+			$why   = 'folder';
+		}
 		if ( $existing && ! (int) $existing['auto'] ) {
 			$venue = $existing['venue']; // Alocare manuală: nu o schimbăm.
 			$why   = 'manual';
 		}
 
 		// Atașamente: PDF și imagini, salvate în folderul privat.
-		$texts = array( $subject, $body );
+		// „parse” = doar mesajele sălii dintr-o conversație WhatsApp (fără ale voastre).
+		$texts = array( $subject, isset( $msg['parse'] ) ? mb_substr( wp_check_invalid_utf8( (string) $msg['parse'], true ), 0, 60000 ) : $body );
 		$files = array();
 		foreach ( array_slice( (array) $atts, 0, 10 ) as $a ) {
 			$name = sanitize_file_name( (string) ( $a['name'] ?? 'atasament' ) );
