@@ -507,6 +507,22 @@ class Nn27_Store {
 		return ( is_array( $doc ) && isset( $doc['venues'] ) && is_array( $doc['venues'] ) ) ? $doc : null;
 	}
 
+	/** Numele alternative din cercetare pentru o sală (după nume), ca scriptul Drive să recunoască folderele. */
+	public static function venue_aliases( $name ) {
+		static $map = null;
+		if ( null === $map ) {
+			$map = array();
+			$doc = self::venue_research();
+			foreach ( $doc ? $doc['venues'] : array() as $nv ) {
+				$all = array_values( array_filter( array_merge( array( (string) $nv['n'] ), (array) ( $nv['aliases'] ?? array() ) ) ) );
+				foreach ( $all as $x ) {
+					$map[ self::vkey( $x ) ] = $all;
+				}
+			}
+		}
+		return $map[ self::vkey( $name ) ] ?? array();
+	}
+
 	private static function vkey( $s ) {
 		$s = remove_accents( mb_strtolower( (string) $s ) );
 		return trim( preg_replace( '/[^a-z0-9]+/', ' ', $s ) );

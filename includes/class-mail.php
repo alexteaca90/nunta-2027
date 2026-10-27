@@ -338,7 +338,9 @@ class Nn27_Mail {
 		// Atașamente: PDF și imagini, salvate în folderul privat.
 		// „parse” = doar mesajele sălii dintr-o conversație WhatsApp (fără ale voastre).
 		$texts = array( $subject, isset( $msg['parse'] ) ? mb_substr( wp_check_invalid_utf8( (string) $msg['parse'], true ), 0, 60000 ) : $body );
-		$files = array();
+		$files      = array();
+		$dupes      = 0;
+		$from_drive = 0 === strpos( $id, 'drv' );
 		foreach ( array_slice( (array) $atts, 0, 10 ) as $a ) {
 			$name = sanitize_file_name( (string) ( $a['name'] ?? 'atasament' ) );
 			$data = base64_decode( (string) ( $a['data'] ?? '' ), true );
@@ -347,6 +349,10 @@ class Nn27_Mail {
 			}
 			$fid = 'F' . substr( md5( $id . '|' . $name ), 0, 20 );
 			$row = Nn27_Files::get( $fid );
+			if ( ! $row && $from_drive && Nn27_Files::find_same( $data ) ) {
+				++$dupes; // Același fișier există deja (din email sau încărcat manual).
+				continue;
+			}
 			if ( ! $row ) {
 				if ( ! function_exists( 'wp_tempnam' ) ) {
 					require_once ABSPATH . 'wp-admin/includes/file.php';
@@ -393,11 +399,13 @@ class Nn27_Mail {
 			unset( $row['created'] );
 			$wpdb->update( $t['mail'], $row, array( 'id' => $id ) );
 		} else {
-			$row['hidden'] = 0;
+			// Din Drive veneau doar fișiere care există deja: rândul rămâne ascuns,
+			// doar ca scriptul să știe că l-a trimis.
+			$row['hidden'] = ( $dupes && ! $files && '' === trim( $body ) ) ? 1 : 0;
 			$wpdb->insert( $t['mail'], $row );
 		}
 		self::bump();
-		return array( 'stored' => true, 'venue' => $venue, 'match' => $why, 'offer' => $offer, 'files' => count( $files ) );
+		return array( 'stored' => true, 'venue' => $venue, 'match' => $why, 'offer' => $offer, 'files' => count( $files ), 'duplicate' => $dupes );
 	}
 
 	private static function bump() {

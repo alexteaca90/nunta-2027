@@ -115,7 +115,7 @@ class Nn27_Rest {
 		$venues = array();
 		foreach ( Nn27_Store::all() as $r ) {
 			if ( 'v' === $r['col'] && is_array( $r['data'] ) ) {
-				$venues[] = array( 'id' => $r['id'], 'n' => (string) ( $r['data']['n'] ?? '' ), 'st' => (int) ( $r['data']['st'] ?? 0 ), 'o' => (int) ( $r['data']['o'] ?? 0 ) );
+				$venues[] = array( 'id' => $r['id'], 'n' => (string) ( $r['data']['n'] ?? '' ), 'st' => (int) ( $r['data']['st'] ?? 0 ), 'o' => (int) ( $r['data']['o'] ?? 0 ), 'a' => Nn27_Store::venue_aliases( (string) ( $r['data']['n'] ?? '' ) ) );
 			}
 		}
 		usort( $venues, static function ( $a, $b ) { return $a['o'] <=> $b['o']; } );

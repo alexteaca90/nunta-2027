@@ -4,9 +4,11 @@
  * Rulează în contul tău Google, la fiecare 10 minute. Trimite în platformă DOAR:
  *   - emailurile de la / către adresele salvate la săli în platformă;
  *   - emailurile cu eticheta „Nunta 2027” (o pui tu pe primul email de la o sală nouă);
- *   - fișierele din folderul Drive „Nunta 2027 – Săli”, câte un subfolder pentru
- *     fiecare sală: poze, PDF-uri, conversații WhatsApp exportate (.txt sau .zip),
- *     documente Google. Fiecare fișier ajunge la sala folderului în care stă.
+ *   - fișierele din folderele Drive de mai jos (CONFIG.folder): în ele, oricât de adânc
+ *     (ex. „Mail/Crystal”, „Whatsapp/Crystal”), fiecare folder cu numele unei săli
+ *     (se recunosc și „GrandMarion”, „HR-HotelCapitol”, „ComplexEOS”) e citit:
+ *     poze, PDF-uri, Word, conversații WhatsApp (.txt / .zip), documente Google.
+ *     Un fișier care există deja în platformă (venit pe email) nu se mai adaugă.
  * Restul căsuței și restul Drive-ului nu sunt citite și nu pleacă nicăieri.
  *
  * Instalare (o singură dată; la o versiune nouă se repetă pașii 1 și 3):
@@ -14,7 +16,8 @@
  *   2. Servicii (+) → Drive API → Adaugă. E nevoie de el ca să se citească textul
  *      din poze și din PDF-urile scanate.
  *   3. Selectezi funcția „instaleaza” și apeși Rulează; accepți permisiunile
- *      (Gmail și Drive). Folderele sălilor se creează singure în Drive.
+ *      (Gmail și Drive).
+ * Ca să vezi ce folder a fost legat de ce sală (fără să trimită nimic), rulează „verifica”.
  */
 
 const CONFIG = {
@@ -22,11 +25,13 @@ const CONFIG = {
   token: '%%TOKEN%%',  // tokenul secret din WordPress → Nunta 2027
   label: 'Nunta 2027',
   zile: 180,           // cât de departe în trecut se uită în Gmail
-  folder: 'Nunta 2027 – Săli', // folderul din Drive cu câte un subfolder pe sală
+  // Folderele din Drive citite (nume sau ID). Primul se creează dacă nu există niciunul,
+  // și doar în el se fac automat foldere pentru sălile noi.
+  folder: ['Nunta 2027 – Săli', '_PLATFORMA-WEDDINGS'],
   // Numele cu care apăreți VOI în conversațiile WhatsApp exportate. Mesajele voastre
   // rămân în platformă, dar prețurile și condițiile se citesc doar din mesajele sălii.
   eu: ['Alex', 'Andreea'],
-  maxMB: 10            // fișierele mai mari se adaugă manual în platformă
+  maxMB: 25            // limita platformei; fișierele mai mari se adaugă manual (comprimate)
 };
 
 function instaleaza() {
@@ -36,7 +41,7 @@ function instaleaza() {
   ScriptApp.newTrigger('sincronizeaza').timeBased().everyMinutes(10).create();
   if (!GmailApp.getUserLabelByName(CONFIG.label)) GmailApp.createLabel(CONFIG.label);
   sincronizeaza();
-  Logger.log('Gata. Sincronizarea rulează la fiecare 10 minute. Folderul din Drive: ' + radacina_().getUrl());
+  Logger.log('Gata. Sincronizarea rulează la fiecare 10 minute. Foldere Drive: ' + radacini_().map(function (f) { return f.getName(); }).join(', '));
 }
 
 function sincronizeaza() {
@@ -82,7 +87,7 @@ function gmail_(contacts, start) {
     var atts = [];
     m.getAttachments({ includeInlineImages: false }).forEach(function (a) {
       var type = a.getContentType();
-      if (!/pdf|^image\//i.test(type) || a.getSize() > 15 * 1024 * 1024) return;
+      if (!/pdf|^image\//i.test(type) || a.getSize() > CONFIG.maxMB * 1024 * 1024) return;
       atts.push({
         name: a.getName(),
         mime: type,
@@ -127,42 +132,79 @@ function ocr_(blobSource, name) {
 
 /* ---------------------------- Google Drive ---------------------------- */
 
-function radacina_() {
-  var props = PropertiesService.getScriptProperties();
-  var id = props.getProperty('radacina');
-  if (id) {
-    try { var f = DriveApp.getFolderById(id); if (!f.isTrashed()) return f; } catch (e) {}
-  }
-  var it = DriveApp.getFoldersByName(CONFIG.folder);
-  var root = it.hasNext() ? it.next() : DriveApp.createFolder(CONFIG.folder);
-  props.setProperty('radacina', root.getId());
-  return root;
+function radacini_() {
+  var out = [], seen = {};
+  [].concat(CONFIG.folder).forEach(function (x) {
+    var f = null;
+    try { f = DriveApp.getFolderById(x); } catch (e) {}
+    if (!f) { var it = DriveApp.getFoldersByName(x); while (it.hasNext()) { var c = it.next(); if (!c.isTrashed()) { f = c; break; } } }
+    if (f && !f.isTrashed() && !seen[f.getId()]) { seen[f.getId()] = 1; out.push(f); }
+  });
+  if (!out.length) out.push(DriveApp.createFolder([].concat(CONFIG.folder)[0]));
+  return out;
 }
 
 function norm_(s) {
-  return String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+  return String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
 }
 
-/** Un subfolder pentru fiecare sală; legătura se păstrează în descrierea folderului. */
-function folderePeSali_(venues) {
-  var root = radacina_(), byId = {}, byName = {}, out = {};
-  var it = root.getFolders();
-  while (it.hasNext()) {
-    var f = it.next(), m = (f.getDescription() || '').match(/nn27:([A-Za-z0-9_-]+)/);
-    if (m) byId[m[1]] = f; else byName[norm_(f.getName())] = f;
-  }
+// Cuvinte prea generale ca să deosebească o sală de alta.
+var GENERAL_ = ['sala', 'salon', 'hotel', 'restaurant', 'complex', 'event', 'events', 'evenimente', 'ballroom',
+  'venue', 'iasi', 'the', 'and', 'by', 'wedding', 'weddings', 'hall', 'resort', 'pensiunea', 'boutique', 'grand', 'de', 'la', 'le'];
+
+/** Sala al cărei nume (sau nume alternativ) se regăsește în numele folderului; '' dacă nu e clar. */
+function potrivire_(numeFolder, venues) {
+  var compact = norm_(numeFolder).replace(/ /g, ''), best = '', score = 0, tie = false;
+  if (!compact) return '';
   venues.forEach(function (v) {
-    var f = byId[v.id] || byName[norm_(v.n)];
-    if (!f) {
-      if (v.st === 6) return; // sălile respinse nu primesc folder nou
-      f = root.createFolder(v.n);
+    [v.n].concat(v.a || []).forEach(function (n) {
+      var tok = norm_(n).split(' ').filter(function (t) { return t.length >= 3 && GENERAL_.indexOf(t) < 0; });
+      var full = norm_(n).replace(/ /g, '');
+      var sc = full === compact ? 1000 : (tok.length && tok.every(function (t) { return compact.indexOf(t) >= 0; }) ? tok.join('').length : 0);
+      if (sc > score) { score = sc; best = v.id; tie = false; } else if (sc && sc === score && best !== v.id) { tie = true; }
+    });
+  });
+  return tie ? '' : best;
+}
+
+/** Folderele sălilor, oricât de adânc (max. 3 niveluri) în folderele din CONFIG. */
+function folderePeSali_(venues, log) {
+  var out = {}, roots = radacini_(), ids = {};
+  venues.forEach(function (v) { ids[v.id] = v; });
+  function walk(folder, depth, path) {
+    var it = folder.getFolders();
+    while (it.hasNext()) {
+      var f = it.next(), name = f.getName(), p = path + '/' + name;
+      var m = (f.getDescription() || '').match(/nn27:([A-Za-z0-9_-]+)/);
+      var vid = m && ids[m[1]] ? m[1] : potrivire_(name, venues);
+      if (vid) {
+        (out[vid] = out[vid] || []).push(f);
+        if (!m) f.setDescription('nn27:' + vid + ' — nu ștergeți acest rând: leagă folderul de sala din platformă.');
+        if (log) log.push(p + '  →  ' + ids[vid].n);
+      } else if (depth < 3) {
+        if (!f.getFolders().hasNext() && log) log.push(p + '  →  NERECUNOSCUT (redenumește-l ca sala din platformă)');
+        walk(f, depth + 1, p);
+      }
     }
-    if (!/nn27:/.test(f.getDescription() || '')) {
+  }
+  roots.forEach(function (r) { walk(r, 1, r.getName()); });
+  // Foldere noi pentru săli doar în folderul principal al platformei, dacă există.
+  var main = roots.filter(function (r) { return r.getName() === [].concat(CONFIG.folder)[0]; })[0];
+  if (main) venues.forEach(function (v) {
+    if (!out[v.id] && v.st !== 6) {
+      var f = main.createFolder(v.n);
       f.setDescription('nn27:' + v.id + ' — nu ștergeți acest rând: leagă folderul de sala din platformă.');
+      out[v.id] = [f];
     }
-    out[v.id] = f;
   });
   return out;
+}
+
+/** Arată în jurnal ce folder e legat de ce sală. Nu trimite nimic. */
+function verifica() {
+  var log = [];
+  folderePeSali_(api_('GET', 'inbox/contacts').venues || [], log);
+  Logger.log('\n' + log.join('\n'));
 }
 
 function fisiere_(folder, depth, acc) {
@@ -182,7 +224,8 @@ function drive_(contacts, start) {
   var props = PropertiesService.getScriptProperties();
   var sent = 0;
   for (var vid in foldere) {
-    var files = fisiere_(foldere[vid], 2, []);
+    var files = [];
+    foldere[vid].forEach(function (f) { fisiere_(f, 2, files); });
     for (var i = 0; i < files.length; i++) {
       if (Date.now() - start > 4.5 * 60 * 1000) { Logger.log('Drive: continuă la următoarea rulare.'); return; }
       var file = files[i], key = 'f_' + file.getId(), ver = vid + '|' + file.getLastUpdated().getTime();
@@ -191,7 +234,8 @@ function drive_(contacts, start) {
         sent += trimiteFisier_(file, vid);
         props.setProperty(key, ver);
       } catch (e) {
-        Logger.log('Drive: ' + file.getName() + ': ' + e.message);
+        Logger.log('Drive: ' + file.getName() + ': ' + e.message +
+          (/413|too large|exceeds/i.test(e.message) ? ' (serverul site-ului refuză fișiere atât de mari; adăugați-l manual sau comprimați-l)' : ''));
       }
     }
   }
@@ -204,6 +248,9 @@ function trimiteFisier_(file, vid) {
   if (mime === MimeType.GOOGLE_DOCS) {
     return trimiteText_(base, id, name, DocumentApp.openById(file.getId()).getBody().getText());
   }
+  if (/wordprocessingml|msword|opendocument\.text/i.test(mime) || /\.(docx?|odt)$/i.test(name)) {
+    return trimiteWord_(base, id, name, file.getBlob());
+  }
   if (/zip/i.test(mime) || /\.zip$/i.test(name)) {
     var parts = Utilities.unzip(file.getBlob()), n = 0;
     parts.forEach(function (b, k) {
@@ -212,6 +259,23 @@ function trimiteFisier_(file, vid) {
     return n;
   }
   return trimiteBlob_(base, id, name, file.getBlob());
+}
+
+/** Word → PDF (platforma păstrează doar PDF-uri și poze), plus textul pentru citirea ofertei. */
+function trimiteWord_(base, id, name, blob) {
+  if (typeof Drive === 'undefined') { Logger.log('Drive: ' + name + ': adăugați serviciul Drive API ca să se poată citi fișierele Word.'); return 0; }
+  var tmp = Drive.Files.create({ name: 'nunta2027-temp-' + name, mimeType: 'application/vnd.google-apps.document' }, blob);
+  try {
+    var text = DocumentApp.openById(tmp.id).getBody().getText();
+    var pdf = DriveApp.getFileById(tmp.id).getAs('application/pdf').setName(name.replace(/\.\w+$/, '') + '.pdf');
+    api_('POST', 'inbox', {
+      message: merge_(base, { id: id, from: 'Google Drive', subject: name, body: '' }),
+      attachments: [{ name: pdf.getName(), mime: 'application/pdf', data: Utilities.base64Encode(pdf.getBytes()), text: text.slice(0, 60000) }]
+    });
+    return 1;
+  } finally {
+    Drive.Files.remove(tmp.id);
+  }
 }
 
 function trimiteBlob_(base, id, name, blob) {

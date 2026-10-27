@@ -72,3 +72,11 @@ Același script din Gmail citește și folderul **Nunta 2027 – Săli** din Goo
 ## Dezvoltare
 
 `bin/build-zip.sh` construiește `dist/nunta-2027.zip`.
+
+## Foldere Drive existente și fără dubluri (v0.4.1)
+
+- Scriptul citește mai multe foldere rădăcină (`CONFIG.folder`, implicit `Nunta 2027 – Săli` și `_PLATFORMA-WEDDINGS`) și caută folderele sălilor oricât de adânc (max. 3 niveluri), de ex. `Mail/GrandMarion` și `Whatsapp/GrandMarion` merg la aceeași sală.
+- Recunoaștere după nume: numele sălii sau unul alternativ din cercetare, fără cuvintele generale (hotel, complex, events, ballroom…), trebuie să se regăsească în numele folderului. Folderul recunoscut primește în descriere `nn27:<id>`, iar legătura rămâne și după redenumire. Funcția `verifica` scrie în jurnal legăturile și folderele nerecunoscute.
+- Un fișier din Drive identic ca și conținut (SHA-1) cu unul deja salvat (din email sau încărcat manual) nu se mai adaugă; rândul rămâne ascuns. În aplicație, fișierele cu același nume și aceeași mărime nu se afișează de două ori.
+- Word (.docx, .doc, .odt) → PDF prin Drive, cu textul pentru citirea ofertei. Limita: 25 MB pe fișier (atât în Gmail, cât și în Drive).
+

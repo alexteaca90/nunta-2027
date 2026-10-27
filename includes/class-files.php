@@ -101,6 +101,27 @@ class Nn27_Files {
 		);
 	}
 
+	/**
+	 * Un fișier identic (același conținut) deja salvat, oricare ar fi numele lui.
+	 * Așa nu se dublează o ofertă primită pe email și pusă apoi și în Drive.
+	 *
+	 * @param string $data Conținutul.
+	 * @return array|null Rândul existent.
+	 */
+	public static function find_same( $data ) {
+		global $wpdb;
+		$t    = Nn27_Installer::tables();
+		$rows = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$t['files']} WHERE size = %d AND deleted = 0", strlen( $data ) ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$hash = sha1( $data );
+		foreach ( (array) $rows as $r ) {
+			$path = self::dir() . '/' . $r['path'];
+			if ( is_file( $path ) && sha1_file( $path ) === $hash ) {
+				return $r;
+			}
+		}
+		return null;
+	}
+
 	public static function get( $id ) {
 		global $wpdb;
 		$t = Nn27_Installer::tables();

@@ -241,7 +241,7 @@ function applyMailOffers(){
       msgs.push(`${v.n}: email trimis`); continue;
     }
     const of = m.offer || {}, got = [];
-    for (const fl of m.files||[]) if (!o.files.some(x=>x.id===fl.id)){ o.files.push({...fl, mail:m.id}); got.push('fișier'); }
+    for (const fl of m.files||[]) if (!o.files.some(x=>x.id===fl.id || (x.name===fl.name && x.size===fl.size))){ o.files.push({...fl, mail:m.id}); got.push('fișier'); }
     if (of.ppp && !num(v.ppp)){ v.ppp = toLei(of.ppp); got.push('preț'); o.auto.push('ppp'); }
     if (of.ppp && of.pppMax && of.pppMax.v!==of.ppp.v && !o.range){ o.range = `${n0(toLei(of.ppp))}–${n0(toLei(of.pppMax))} lei/pers. (${of.options} variante)`; }
     if (of.cp && !num(v.cp)){ v.cp = toLei(of.cp); o.auto.push('cp'); }
